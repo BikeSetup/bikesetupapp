@@ -1,0 +1,96 @@
+import 'package:bikesetupapp/Services/database.dart';
+import 'package:bikesetupapp/Widgets/progressindicator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+class Bubble extends StatefulWidget {
+  final User? user;
+  final double left;
+  final double bottom;
+  final String bikename;
+  final String category;
+  final String setup;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
+  const Bubble(
+      {super.key,
+      required this.user,
+      required this.left,
+      required this.bottom,
+      required this.bikename,
+      required this.category,
+      required this.setup,
+      this.onPressed,
+      required this.onLongPress});
+
+  @override
+  State<Bubble> createState() => _BubbleState();
+}
+
+class _BubbleState extends State<Bubble> {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: widget.left,
+      bottom: widget.bottom,
+      child: ElevatedButton(
+        onPressed: widget.onPressed,
+        onLongPress: widget.onLongPress,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.all(0),
+          fixedSize: const Size(50, 50),
+          shape: const CircleBorder(),
+        ),
+        child: Container(
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: Theme.of(context).cardColor),
+            height: 50,
+            width: 50,
+            child: Center(
+              child: StreamBuilder(
+                  stream: DatabaseService('${widget.user?.uid}')
+                      .getDocumentElement(
+                          widget.bikename, widget.category, widget.setup),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (ConnectionState.waiting == snapshot.connectionState) {
+                      return PulsatingCircle(color: Theme.of(context).cardColor, size: 50);
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text('Error'));
+                    } else if (snapshot.hasData && snapshot.data.toString() != "") {
+                      try {
+                        final element = snapshot.data?['Pressure'];
+                        
+                        if (element != null &&
+                            element is String &&
+                            element != "") {
+                          return Text(
+                            element.toString(),
+                            style: const TextStyle(color: Colors.white),
+                          );
+                        } else {
+                          return const Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                            size: 30,
+                          );
+                        }
+                      } catch (e) {
+                        return const Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                          size: 30,
+                        );
+                      }
+                    } else {
+                      return const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 30,
+                      );
+                    }
+                  }),
+            )),
+      ),
+    );
+  }
+}
