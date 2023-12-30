@@ -98,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: size.height / 6.66,
                 bikename: widget.bikename,
                 category: 'RearTire',
+                chosencategory: chosenCategory.category,
                 setup: chosensetup,
                 onPressed: () {
                   setState(() {
@@ -123,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: size.height / 6.66,
                 bikename: widget.bikename,
                 category: 'FrontTire',
+                chosencategory: chosenCategory.category,
                 setup: chosensetup,
                 onPressed: () {
                   setState(() {
@@ -148,6 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: size.height / 8,
                 bikename: widget.bikename,
                 category: 'Shock',
+                chosencategory: chosenCategory.category,
                 setup: chosensetup,
                 onPressed: () {
                   setState(() {
@@ -171,7 +174,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 left: size.width / 2.6133,
                 bottom: size.height / 5.33,
                 bikename: widget.bikename,
-                category: '',
+                category: 'GeneralSettings',
+                chosencategory: chosenCategory.category,
                 setup: chosensetup,
                 onPressed: () {
                   setState(() {
@@ -186,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: size.height / 5.33,
                 bikename: widget.bikename,
                 category: 'Fork',
+                chosencategory: chosenCategory.category,
                 setup: chosensetup,
                 onPressed: () {
                   setState(() {

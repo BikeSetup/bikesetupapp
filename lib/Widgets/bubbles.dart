@@ -9,9 +9,9 @@ class Bubble extends StatefulWidget {
   final double bottom;
   final String bikename;
   final String category;
+  final String chosencategory;
   final String setup;
   final VoidCallback? onPressed;
-  //final VoidCallback? onLongPress;
   final Function(String) onValueChange;
   const Bubble(
       {super.key,
@@ -20,6 +20,7 @@ class Bubble extends StatefulWidget {
       required this.bottom,
       required this.bikename,
       required this.category,
+      required this.chosencategory,
       required this.setup,
       required this.onPressed,
       //required this.onLongPress,
@@ -44,7 +45,10 @@ class _BubbleState extends State<Bubble> {
         ),
         child: Container(
             decoration: BoxDecoration(
-                shape: BoxShape.circle, color: Theme.of(context).cardColor),
+                shape: BoxShape.circle,
+                color: (widget.chosencategory == widget.category)
+                    ? Theme.of(context).cardTheme.color
+                    : Theme.of(context).cardColor),
             height: 50,
             width: 50,
             child: Center(
