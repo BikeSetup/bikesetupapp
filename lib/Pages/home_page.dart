@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final Size size = MediaQuery.of(context).size;
     final double boxHeight = size.height / 3.5;
+    const double offset = 40;
 
     return Scaffold(
       drawer: NavDrawer(
@@ -57,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
         bikename: widget.bikename,
       ),
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           widget.bikename,
           style: Theme.of(context).textTheme.titleLarge,
@@ -65,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           Column(children: [
-            SizedBox(height: boxHeight),
+            SizedBox(height: boxHeight- offset),
             Expanded(
                 child: HomePageListView(
                     user: widget.user,
@@ -94,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Bubble(
                 user: widget.user,
-                left: size.width / 39.2,
+                left: size.width / 40,
                 bottom: size.height / 6.66,
                 bikename: widget.bikename,
                 category: 'RearTire',
@@ -120,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Bubble(
                 user: widget.user,
-                left: size.width / 1.18,
+                left: size.width / 1.20,
                 bottom: size.height / 6.66,
                 bikename: widget.bikename,
                 category: 'FrontTire',
@@ -146,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Bubble(
                 user: widget.user,
-                left: size.width / 2.177,
+                left: size.width / 2.2,
                 bottom: size.height / 8,
                 bikename: widget.bikename,
                 category: 'Shock',
@@ -171,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Bubble(
                 user: widget.user,
-                left: size.width / 2.6133,
+                left: size.width / 2.65,
                 bottom: size.height / 5.33,
                 bikename: widget.bikename,
                 category: 'GeneralSettings',
@@ -186,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Bubble(
                 user: widget.user,
-                left: size.width / 1.45,
+                left: size.width / 1.5,
                 bottom: size.height / 5.33,
                 bikename: widget.bikename,
                 category: 'Fork',

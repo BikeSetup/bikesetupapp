@@ -48,7 +48,7 @@ class _HomePageListViewState extends State<HomePageListView> {
               snapshot.data!.data() as Map<String, dynamic>?;
           return ListView.builder(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 40 + 5),
             itemCount: settings?.length,
             itemBuilder: (context, index) {
               return Card(

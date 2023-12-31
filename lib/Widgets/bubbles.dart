@@ -45,6 +45,13 @@ class _BubbleState extends State<Bubble> {
         ),
         child: Container(
             decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 3,
+                      blurRadius: 5,
+                      offset: const Offset(0, 2))
+                ],
                 shape: BoxShape.circle,
                 color: (widget.chosencategory == widget.category)
                     ? Theme.of(context).cardTheme.color

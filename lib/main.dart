@@ -1,6 +1,7 @@
 import 'package:bikesetupapp/Services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:bikesetupapp/Pages/home_page.dart';
+import 'package:flutter/services.dart';
 import 'Pages/google_sign_in.dart';
 import 'package:bikesetupapp/Services/themedata.dart';
 import 'package:bikesetupapp/Services/app_state_notifier.dart';
@@ -45,10 +46,15 @@ class MyApp extends StatelessWidget {
       required this.user,
       required this.defaultBike})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppStateNotifier>(
       builder: (context, appState, child) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
         return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Bike Setup',
