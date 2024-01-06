@@ -7,36 +7,37 @@ class DatabaseService {
   final CollectionReference userbikesetup =
       FirebaseFirestore.instance.collection('UserBikeSetup');
 
-  Future createBike(
-      String bikename,
-      Map<String, String> suspension,
-      String forktravel,
-      String shocktravel,
-      String frontwheelsize,
-      String rearwheelsize,
-      bool isdefaultbike) async {
-    await createFork(bikename, forktravel);
-    await createShock(bikename, shocktravel);
-    await createFrontTire(bikename, frontwheelsize);
-    await createRearTire(bikename, rearwheelsize);
-    await createGeneralSettings(bikename);
+  Future createBike(String bikename, Map<String, String> setupinformation,
+      String biketype, bool isdefaultbike) async {
+    await createSetup(bikename, 'Standard', setupinformation);
+
     if (isdefaultbike) {
       await setDefaultBike(bikename);
     }
-    await createSetupList(bikename, suspension);
     return await userbikesetup
         .doc(userID)
         .collection('UserData')
         .doc('BikeList')
-        .set({bikename: 'Fork:${suspension['fork']}|Shock:${suspension['shock']}'},
-            SetOptions(merge: true));
+        .set({
+      bikename: biketype,
+    }, SetOptions(merge: true));
+  }
+
+  Future createSetup(
+    String bikename,
+    String setupname,
+    Map<String, String> setupinformation,
+  ) async {
+    await createFork(bikename, setupname);
+    await createShock(bikename, setupname);
+    await createFrontTire(bikename, setupname);
+    await createRearTire(bikename, setupname);
+    await createGeneralSettings(bikename, setupname);
+    await createSetupList(bikename, setupname, setupinformation);
   }
 
   Future deleteBike(String bikename) async {
-    var snapshots = await userbikesetup
-        .doc(userID)
-        .collection(bikename)
-        .get();
+    var snapshots = await userbikesetup.doc(userID).collection(bikename).get();
     for (var doc in snapshots.docs) {
       await doc.reference.delete();
     }
@@ -48,50 +49,46 @@ class DatabaseService {
         .update({bikename: FieldValue.delete()});
   }
 
-  Future createFork(String bikename, String forktravel) async {
+  Future createFork(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
-        .doc('ForkStandard')
+        .doc('Fork$setupname')
         .set({
       'Pressure': '90',
-      'Front Travel': forktravel,
     }, SetOptions(merge: true));
   }
 
-  Future createShock(String bikename, String shocktravel) async {
+  Future createShock(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
-        .doc('ShockStandard')
-        .set({'Pressure': '180', 'Shock Travel': shocktravel},
-            SetOptions(merge: true));
+        .doc('Shock$setupname')
+        .set({'Pressure': '180'}, SetOptions(merge: true));
   }
 
-  Future createFrontTire(String bikename, String frontwheelsize) async {
+  Future createFrontTire(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
-        .doc('FrontTireStandard')
-        .set({'Pressure': '24', 'Wheel Size': frontwheelsize},
-            SetOptions(merge: true));
+        .doc('FrontTire$setupname')
+        .set({'Pressure': '24'}, SetOptions(merge: true));
   }
 
-  Future createRearTire(String bikename, String rearwheelsize) async {
+  Future createRearTire(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
-        .doc('RearTireStandard')
-        .set({'Pressure': '26', 'Wheel Size': rearwheelsize},
-            SetOptions(merge: true));
+        .doc('RearTire$setupname')
+        .set({'Pressure': '26'}, SetOptions(merge: true));
   }
 
-  Future createGeneralSettings(String bikename) async {
+  Future createGeneralSettings(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
-        .doc('GeneralSettingsStandard')
-        .set({'Distance': '90cm'}, SetOptions(merge: true));
+        .doc('General$setupname')
+        .set({'Reach': '90cm'}, SetOptions(merge: true));
   }
 
   Future setDefaultBike(String bikename) async {
@@ -102,7 +99,8 @@ class DatabaseService {
         .set({'default': bikename}, SetOptions(merge: true));
   }
 
-  Future setSetting(String key, String value, String bikename, String category,String setup) async {
+  Future setSetting(String key, String value, String bikename, String category,
+      String setup) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
@@ -110,7 +108,8 @@ class DatabaseService {
         .set({key: value}, SetOptions(merge: true));
   }
 
-  Future editSetting(String key, String value, String bikename, String category, String setup) async {
+  Future editSetting(String key, String value, String bikename, String category,
+      String setup) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
@@ -118,7 +117,8 @@ class DatabaseService {
         .update({key: value});
   }
 
-  Future deleteSetting(String key, String bikename, String category,String setup) async {
+  Future deleteSetting(
+      String key, String bikename, String category, String setup) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
@@ -128,13 +128,13 @@ class DatabaseService {
     });
   }
 
-  Future createSetupList(
-      String bikename, Map<String, dynamic> suspension) async {
+  Future createSetupList(String bikename, String setupname,
+      Map<String, dynamic> suspension) async {
     return await userbikesetup
         .doc(userID)
         .collection(bikename)
         .doc('SetupList')
-        .set({'Standard': suspension}, SetOptions(merge: true));
+        .set({setupname: suspension}, SetOptions(merge: true));
   }
 
   Stream getSettings(String bikename, String category, String setup) {
@@ -153,8 +153,7 @@ class DatabaseService {
         .snapshots();
   }
 
-  Stream getDocumentElement(
-      String bikename, String category, String setup) {
+  Stream getDocumentElement(String bikename, String category, String setup) {
     return userbikesetup
         .doc(userID)
         .collection(bikename)
@@ -164,8 +163,11 @@ class DatabaseService {
 
   Future<String> getDefaultBike() async {
     try {
-      DocumentSnapshot snapshot =
-          await userbikesetup.doc(userID).collection('UserData').doc('DefaultBike').get();
+      DocumentSnapshot snapshot = await userbikesetup
+          .doc(userID)
+          .collection('UserData')
+          .doc('DefaultBike')
+          .get();
 
       if (snapshot.exists) {
         dynamic value = snapshot['default'];
@@ -184,8 +186,11 @@ class DatabaseService {
 
   Future<String> getSuspensionType(String bikename) async {
     try {
-      DocumentSnapshot snapshot =
-          await userbikesetup.doc(userID).collection('UserData').doc('BikeList').get();
+      DocumentSnapshot snapshot = await userbikesetup
+          .doc(userID)
+          .collection('UserData')
+          .doc('BikeList')
+          .get();
 
       if (snapshot.exists) {
         dynamic value = snapshot[bikename];
@@ -202,10 +207,22 @@ class DatabaseService {
     }
   }
 
-  Future<String> getSetting(String bikename, String category, String setup, String key) async {
+  Future getSetupSettings(String bikename, String setupname) async {
+    return await userbikesetup
+        .doc(userID)
+        .collection(bikename)
+        .doc('SetupList')
+        .get();
+  }
+
+  Future<String> getSetting(
+      String bikename, String category, String setup, String key) async {
     try {
-      DocumentSnapshot snapshot =
-          await userbikesetup.doc(userID).collection(bikename).doc('$category$setup').get();
+      DocumentSnapshot snapshot = await userbikesetup
+          .doc(userID)
+          .collection(bikename)
+          .doc('$category$setup')
+          .get();
 
       if (snapshot.exists) {
         dynamic value = snapshot[key];
@@ -222,7 +239,8 @@ class DatabaseService {
     }
   }
 
-  Stream getDocumentElementSnap(String bikename, String category, String setup) {
+  Stream getDocumentElementSnap(
+      String bikename, String category, String setup) {
     return userbikesetup
         .doc(userID)
         .collection(bikename)
@@ -230,5 +248,3 @@ class DatabaseService {
         .snapshots();
   }
 }
-
-

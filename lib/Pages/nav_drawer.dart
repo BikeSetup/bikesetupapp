@@ -1,4 +1,5 @@
 import 'package:bikesetupapp/Pages/new_bike.dart';
+import 'package:bikesetupapp/Pages/new_bike_select_type.dart';
 import 'package:bikesetupapp/Pages/settings.dart';
 import 'package:bikesetupapp/Widgets/navdrawer_bike_list.dart';
 import 'package:flutter/material.dart';
@@ -67,14 +68,14 @@ class _NavDrawerState extends State<NavDrawer> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
-                                                NewBike(
+                                                BikeTypeSelector(
                                                     user: widget.user!,
-                                                  isnewbike: true,
-                                                  isdefaultbike: false,
-                                                  bike: '',
                                                 )));
                                     } else {
-                                      // TODO: add alert dialog
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('No User logged in'),
+                                      ));
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(

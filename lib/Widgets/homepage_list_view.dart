@@ -35,9 +35,11 @@ class _HomePageListViewState extends State<HomePageListView> {
           .getSettings(widget.bikename, widget.category, widget.setup),
       builder: ((context, AsyncSnapshot snapshot) {
         if (ConnectionState.waiting == snapshot.connectionState) {
-          return const Center(
+          return Center(
               child: CircularProgressIndicator
-                  .adaptive()); //TODO: Change color to Theme
+                  .adaptive(
+                    backgroundColor: Theme.of(context).textTheme.labelMedium!.color,
+                  ));
         } else if (snapshot.hasError) {
           return const Center(child: Text('Error'));
         } else if (snapshot.data == null || snapshot.data!.data() == null) {

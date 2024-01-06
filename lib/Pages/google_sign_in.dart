@@ -1,5 +1,6 @@
 import 'package:bikesetupapp/Pages/home_page.dart';
 import 'package:bikesetupapp/Pages/new_bike.dart';
+import 'package:bikesetupapp/Pages/new_bike_select_type.dart';
 import 'package:bikesetupapp/Services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:bikesetupapp/Services/auth_service.dart';
@@ -26,7 +27,10 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: Text("Login", style: Theme.of(context).textTheme.titleLarge,),
+          title: Text(
+            "Login",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Center(
@@ -51,11 +55,8 @@ class _LoginPageState extends State<LoginPage> {
                           userCredential.additionalUserInfo!.isNewUser) {
                         if (!mounted) return;
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => NewBike(
+                            builder: (BuildContext context) => BikeTypeSelector(
                                   user: user,
-                                  isnewbike: true,
-                                  isdefaultbike: true,
-                                  bike: '',
                                 )));
                       } else if (user != null) {
                         defaultBike =
@@ -63,11 +64,9 @@ class _LoginPageState extends State<LoginPage> {
                         if (defaultBike == "") {
                           if (!mounted) return;
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => NewBike(
+                              builder: (BuildContext context) =>
+                                  BikeTypeSelector(
                                     user: user,
-                                    isnewbike: true,
-                                    isdefaultbike: true,
-                                    bike: '',
                                   )));
                         } else {
                           if (!mounted) return;
@@ -116,11 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                           userCredential.additionalUserInfo!.isNewUser) {
                         if (!mounted) return;
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => NewBike(
+                            builder: (BuildContext context) => BikeTypeSelector(
                                   user: user,
-                                  isnewbike: true,
-                                  isdefaultbike: true,
-                                  bike: '',
                                 )));
                       } else if (user != null) {
                         await FirebaseFirestore.instance
@@ -144,11 +140,9 @@ class _LoginPageState extends State<LoginPage> {
                             //if can't find default bike, go to new bike page
                             if (!mounted) return;
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) => NewBike(
+                                builder: (BuildContext context) =>
+                                    BikeTypeSelector(
                                       user: user,
-                                      isnewbike: true,
-                                      isdefaultbike: true,
-                                      bike: '',
                                     )));
                           }
                         });

@@ -8,12 +8,16 @@ class NewBike extends StatefulWidget {
   final bool isnewbike;
   final bool isdefaultbike;
   final String bike;
+  final String setup;
+  final String biketype;
   const NewBike(
       {Key? key,
       required this.user,
       required this.isnewbike,
       required this.isdefaultbike,
-      required this.bike})
+      required this.bike,
+      required this.setup,
+      required this.biketype})
       : super(key: key);
 
   @override
@@ -32,27 +36,19 @@ class _NewBikeState extends State<NewBike> {
   String bikename = '';
 
   Future<void> getData() async {
-    String suspensionType =
-        await DatabaseService(widget.user.uid).getSuspensionType(widget.bike);
-    List<String> suspensionTypeList = suspensionType.split('|');
+    var snapshot= await DatabaseService(widget.user.uid)
+        .getSetupSettings(widget.bike, widget.setup);
 
-    String tmpfronttravel = await DatabaseService(widget.user.uid)
-        .getSetting(widget.bike, 'Fork', 'Standard', 'Front Travel');
-    String tmpreartravel = await DatabaseService(widget.user.uid)
-        .getSetting(widget.bike, 'Shock', 'Standard', 'Shock Travel');
-    String tmpfrontwheelsize = await DatabaseService(widget.user.uid)
-        .getSetting(widget.bike, 'FrontTire', 'Standard', 'Wheel Size');
-    String tmprearwheelsize = await DatabaseService(widget.user.uid)
-        .getSetting(widget.bike, 'RearTire', 'Standard', 'Wheel Size');
+    Map<String, dynamic> setupdata = snapshot[widget.setup]!;
 
     setState(() {
       //TODO: Remove tmp variables
-      fronttravel = tmpfronttravel.split('mm')[0].trim();
-      reartravel = tmpreartravel.split('mm')[0].trim();
-      frontwheelsize = tmpfrontwheelsize.split('"')[0].trim();
-      rearwheelsize = tmprearwheelsize.split('"')[0].trim();
-      forktype = suspensionTypeList[0].substring(5);
-      shocktype = suspensionTypeList[1].substring(6);
+      fronttravel = setupdata['fronttravel']!.toString().replaceAll('mm', "");
+      reartravel = setupdata['reartravel']!.toString().replaceAll('mm', "");
+      frontwheelsize = setupdata['frontwheelsize']!.toString().replaceAll('"', "");
+      rearwheelsize = setupdata['rearwheelsize']!.toString().replaceAll('"', "");
+      forktype = setupdata['fork']!.toString();
+      shocktype = setupdata['shock']!.toString();
     });
   }
 
@@ -418,24 +414,7 @@ class _NewBikeState extends State<NewBike> {
                                         backgroundColor:
                                             Theme.of(context).primaryColor),
                                     onPressed: () {
-                                      if (bikename == '') {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'Please enter a bike name'),
-                                          ),
-                                        );
-                                      } else {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        MyHomePage(
-                                                          user: widget.user,
-                                                          bikename: widget.bike,
-                                                        )));
-                                      }
+                                      Navigator.of(context).pop();
                                     },
                                     child: Text(
                                       'Cancel',
@@ -470,12 +449,13 @@ class _NewBikeState extends State<NewBike> {
                                                 bikename,
                                                 {
                                                   'fork': forktype,
-                                                  'shock': shocktype
+                                                  'shock': shocktype,
+                                                  'fronttravel': '${fronttravel}mm',
+                                                  'reartravel': '${reartravel}mm',
+                                                  'frontwheelsize': '$frontwheelsize"',
+                                                  'rearwheelsize': '$rearwheelsize"',
                                                 },
-                                                '${fronttravel}mm',
-                                                '${reartravel}mm',
-                                                '$frontwheelsize"',
-                                                '$rearwheelsize"',
+                                                widget.biketype,
                                                 widget.isdefaultbike);
                                         Navigator.of(context).push(
                                             MaterialPageRoute(

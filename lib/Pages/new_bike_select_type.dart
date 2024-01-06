@@ -1,0 +1,126 @@
+import 'package:bikesetupapp/Pages/new_bike.dart';
+import 'package:bikesetupapp/Widgets/bike_selector_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+class BikeTypeSelector extends StatefulWidget {
+  final User user;
+  const BikeTypeSelector({super.key, required this.user});
+
+  @override
+  State<BikeTypeSelector> createState() => _BikeTypeSelectorState();
+}
+
+class _BikeTypeSelectorState extends State<BikeTypeSelector> {
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
+    PageController _pageController = PageController(viewportFraction: 0.8);
+
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Select Bike Type",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
+        body: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: size.height,
+              minWidth: size.width,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Center(
+                        child: SizedBox(
+                      height: size.height / 3,
+                      child: PageView(
+                        controller: _pageController,
+                        children: const <Widget>[
+                          BikeSelectorWidget(bikeType: "Full Suspension"),
+                          BikeSelectorWidget(bikeType: "Hardtail"),
+                        ],
+                      ),
+                    )),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width: size.width / 2,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 30, right: 30),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'Cancel',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                ),
+                              )),
+                          SizedBox(
+                              width: size.width / 2,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 30, right: 30),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor),
+                                  onPressed: () {
+                                    int currentPageIndex = _pageController.page?.round() ?? 0;
+                                    String biketype;
+                                    switch (currentPageIndex) {
+                                      case 0:
+                                        biketype = 'Full Suspension';
+                                        break;
+                                      case 1:
+                                        biketype = 'Hardtail';
+                                        break;
+                                      default:
+                                        biketype = 'Road';
+                                        break;
+                                    }
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            NewBike(
+                                          user: widget.user,
+                                          isnewbike: true,
+                                          isdefaultbike: true,
+                                          bike: "",
+                                          setup: 'Standard', //TODO: Change
+                                          biketype: biketype,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Save',
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                ),
+                              ))
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )));
+  }
+}

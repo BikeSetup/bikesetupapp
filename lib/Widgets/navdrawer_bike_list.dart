@@ -64,6 +64,8 @@ class _BikeListState extends State<BikeList> {
                               isnewbike: false,
                               isdefaultbike: false,
                               bike: bikes.keys.elementAt(index),
+                              setup: 'Standard', //TODO: Change
+                              biketype: 'Hardtail',
                             ),
                           ),
                         );
@@ -74,6 +76,7 @@ class _BikeListState extends State<BikeList> {
                       ),
                     ),
                     title: Text(bikes.keys.elementAt(index), style: Theme.of(context).textTheme.labelLarge,),
+                    subtitle: Text(bikes.values.elementAt(index), style: Theme.of(context).textTheme.bodySmall,),
                     trailing: IconButton(
                       onPressed: () async {
                         AlertDialogs.deleteBike(
