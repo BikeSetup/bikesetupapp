@@ -36,10 +36,9 @@ class _NewBikeState extends State<NewBike> {
   String bikename = '';
 
   Future<void> getData() async {
-    var snapshot= await DatabaseService(widget.user.uid)
-        .getSetupSettings(widget.bike, widget.setup);
-
-    Map<String, dynamic> setupdata = snapshot[widget.setup]!;
+    
+    Map<String, dynamic> setupdata = await DatabaseService(widget.user.uid)
+        .getSetupInformation(widget.bike, widget.setup);
 
     setState(() {
       fronttravel = setupdata['fronttravel']!.toString().replaceAll('mm', "");
