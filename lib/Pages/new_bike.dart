@@ -27,26 +27,33 @@ class NewBike extends StatefulWidget {
 class _NewBikeState extends State<NewBike> {
   late Future<void> initData;
 
-  String shocktype = 'Air';
-  String forktype = 'Air';
-  String reartravel = '';
-  String fronttravel = '';
-  String frontwheelsize = '';
-  String rearwheelsize = '';
+  Map<String, String> setupinformation = {
+    'fork': 'Air',
+    'shock': 'Air',
+    'fronttravel': '',
+    'reartravel': '',
+    'frontwheelsize': '',
+    'rearwheelsize': '',
+  };
+
   String bikename = '';
+  List<String> possiblesuspensiontype = ['Air', 'Coil'];
 
   Future<void> getData() async {
-    
     Map<String, dynamic> setupdata = await DatabaseService(widget.user.uid)
         .getSetupInformation(widget.bike, widget.setup);
 
     setState(() {
-      fronttravel = setupdata['fronttravel']!.toString().replaceAll('mm', "");
-      reartravel = setupdata['reartravel']!.toString().replaceAll('mm', "");
-      frontwheelsize = setupdata['frontwheelsize']!.toString().replaceAll('"', "");
-      rearwheelsize = setupdata['rearwheelsize']!.toString().replaceAll('"', "");
-      forktype = setupdata['fork']!.toString();
-      shocktype = setupdata['shock']!.toString();
+      setupinformation['fronttravel'] =
+          setupdata['fronttravel']!.toString().replaceAll('mm', "");
+      setupinformation['reartravel'] =
+          setupdata['reartravel']!.toString().replaceAll('mm', "");
+      setupinformation['frontwheelsize'] =
+          setupdata['frontwheelsize']!.toString().replaceAll('"', "");
+      setupinformation['rearwheelsize'] =
+          setupdata['rearwheelsize']!.toString().replaceAll('"', "");
+      setupinformation['fork'] = setupdata['fork']!.toString();
+      setupinformation['shock'] = setupdata['shock']!.toString();
     });
   }
 
@@ -69,9 +76,9 @@ class _NewBikeState extends State<NewBike> {
       future: initData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
+          return Center(
               child: CircularProgressIndicator(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.titleLarge!.color,
           )); //TODO: Add theme color
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -121,187 +128,209 @@ class _NewBikeState extends State<NewBike> {
                         )),
                         Expanded(
                           child: ListView(children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.alarm,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              title: Text(
-                                'Shock Type',
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              trailing: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  dropdownColor:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  value: shocktype,
-                                  icon: Icon(
-                                    Icons.arrow_downward_rounded,
+                            Visibility(
+                                visible: widget.biketype == 'FullSuspension',
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.alarm,
                                     color: Theme.of(context).iconTheme.color,
                                   ),
-                                  elevation: 16,
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      shocktype = newValue!;
-                                      if (shocktype == 'None') {
-                                        reartravel = '0';
-                                      }
-                                    });
-                                  },
-                                  items: <String>['Air', 'Coil', 'None']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        //style: Theme.of(context).textTheme.titleLarge,
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                            ListTile(
-                              leading: Icon(
-                                Icons.alarm,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              title: Text(
-                                'Fork Type',
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              trailing: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  dropdownColor:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  value: forktype,
-                                  icon: Icon(
-                                    Icons.arrow_downward_rounded,
-                                    color: Theme.of(context).iconTheme.color,
+                                  title: Text(
+                                    'Shock Type',
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
                                   ),
-                                  elevation: 16,
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      forktype = newValue!;
-                                      if (forktype == 'None') {
-                                        fronttravel = '0';
-                                      }
-                                    });
-                                  },
-                                  items: <String>['Air', 'Coil', 'None']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        //style: Theme.of(context).textTheme.titleLarge,
+                                  trailing: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      dropdownColor: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      value: setupinformation['shock'],
+                                      icon: Icon(
+                                        Icons.arrow_downward_rounded,
+                                        color:
+                                            Theme.of(context).iconTheme.color,
                                       ),
-                                    );
-                                  }).toList(),
+                                      elevation: 16,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          setupinformation['shock'] = newValue!;
+                                        });
+                                      },
+                                      items: possiblesuspensiontype
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(
+                                            value,
+                                            //style: Theme.of(context).textTheme.titleLarge,
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                )),
+                            Visibility(
+                              visible: widget.biketype != 'Road',
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.alarm,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                title: Text(
+                                  'Fork Type',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                ),
+                                trailing: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    dropdownColor: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                    value: setupinformation['fork'],
+                                    icon: Icon(
+                                      Icons.arrow_downward_rounded,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                    elevation: 16,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        setupinformation['fork'] = newValue!;
+                                      });
+                                    },
+                                    items: possiblesuspensiontype
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(
+                                          value,
+                                          //style: Theme.of(context).textTheme.titleLarge,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
                                 ),
                               ),
                             ),
-                            ListTile(
-                              leading: Icon(
-                                Icons.straighten,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              title: Text(
-                                'Rear Travel',
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              trailing: SizedBox(
-                                width: 150.0,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 3,
-                                      child: TextFormField(
-                                        readOnly: shocktype == 'None',
-                                        initialValue: (widget.isnewbike)
-                                            ? null
-                                            : reartravel,
-                                        keyboardType: TextInputType.number,
-                                        textAlign: TextAlign.end,
-                                        decoration: InputDecoration.collapsed(
-                                            hintText: (reartravel == "")
-                                                ? 'Rear Travel'
-                                                : null,
-                                            hintStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            reartravel = value;
-                                          });
-                                        },
+                            Visibility(
+                              visible: widget.biketype == 'FullSuspension',
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.straighten,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                title: Text(
+                                  'Rear Travel',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                ),
+                                trailing: SizedBox(
+                                  width: 150.0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 3,
+                                        child: TextFormField(
+                                          initialValue: (widget.isnewbike)
+                                              ? null
+                                              : setupinformation['reartravel'],
+                                          keyboardType: TextInputType.number,
+                                          textAlign: TextAlign.end,
+                                          decoration: InputDecoration.collapsed(
+                                              hintText: (setupinformation[
+                                                          'reartravel'] ==
+                                                      "")
+                                                  ? 'Rear Travel'
+                                                  : null,
+                                              hintStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              setupinformation['reartravel'] =
+                                                  value;
+                                            });
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                        child: Text(
-                                      'mm',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ))
-                                  ],
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                          child: Text(
+                                        'mm',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ))
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                            ListTile(
-                              leading: Icon(
-                                Icons.straighten,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              title: Text(
-                                'Front Travel',
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                              trailing: SizedBox(
-                                width: 150.0,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 3,
-                                      child: TextFormField(
-                                        readOnly: forktype == 'None',
-                                        initialValue: (widget.isnewbike)
-                                            ? null
-                                            : fronttravel,
-                                        keyboardType: TextInputType.number,
-                                        textAlign: TextAlign.end,
-                                        decoration: InputDecoration.collapsed(
-                                            hintText: (fronttravel == "")
-                                                ? 'Front Travel'
-                                                : null,
-                                            hintStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            fronttravel = value;
-                                          });
-                                        },
+                            Visibility(
+                              visible: widget.biketype != 'Road',
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.straighten,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                                title: Text(
+                                  'Front Travel',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
+                                ),
+                                trailing: SizedBox(
+                                  width: 150.0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 3,
+                                        child: TextFormField(
+                                          readOnly:
+                                              setupinformation['fronttravel'] ==
+                                                  'None',
+                                          initialValue: (widget.isnewbike)
+                                              ? null
+                                              : setupinformation['fronttravel'],
+                                          keyboardType: TextInputType.number,
+                                          textAlign: TextAlign.end,
+                                          decoration: InputDecoration.collapsed(
+                                              hintText: (setupinformation[
+                                                          'fronttravel'] ==
+                                                      "")
+                                                  ? 'Front Travel'
+                                                  : null,
+                                              hintStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              setupinformation['fronttravel'] =
+                                                  value;
+                                            });
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                        child: Text(
-                                      'mm',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ))
-                                  ],
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                          child: Text(
+                                        'mm',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ))
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -326,17 +355,17 @@ class _NewBikeState extends State<NewBike> {
                                             hintStyle: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,
-                                            hintText: (rearwheelsize == "")
+                                            hintText: (setupinformation['rearwheelsize'] == "")
                                                 ? 'Size'
                                                 : null),
                                         initialValue: (widget.isnewbike)
                                             ? null
-                                            : rearwheelsize,
+                                            : setupinformation['rearwheelsize'],
                                         keyboardType: TextInputType.number,
                                         textAlign: TextAlign.end,
                                         onChanged: (value) {
                                           setState(() {
-                                            rearwheelsize = value;
+                                            setupinformation['rearwheelsize'] = value;
                                           });
                                         },
                                       ),
@@ -372,17 +401,17 @@ class _NewBikeState extends State<NewBike> {
                                             hintStyle: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,
-                                            hintText: (frontwheelsize == "")
+                                            hintText: (setupinformation['frontwheelsize'] == "")
                                                 ? 'Size'
                                                 : null),
                                         initialValue: (widget.isnewbike)
                                             ? null
-                                            : frontwheelsize,
+                                            : setupinformation['frontwheelsize'],
                                         keyboardType: TextInputType.number,
                                         textAlign: TextAlign.end,
                                         onChanged: (value) {
                                           setState(() {
-                                            frontwheelsize = value;
+                                            setupinformation['frontwheelsize'] = value;
                                           });
                                         },
                                       ),
@@ -442,29 +471,35 @@ class _NewBikeState extends State<NewBike> {
                                         );
                                         return;
                                       } else {
+                                        if (widget.biketype == 'Road') {
+                                          setupinformation['fronttravel'] =
+                                              'None';
+                                          setupinformation['reartravel'] =
+                                              'None';
+                                          setupinformation['fork'] = 'None';
+                                          setupinformation['shock'] = 'None';
+                                        } else if (widget.biketype ==
+                                            'Hardtail') {
+                                          setupinformation['reartravel'] =
+                                              'None';
+                                          setupinformation['shock'] = 'None';
+                                        }
                                         DatabaseService(widget.user.uid)
                                             .createBike(
                                                 bikename,
-                                                {
-                                                  'fork': forktype,
-                                                  'shock': shocktype,
-                                                  'fronttravel': '${fronttravel}mm',
-                                                  'reartravel': '${reartravel}mm',
-                                                  'frontwheelsize': '$frontwheelsize"',
-                                                  'rearwheelsize': '$rearwheelsize"',
-                                                },
+                                                setupinformation,
                                                 widget.biketype,
                                                 widget.isdefaultbike);
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        MyHomePage(
-                                                          user: widget.user,
-                                                          bikename: bikename,
-                                                          biketype: widget.biketype,
-                                                          chosensetup: "Standard",
-                                                        )));
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    MyHomePage(
+                                                      user: widget.user,
+                                                      bikename: bikename,
+                                                      biketype: widget.biketype,
+                                                      chosensetup: "Standard",
+                                                    )));
                                       }
                                     },
                                     child: Text(
