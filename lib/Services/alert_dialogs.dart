@@ -307,4 +307,32 @@ class AlertDialogs {
       },
     );
   }
+
+  static Future<void> deleteBikeError(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).cardTheme.color,
+          title: Text(
+            'Deleting Bike',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          content: Text(
+            'You must have at least one bike',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          actions: <Widget>[
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Ok')),
+          ],
+        );
+      },
+    );
+  }
 }

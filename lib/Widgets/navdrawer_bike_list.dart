@@ -88,6 +88,10 @@ class _BikeListState extends State<BikeList> {
                       ),
                       trailing: IconButton(
                         onPressed: () async {
+                          if (bikes.length <= 1) {
+                            AlertDialogs.deleteBikeError(context);
+                            return;
+                          }
                           AlertDialogs.deleteBike(context, widget.user!,
                               bikes.keys.elementAt(index));
                         },

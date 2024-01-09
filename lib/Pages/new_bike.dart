@@ -443,8 +443,9 @@ class _NewBikeState extends State<NewBike> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text(
-                                      'Cancel',
+                                    child: Text(widget.isnewbike
+                                        ? 'Back'
+                                        : 'Cancel',
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge,
@@ -471,19 +472,6 @@ class _NewBikeState extends State<NewBike> {
                                         );
                                         return;
                                       } else {
-                                        if (widget.biketype == 'Road') {
-                                          setupinformation['fronttravel'] =
-                                              'None';
-                                          setupinformation['reartravel'] =
-                                              'None';
-                                          setupinformation['fork'] = 'None';
-                                          setupinformation['shock'] = 'None';
-                                        } else if (widget.biketype ==
-                                            'Hardtail') {
-                                          setupinformation['reartravel'] =
-                                              'None';
-                                          setupinformation['shock'] = 'None';
-                                        }
                                         DatabaseService(widget.user.uid)
                                             .createBike(
                                                 bikename,

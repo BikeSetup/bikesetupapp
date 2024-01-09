@@ -82,7 +82,8 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                       backgroundColor:
                                           Theme.of(context).primaryColor),
                                   onPressed: () {
-                                    int currentPageIndex = pageController.page?.round() ?? 0;
+                                    int currentPageIndex =
+                                        pageController.page?.round() ?? 0;
                                     String biketype;
                                     switch (currentPageIndex) {
                                       case 0:
@@ -96,21 +97,41 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                         break;
                                     }
                                     Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            NewBike(
-                                          user: widget.user,
-                                          isnewbike: true,
-                                          isdefaultbike: true,
-                                          bike: "",
-                                          setup: 'Standard', //TODO: Change
-                                          biketype: biketype,
-                                        ),
+                                      PageRouteBuilder(
+                                        transitionDuration:
+                                            const Duration(milliseconds: 500),
+                                        transitionsBuilder:
+                                            (BuildContext context,
+                                                Animation<double> animation,
+                                                Animation<double>
+                                                    secondaryAnimation,
+                                                Widget child) {
+                                          return SlideTransition(
+                                            position: Tween<Offset>(
+                                              begin: const Offset(1.0, 0.0),
+                                              end: Offset.zero,
+                                            ).animate(animation),
+                                            child: child,
+                                          );
+                                        },
+                                        pageBuilder: (BuildContext context,
+                                            Animation<double> animation,
+                                            Animation<double>
+                                                secondaryAnimation) {
+                                          return NewBike(
+                                            user: widget.user,
+                                            isnewbike: true,
+                                            isdefaultbike: true,
+                                            bike: "",
+                                            setup: 'Standard', //TODO: Change
+                                            biketype: biketype,
+                                          );
+                                        },
                                       ),
                                     );
                                   },
                                   child: Text(
-                                    'Save',
+                                    'Next',
                                     style:
                                         Theme.of(context).textTheme.titleLarge,
                                   ),

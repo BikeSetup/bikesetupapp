@@ -117,16 +117,22 @@ class DatabaseService {
 
   //Delete functions
   Future deleteBike(String bikename) async {
+    
     var snapshots = await userbikesetup.doc(userID).collection(bikename).get();
     for (var doc in snapshots.docs) {
       await doc.reference.delete();
     }
 
-    return await userbikesetup
+    await userbikesetup
         .doc(userID)
         .collection('UserData')
         .doc('BikeList')
         .update({bikename: FieldValue.delete()});
+
+    if (bikename == await getDefaultBike()) {
+      String newDefaultBike = await getFirstBike();
+      await setDefaultBike(newDefaultBike);
+    }
   }
 
   Future deleteSetting(
@@ -187,6 +193,21 @@ class DatabaseService {
       return "";
     }
   }
+
+  Future<String> getFirstBike() async {
+  final DocumentSnapshot documentSnapshot = await userbikesetup
+      .doc(userID)
+      .collection('UserData')
+      .doc('BikeList')
+      .get();
+
+  final Map<String, dynamic>? data = documentSnapshot.data() as Map<String, dynamic>?;
+  if (data == null) {
+    return '';
+  }
+  final String firstField = data.entries.first.value.toString();
+  return firstField;
+}
 
   Future<String> getBikeType(String bikename) async {
     try {
