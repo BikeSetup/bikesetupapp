@@ -93,7 +93,7 @@ class _NewBikeState extends State<NewBike> {
                           style: Theme.of(context).textTheme.titleLarge,
                         )
                       : Text(
-                          'Edit Bike',
+                          'Edit Setup',
                           style: Theme.of(context).textTheme.titleLarge,
                         )),
               body: ConstrainedBox(
@@ -135,7 +135,7 @@ class _NewBikeState extends State<NewBike> {
                         Expanded(
                           child: ListView(children: [
                             Visibility(
-                                visible: widget.biketype == 'FullSuspension',
+                                visible: widget.biketype == 'Fullsuspension',
                                 child: ListTile(
                                   leading: Icon(
                                     Icons.alarm,
@@ -224,7 +224,7 @@ class _NewBikeState extends State<NewBike> {
                               ),
                             ),
                             Visibility(
-                              visible: widget.biketype == 'FullSuspension',
+                              visible: widget.biketype == 'Fullsuspension',
                               child: ListTile(
                                 leading: Icon(
                                   Icons.straighten,

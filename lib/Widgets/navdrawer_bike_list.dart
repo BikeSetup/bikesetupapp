@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 
 class BikeList extends StatefulWidget {
   final User? user;
-  const BikeList({super.key, required this.user});
+  final String bikename;
+  const BikeList({super.key, required this.user, required this.bikename});
 
   @override
   State<BikeList> createState() => _BikeListState();
@@ -46,6 +47,8 @@ class _BikeListState extends State<BikeList> {
                   return Card(
                     elevation: 5,
                     child: ExpansionTile(
+                      initiallyExpanded: bikes.keys.elementAt(index) ==
+                          widget.bikename,
                       onExpansionChanged: (value) {},
                       title: Text(
                         bikes.keys.elementAt(index),
@@ -100,7 +103,6 @@ class _BikeListState extends State<BikeList> {
                                           itemCount: setuplist.length,
                                           itemBuilder: (context, index) {
                                             return ListTile(
-                                              
                                                 leading: IconButton(
                                                   onPressed: () {
                                                     Navigator.of(context).push(

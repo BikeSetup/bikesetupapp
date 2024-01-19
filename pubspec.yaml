@@ -67,7 +67,7 @@ flutter:
   assets:
      - assets/google_icon.png
      - assets/incognito.png
-     - assets/FullSuspension.png
+     - assets/Fullsuspension.png
      - assets/Hardtail.png
      - assets/Road.png
 

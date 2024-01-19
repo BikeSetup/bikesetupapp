@@ -38,8 +38,8 @@ class _HomePageListViewState extends State<HomePageListView> {
           return Center(
               child: CircularProgressIndicator
                   .adaptive(
-                    backgroundColor: Theme.of(context).textTheme.labelMedium!.color,
-                  ));
+                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).floatingActionButtonTheme.backgroundColor!)),
+                  );
         } else if (snapshot.hasError) {
           return const Center(child: Text('Error'));
         } else if (snapshot.data == null || snapshot.data!.data() == null) {

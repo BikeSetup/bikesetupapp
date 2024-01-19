@@ -65,12 +65,20 @@ class _MyHomePageState extends State<MyHomePage> {
         chosensetup: widget.chosensetup,
       ),
       appBar: AppBar(
-        scrolledUnderElevation: 0,
-        title: Text(
-          widget.bikename,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
+          scrolledUnderElevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.bikename,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text(
+                widget.chosensetup,
+                style: Theme.of(context).textTheme.titleLarge,
+              )
+            ],
+          )),
       body: Stack(
         children: [
           Column(children: [

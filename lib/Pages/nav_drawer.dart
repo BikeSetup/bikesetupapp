@@ -75,7 +75,7 @@ class _NavDrawerState extends State<NavDrawer> {
               Expanded(
                 child: SizedBox(
                     height: size.height * 0.73,
-                    child: BikeList(user: widget.user)),
+                    child: BikeList(user: widget.user, bikename: widget.bikename,)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
