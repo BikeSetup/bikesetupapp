@@ -117,7 +117,6 @@ class DatabaseService {
 
   //Delete functions
   Future deleteBike(String bikename) async {
-    
     var snapshots = await userbikesetup.doc(userID).collection(bikename).get();
     for (var doc in snapshots.docs) {
       await doc.reference.delete();
@@ -133,6 +132,22 @@ class DatabaseService {
       String newDefaultBike = await getFirstBike();
       await setDefaultBike(newDefaultBike);
     }
+  }
+
+  Future deleteSetup(String bikename, String setup) async {
+    var snapshots = await userbikesetup.doc(userID).collection(bikename).get();
+
+    for (var doc in snapshots.docs) {
+      if (doc.id.endsWith(setup)) {
+        await doc.reference.delete();
+      }
+    }
+
+    await userbikesetup
+        .doc(userID)
+        .collection(bikename)
+        .doc('SetupList')
+        .update({setup: FieldValue.delete()});
   }
 
   Future deleteSetting(
@@ -163,7 +178,7 @@ class DatabaseService {
         .snapshots();
   }
 
-   Stream getSetups(String bikename) {
+  Stream getSetups(String bikename) {
     return userbikesetup
         .doc(userID)
         .collection(bikename)
@@ -203,19 +218,20 @@ class DatabaseService {
   }
 
   Future<String> getFirstBike() async {
-  final DocumentSnapshot documentSnapshot = await userbikesetup
-      .doc(userID)
-      .collection('UserData')
-      .doc('BikeList')
-      .get();
+    final DocumentSnapshot documentSnapshot = await userbikesetup
+        .doc(userID)
+        .collection('UserData')
+        .doc('BikeList')
+        .get();
 
-  final Map<String, dynamic>? data = documentSnapshot.data() as Map<String, dynamic>?;
-  if (data == null) {
-    return '';
+    final Map<String, dynamic>? data =
+        documentSnapshot.data() as Map<String, dynamic>?;
+    if (data == null) {
+      return '';
+    }
+    final String firstField = data.entries.first.value.toString();
+    return firstField;
   }
-  final String firstField = data.entries.first.value.toString();
-  return firstField;
-}
 
   Future<String> getBikeType(String bikename) async {
     try {

@@ -4,21 +4,11 @@ import 'package:bikesetupapp/Widgets/Bubbles.dart';
 import 'package:bikesetupapp/Widgets/homepage_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bikesetupapp/Services/enums.dart';
 
 import '../Services/alert_dialogs.dart';
 
 const double borderrad = 35;
-
-enum ChosenCategory {
-  reartire(category: 'RearTire'),
-  fronttire(category: 'FrontTire'),
-  shock(category: 'Shock'),
-  generalsettings(category: 'GeneralSettings'),
-  fork(category: 'Fork');
-
-  final String category;
-  const ChosenCategory({required this.category});
-}
 
 class MyHomePage extends StatefulWidget {
   final User? user;

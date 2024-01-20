@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bikesetupapp/Pages/home_page.dart';
 import 'package:bikesetupapp/Services/database.dart';
+import 'package:bikesetupapp/Services/enums.dart';
 
 class NewBike extends StatefulWidget {
   final User user;
-  final bool isnewbike;
-  final bool isnewsetup;
+  final NewBikeMode newbikemode;
   final bool isdefaultbike;
   final String bike;
   final String setup;
-  final String biketype;
+  final BikeType biketype;
   const NewBike(
       {Key? key,
       required this.user,
-      required this.isnewbike,
-      required this.isnewsetup,
+      required this.newbikemode,
       required this.isdefaultbike,
       required this.bike,
       required this.setup,
@@ -62,9 +61,12 @@ class _NewBikeState extends State<NewBike> {
   @override
   void initState() {
     super.initState();
-    if (!widget.isnewbike && !widget.isnewsetup) {
+    if (widget.newbikemode == NewBikeMode.editBike) {
       initData = getData();
       userinput = widget.bike;
+    } else if (widget.newbikemode == NewBikeMode.editSetup) {
+      initData = getData();
+      userinput = widget.setup;
     } else {
       initData = Future.value();
     }
@@ -87,15 +89,10 @@ class _NewBikeState extends State<NewBike> {
         } else {
           return Scaffold(
               appBar: AppBar(
-                  title: (widget.isnewbike || widget.isnewsetup)
-                      ? Text(
-                          'Create New Bike',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )
-                      : Text(
-                          'Edit Setup',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
+                  title: Text(
+                widget.newbikemode.appBarTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              )),
               body: ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: size.height,
@@ -111,18 +108,18 @@ class _NewBikeState extends State<NewBike> {
                           child: Center(
                             child: TextFormField(
                               style: Theme.of(context).textTheme.labelLarge,
-                              readOnly: !widget.isnewbike && !widget.isnewsetup,
-                              initialValue:
-                                  widget.isnewbike || widget.isnewsetup
-                                      ? null
-                                      : userinput,
+                              readOnly: widget.newbikemode ==
+                                      NewBikeMode.editBike ||
+                                  widget.newbikemode == NewBikeMode.editSetup,
+                              initialValue: widget.newbikemode ==
+                                          NewBikeMode.newBike ||
+                                      widget.newbikemode == NewBikeMode.newSetup
+                                  ? null
+                                  : userinput,
                               decoration: InputDecoration(
                                   hintStyle:
                                       Theme.of(context).textTheme.titleLarge,
-                                  hintText:
-                                      widget.isnewbike || widget.isnewsetup
-                                          ? 'Label your new Bike...'
-                                          : null,
+                                  hintText: widget.newbikemode.hintTextTextField,
                                   border: InputBorder.none),
                               onChanged: (value) {
                                 setState(() {
@@ -243,7 +240,10 @@ class _NewBikeState extends State<NewBike> {
                                       Expanded(
                                         flex: 3,
                                         child: TextFormField(
-                                          initialValue: (widget.isnewbike)
+                                          initialValue: (widget.newbikemode ==
+                                                      NewBikeMode.newBike) ||
+                                                  (widget.newbikemode ==
+                                                      NewBikeMode.newSetup)
                                               ? null
                                               : setupinformation['reartravel'],
                                           keyboardType: TextInputType.number,
@@ -303,7 +303,10 @@ class _NewBikeState extends State<NewBike> {
                                           readOnly:
                                               setupinformation['fronttravel'] ==
                                                   'None',
-                                          initialValue: (widget.isnewbike)
+                                          initialValue: (widget.newbikemode ==
+                                                      NewBikeMode.newBike) ||
+                                                  (widget.newbikemode ==
+                                                      NewBikeMode.newSetup)
                                               ? null
                                               : setupinformation['fronttravel'],
                                           keyboardType: TextInputType.number,
@@ -366,7 +369,10 @@ class _NewBikeState extends State<NewBike> {
                                                     "")
                                                 ? 'Size'
                                                 : null),
-                                        initialValue: (widget.isnewbike)
+                                        initialValue: (widget.newbikemode ==
+                                                    NewBikeMode.newBike) ||
+                                                (widget.newbikemode ==
+                                                    NewBikeMode.newSetup)
                                             ? null
                                             : setupinformation['rearwheelsize'],
                                         keyboardType: TextInputType.number,
@@ -415,7 +421,10 @@ class _NewBikeState extends State<NewBike> {
                                                     "")
                                                 ? 'Size'
                                                 : null),
-                                        initialValue: (widget.isnewbike)
+                                        initialValue: (widget.newbikemode ==
+                                                    NewBikeMode.newBike) ||
+                                                (widget.newbikemode ==
+                                                    NewBikeMode.newSetup)
                                             ? null
                                             : setupinformation[
                                                 'frontwheelsize'],
@@ -457,7 +466,9 @@ class _NewBikeState extends State<NewBike> {
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
-                                      widget.isnewbike ? 'Back' : 'Cancel',
+                                      widget.newbikemode == NewBikeMode.newBike
+                                          ? 'Back'
+                                          : 'Cancel',
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge,
@@ -486,22 +497,25 @@ class _NewBikeState extends State<NewBike> {
                                       } else {
                                         String bikename;
                                         String setupname;
-                                        if (widget.isnewbike) {
+                                        if (widget.newbikemode ==
+                                            NewBikeMode.newBike) {
                                           bikename = userinput;
-                                          setupname = 'Standard'; //TODO: Change to Default
+                                          setupname =
+                                              'Standard'; //TODO: Change to Default
                                           DatabaseService(widget.user.uid)
-                                            .createBike(
-                                                bikename,
-                                                setupinformation,
-                                                widget.biketype,
-                                                widget.isdefaultbike);
-                                        }
-                                        else {
+                                              .createBike(
+                                                  bikename,
+                                                  setupinformation,
+                                                  widget.biketype.biketype,
+                                                  widget.isdefaultbike);
+                                        } else {
                                           bikename = widget.bike;
                                           setupname = userinput;
-                                          DatabaseService(widget.user.uid).createSetup(bikename, setupname, setupinformation);
+                                          DatabaseService(widget.user.uid)
+                                              .createSetup(bikename, setupname,
+                                                  setupinformation);
                                         }
-                                        
+
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (BuildContext
@@ -509,7 +523,7 @@ class _NewBikeState extends State<NewBike> {
                                                     MyHomePage(
                                                       user: widget.user,
                                                       bikename: bikename,
-                                                      biketype: widget.biketype,
+                                                      biketype: widget.biketype.biketype,
                                                       chosensetup: setupname,
                                                     )));
                                       }

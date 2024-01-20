@@ -2,6 +2,7 @@ import 'package:bikesetupapp/Pages/home_page.dart';
 import 'package:bikesetupapp/Pages/new_bike.dart'; // Add this line
 import 'package:bikesetupapp/Services/alert_dialogs.dart';
 import 'package:bikesetupapp/Services/database.dart';
+import 'package:bikesetupapp/Services/enums.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -47,8 +48,8 @@ class _BikeListState extends State<BikeList> {
                   return Card(
                     elevation: 5,
                     child: ExpansionTile(
-                      initiallyExpanded: bikes.keys.elementAt(index) ==
-                          widget.bikename,
+                      initiallyExpanded:
+                          bikes.keys.elementAt(index) == widget.bikename,
                       onExpansionChanged: (value) {},
                       title: Text(
                         bikes.keys.elementAt(index),
@@ -78,7 +79,13 @@ class _BikeListState extends State<BikeList> {
                                 .getSetups(bikes.keys.elementAt(index)),
                             builder: ((context, AsyncSnapshot snapshot) {
                               String bikename = bikes.keys.elementAt(index);
-                              String biketype = bikes.values.elementAt(index);
+                              
+                              BikeType biketype = BikeType.fromString(bikes.values.elementAt(index));
+                              if (biketype == BikeType.error) {
+                                return const Center(
+                                  child: Text('Error'),
+                                );
+                              }
                               if (ConnectionState.waiting ==
                                   snapshot.connectionState) {
                                 return const Center(
@@ -103,65 +110,97 @@ class _BikeListState extends State<BikeList> {
                                           itemCount: setuplist.length,
                                           itemBuilder: (context, index) {
                                             return ListTile(
-                                                leading: IconButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            NewBike(
-                                                          user: widget.user!,
-                                                          isnewbike: false,
-                                                          isnewsetup: false,
-                                                          isdefaultbike: false,
-                                                          bike: bikename,
-                                                          setup:setuplist.keys.elementAt(index),
-                                                          biketype: biketype
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.edit,
-                                                    color: Theme.of(context)
-                                                        .iconTheme
-                                                        .color,
-                                                  ),
-                                                ),
-                                                title: Text(setuplist.keys
-                                                    .elementAt(index), style: Theme.of(context).textTheme.labelMedium,),
-                                                onTap: () {
+                                              leading: IconButton(
+                                                onPressed: () {
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                       builder: (BuildContext
                                                               context) =>
-                                                          MyHomePage(
-                                                        bikename: bikename,
-                                                        user: widget.user,
-                                                        biketype: biketype,
-                                                        chosensetup: setuplist
-                                                            .keys
-                                                            .elementAt(index),
-                                                      ),
+                                                          NewBike(
+                                                              user:
+                                                                  widget.user!,
+                                                              newbikemode: NewBikeMode
+                                                                  .editSetup,
+                                                              isdefaultbike:
+                                                                  false,
+                                                              bike: bikename,
+                                                              setup: setuplist
+                                                                  .keys
+                                                                  .elementAt(
+                                                                      index),
+                                                              biketype:
+                                                                  biketype),
                                                     ),
                                                   );
-                                                });
+                                                },
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  color: Theme.of(context)
+                                                      .iconTheme
+                                                      .color,
+                                                ),
+                                              ),
+                                              title: Text(
+                                                setuplist.keys.elementAt(index),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium,
+                                              ),
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        MyHomePage(
+                                                      bikename: bikename,
+                                                      user: widget.user,
+                                                      biketype: biketype.biketype,
+                                                      chosensetup: setuplist
+                                                          .keys
+                                                          .elementAt(index),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              trailing: IconButton(
+                                                onPressed: () async {
+                                                  if (setuplist.length <= 1) {
+                                                    AlertDialogs
+                                                        .deleteBikeError(
+                                                            context);
+                                                    return;
+                                                  }
+                                                  AlertDialogs.deleteSetup(
+                                                      context,
+                                                      widget.user!,
+                                                      bikename,
+                                                      setuplist.keys
+                                                          .elementAt(index));
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  color: Theme.of(context)
+                                                      .iconTheme
+                                                      .color,
+                                                ),
+                                              ),
+                                            );
                                           }));
                                 }
                               }
                             })),
                         ElevatedButton(
                           onPressed: () {
+                            BikeType biketype = BikeType.fromString(bikes.values.elementAt(index));
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (BuildContext context) => NewBike(
                                   user: widget.user!,
-                                  isnewbike: false,
-                                  isnewsetup: true,
+                                  newbikemode: NewBikeMode.newSetup,
                                   isdefaultbike: false,
                                   setup: "",
                                   bike: bikes.keys.elementAt(index),
-                                  biketype: bikes.values.elementAt(index),
+                                  biketype: biketype,
                                 ),
                               ),
                             );

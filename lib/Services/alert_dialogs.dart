@@ -308,6 +308,42 @@ class AlertDialogs {
     );
   }
 
+  static Future<void> deleteSetup(
+      BuildContext context, User user, String bikename, String setupname) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).cardTheme.color,
+          title: Text(
+            'Deleting Setup',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          content: Text(
+            'Are you sure you want to delete this Setup?',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          actions: <Widget>[
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel')),
+            ElevatedButton(
+              child: const Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                DatabaseService(user.uid).deleteSetup(bikename, setupname);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Future<void> deleteBikeError(BuildContext context) async {
     return showDialog<void>(
       context: context,

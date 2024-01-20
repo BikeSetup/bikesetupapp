@@ -1,4 +1,5 @@
 import 'package:bikesetupapp/Pages/new_bike.dart';
+import 'package:bikesetupapp/Services/enums.dart';
 import 'package:bikesetupapp/Widgets/bike_selector_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -84,16 +85,16 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                   onPressed: () {
                                     int currentPageIndex =
                                         pageController.page?.round() ?? 0;
-                                    String biketype;
+                                    BikeType biketype;
                                     switch (currentPageIndex) {
                                       case 0:
-                                        biketype = 'Fullsuspension';
+                                        biketype = BikeType.fullsuspension;
                                         break;
                                       case 1:
-                                        biketype = 'Hardtail';
+                                        biketype = BikeType.hardtail;
                                         break;
                                       default:
-                                        biketype = 'Road';
+                                        biketype = BikeType.road;
                                         break;
                                     }
                                     Navigator.of(context).push(
@@ -120,11 +121,10 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                                 secondaryAnimation) {
                                           return NewBike(
                                             user: widget.user,
-                                            isnewbike: true,
-                                            isnewsetup: false,
+                                            newbikemode: NewBikeMode.newBike,
                                             isdefaultbike: true,
                                             bike: "",
-                                            setup: 'Standard', //TODO: Change
+                                            setup: 'Standard',
                                             biketype: biketype,
                                           );
                                         },
