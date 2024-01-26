@@ -129,8 +129,8 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                             user: widget.user,
                                             newbikemode: NewBikeMode.newBike,
                                             isdefaultbike: true,
-                                            bike: "",
-                                            setup: 'Default',
+                                            bikename: "",
+                                            setupname: 'Default',
                                             biketype: biketype,
                                           );
                                         },

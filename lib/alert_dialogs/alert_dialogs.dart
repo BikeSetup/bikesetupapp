@@ -406,7 +406,7 @@ class AlertDialogs {
           return AlertDialog(
             backgroundColor: Theme.of(context).cardTheme.color,
             title: Text(
-              'Setup Information',
+              setupname,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             content: SetupInformation(

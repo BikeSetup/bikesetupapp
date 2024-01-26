@@ -61,10 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 widget.bikename,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Text(
-                widget.chosensetup,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
               IconButton(
                   onPressed: () {
                     if (widget.user != null) {

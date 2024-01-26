@@ -133,8 +133,8 @@ class _BikeListState extends State<BikeList> {
                                                                       .editSetup,
                                                               isdefaultbike:
                                                                   false,
-                                                              bike: bikename,
-                                                              setup: setuplist
+                                                              bikename: bikename,
+                                                              setupname: setuplist
                                                                   .keys
                                                                   .elementAt(
                                                                       index),
@@ -209,8 +209,8 @@ class _BikeListState extends State<BikeList> {
                                   user: widget.user!,
                                   newbikemode: NewBikeMode.newSetup,
                                   isdefaultbike: false,
-                                  setup: "",
-                                  bike: bikes.keys.elementAt(index),
+                                  setupname: "",
+                                  bikename: bikes.keys.elementAt(index),
                                   biketype: biketype,
                                 ),
                               ),
