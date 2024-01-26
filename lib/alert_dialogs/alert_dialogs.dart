@@ -1,4 +1,6 @@
+import 'package:bikesetupapp/bike_enums/biketype.dart';
 import 'package:bikesetupapp/database_service/database.dart';
+import 'package:bikesetupapp/widgets/setup_information_alert_content.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -292,12 +294,22 @@ class AlertDialogs {
           actionsAlignment: MainAxisAlignment.spaceAround,
           actions: <Widget>[
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel')),
+                child: Text('Cancel', style: Theme.of(context).textTheme.labelLarge)),
             ElevatedButton(
-              child: const Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                  ),
+              child: Text('Delete', style: Theme.of(context).textTheme.labelLarge),
               onPressed: () {
                 Navigator.of(context).pop();
                 DatabaseService(user.uid).deleteBike(bikename);
@@ -328,12 +340,22 @@ class AlertDialogs {
           actionsAlignment: MainAxisAlignment.spaceAround,
           actions: <Widget>[
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel')),
+                child: Text('Cancel', style: Theme.of(context).textTheme.labelLarge)),
             ElevatedButton(
-              child: const Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                  ),
+              child: Text('Delete', style: Theme.of(context).textTheme.labelLarge),
               onPressed: () {
                 Navigator.of(context).pop();
                 DatabaseService(user.uid).deleteSetup(bikename, setupname);
@@ -345,28 +367,31 @@ class AlertDialogs {
     );
   }
 
-  static Future<void> deleteBikeError(BuildContext context) async {
+  static Future<void> deleteBikeError(BuildContext context, String type) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).cardTheme.color,
-          title: Text(
-            'Deleting Bike',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          title: Text('Deleting $type',
+              style: Theme.of(context).textTheme.titleLarge),
           content: Text(
-            'You must have at least one bike',
+            'You must have at least one $type',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           actionsAlignment: MainAxisAlignment.spaceAround,
           actions: <Widget>[
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Ok')),
+                child: Text('Ok', style: Theme.of(context).textTheme.labelLarge)),
           ],
         );
       },
@@ -374,7 +399,7 @@ class AlertDialogs {
   }
 
   static Future<void> showSetupInformation(BuildContext context, Size size,
-      String userID, String bikename, String setupname) async {
+      String userID, String bikename, String setupname, BikeType biketype) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -384,52 +409,21 @@ class AlertDialogs {
               'Setup Information',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            content: FutureBuilder(
-                future: DatabaseService(userID)
-                    .getSetupInformation(bikename, setupname),
-                builder: ((context, snapshot) {
-                  if (ConnectionState.waiting == snapshot.connectionState) {
-                    return Center(
-                      child: CircularProgressIndicator.adaptive(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context)
-                                  .floatingActionButtonTheme
-                                  .backgroundColor!)),
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Center(child: Text('Error'));
-                  } else if (snapshot.data == null) {
-                    return const Center(
-                        child: CircularProgressIndicator.adaptive());
-                  } else {
-                    Map<String, dynamic> setupinformation =
-                        snapshot.data as Map<String, dynamic>;
-                    return SizedBox(
-                      height: 200,
-                      width: size.height * 0.8,
-                      child: ListView.builder(
-                          itemCount: setupinformation.length,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  setupinformation.keys.elementAt(index),
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
-                                Text(
-                                  setupinformation.values.elementAt(index),
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
-                              ],
-                            );
-                          }),
-                    );
-                  }
-                })),
+            content: SetupInformation(
+              userID: userID,
+              bikename: bikename,
+              setupname: setupname,
+              biketype: biketype,
+              size: size,
+            ),
             actionsAlignment: MainAxisAlignment.spaceAround,
             actions: [
               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

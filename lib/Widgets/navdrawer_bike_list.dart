@@ -71,7 +71,7 @@ class _BikeListState extends State<BikeList> {
                       trailing: IconButton(
                         onPressed: () async {
                           if (bikes.length <= 1) {
-                            AlertDialogs.deleteBikeError(context);
+                            AlertDialogs.deleteBikeError(context, 'Bike');
                             return;
                           }
                           AlertDialogs.deleteBike(context, widget.user!,
@@ -177,7 +177,7 @@ class _BikeListState extends State<BikeList> {
                                                   if (setuplist.length <= 1) {
                                                     AlertDialogs
                                                         .deleteBikeError(
-                                                            context);
+                                                            context, 'Setup');
                                                     return;
                                                   }
                                                   AlertDialogs.deleteSetup(

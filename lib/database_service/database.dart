@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bikesetupapp/bike_enums/category.dart';
 
 class DatabaseService {
   DatabaseService(this.userID);
@@ -9,7 +10,7 @@ class DatabaseService {
 
   Future createBike(String bikename, Map<String, String> setupinformation,
       String biketype, bool isdefaultbike) async {
-    await createSetup(bikename, 'Standard', setupinformation);
+    await createSetup(bikename, 'Default', setupinformation);
 
     if (isdefaultbike) {
       await setDefaultBike(bikename);
@@ -18,9 +19,8 @@ class DatabaseService {
         .doc(userID)
         .collection('UserData')
         .doc('BikeList')
-        .set({
-      bikename: biketype,
-    }, SetOptions(merge: true));
+        .set({bikename: biketype},
+        SetOptions(merge: true));
   }
 
   Future createSetup(
@@ -39,8 +39,10 @@ class DatabaseService {
   Future createFork(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('Fork$setupname')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setupname)
+        .doc(Category.fork.category)
         .set({
       'Pressure': '90',
     }, SetOptions(merge: true));
@@ -49,32 +51,40 @@ class DatabaseService {
   Future createShock(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('Shock$setupname')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setupname)
+        .doc(Category.shock.category)
         .set({'Pressure': '180'}, SetOptions(merge: true));
   }
 
   Future createFrontTire(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('FrontTire$setupname')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setupname)
+        .doc(Category.fronttire.category)
         .set({'Pressure': '24'}, SetOptions(merge: true));
   }
 
   Future createRearTire(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('RearTire$setupname')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setupname)
+        .doc(Category.reartire.category)
         .set({'Pressure': '26'}, SetOptions(merge: true));
   }
 
   Future createGeneralSettings(String bikename, String setupname) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('GeneralSettings$setupname')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setupname)
+        .doc(Category.generalsettings.category)
         .set({'Reach': '450mm', 'Stackhight': '20mm', 'Seathight': '35mm'},
             SetOptions(merge: true));
   }
@@ -83,8 +93,8 @@ class DatabaseService {
       Map<String, dynamic> suspension) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('SetupList')
+        .collection('Bikes')
+        .doc(bikename)
         .set({setupname: suspension}, SetOptions(merge: true));
   }
 
@@ -101,8 +111,10 @@ class DatabaseService {
       String setup) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc(category + setup)
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setup)
+        .doc(category)
         .set({key: value}, SetOptions(merge: true));
   }
 
@@ -110,43 +122,34 @@ class DatabaseService {
       String setup) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('$category$setup')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setup)
+        .doc(category)
         .update({key: value});
   }
 
   //Delete functions
   Future deleteBike(String bikename) async {
-    var snapshots = await userbikesetup.doc(userID).collection(bikename).get();
-    for (var doc in snapshots.docs) {
-      await doc.reference.delete();
-    }
-
+    await userbikesetup.doc(userID).collection('Bikes').doc(bikename).delete();
     await userbikesetup
         .doc(userID)
         .collection('UserData')
         .doc('BikeList')
         .update({bikename: FieldValue.delete()});
-
-    if (bikename == await getDefaultBike()) {
-      String newDefaultBike = await getFirstBike();
-      await setDefaultBike(newDefaultBike);
-    }
   }
 
   Future deleteSetup(String bikename, String setup) async {
-    var snapshots = await userbikesetup.doc(userID).collection(bikename).get();
+    var setups = await userbikesetup.doc(userID).collection('Bikes').doc(bikename).collection(setup).get();
 
-    for (var doc in snapshots.docs) {
-      if (doc.id.endsWith(setup)) {
-        await doc.reference.delete();
-      }
+    for (var doc in setups.docs) {
+      await doc.reference.delete();
     }
 
     await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('SetupList')
+        .collection('Bikes')
+        .doc(bikename)
         .update({setup: FieldValue.delete()});
   }
 
@@ -154,8 +157,10 @@ class DatabaseService {
       String key, String bikename, String category, String setup) async {
     return await userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc(category + setup)
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setup)
+        .doc(category)
         .update({
       key: FieldValue.delete(),
     });
@@ -165,8 +170,10 @@ class DatabaseService {
   Stream getSettings(String bikename, String category, String setup) {
     return userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('$category$setup')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setup)
+        .doc(category)
         .snapshots();
   }
 
@@ -181,16 +188,18 @@ class DatabaseService {
   Stream getSetups(String bikename) {
     return userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('SetupList')
+        .collection('Bikes')
+        .doc(bikename)
         .snapshots();
   }
 
   Stream getDocumentElement(String bikename, String category, String setup) {
     return userbikesetup
         .doc(userID)
-        .collection(bikename)
-        .doc('$category$setup')
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setup)
+        .doc(category)
         .snapshots();
   }
 
@@ -229,7 +238,7 @@ class DatabaseService {
     if (data == null) {
       return '';
     }
-    final String firstField = data.entries.first.value.toString();
+    final String firstField = data.entries.first.key.toString();
     return firstField;
   }
 
@@ -260,8 +269,8 @@ class DatabaseService {
     try {
       DocumentSnapshot snapshot = await userbikesetup
           .doc(userID)
-          .collection(bikename)
-          .doc('SetupList')
+          .collection('Bikes')
+          .doc(bikename)
           .get();
 
       if (snapshot.exists) {

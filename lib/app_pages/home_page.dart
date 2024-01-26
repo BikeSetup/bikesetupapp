@@ -1,5 +1,4 @@
 import 'package:bikesetupapp/app_pages/nav_drawer.dart';
-import 'package:bikesetupapp/database_service/database.dart';
 import 'package:bikesetupapp/alert_dialogs/alert_dialogs.dart';
 import 'package:bikesetupapp/widgets/homepage_list_view.dart';
 import 'package:bikesetupapp/widgets/home_page_bubbles.dart';
@@ -39,8 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseService(widget.user!.uid)
-        .setDefaultBike(widget.bikename); //Macht das Sinn??
 
     final Size size = MediaQuery.of(context).size;
     final double boxHeight = size.height / 3.5;
@@ -76,7 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           size,
                           widget.user!.uid,
                           widget.bikename,
-                          widget.chosensetup);
+                          widget.chosensetup,
+                          widget.biketype);
                     }
                   },
                   icon: const Icon(Icons.info_rounded)),

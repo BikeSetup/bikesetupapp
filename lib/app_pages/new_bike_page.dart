@@ -503,7 +503,7 @@ class _NewBikeState extends State<NewBike> {
                                             NewBikeMode.newBike) {
                                           bikename = userinput;
                                           setupname =
-                                              'Standard'; //TODO: Change to Default
+                                              'Default';
                                           DatabaseService(widget.user.uid)
                                               .createBike(
                                                   bikename,

@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
                     user: user,
                     bikename: defaultBike,
                     biketype: biketype,
-                    chosensetup: "Standard",
+                    chosensetup: "Default",
                   )
                 : const LoginPage());
       },

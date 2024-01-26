@@ -130,7 +130,7 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                             newbikemode: NewBikeMode.newBike,
                                             isdefaultbike: true,
                                             bike: "",
-                                            setup: 'Standard',
+                                            setup: 'Default',
                                             biketype: biketype,
                                           );
                                         },
