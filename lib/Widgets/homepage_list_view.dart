@@ -1,4 +1,4 @@
-import 'package:bikesetupapp/alert_dialogs/alert_dialogs.dart';
+import 'package:bikesetupapp/alert_dialogs/settings_alert_dialogs.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 
 import 'package:flutter/material.dart';
@@ -37,10 +37,11 @@ class _HomePageListViewState extends State<HomePageListView> {
       builder: ((context, AsyncSnapshot snapshot) {
         if (ConnectionState.waiting == snapshot.connectionState) {
           return Center(
-              child: CircularProgressIndicator
-                  .adaptive(
-                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).floatingActionButtonTheme.backgroundColor!)),
-                  );
+            child: CircularProgressIndicator.adaptive(
+                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context)
+                    .floatingActionButtonTheme
+                    .backgroundColor!)),
+          );
         } else if (snapshot.hasError) {
           return const Center(child: Text('Error'));
         } else if (snapshot.data == null || snapshot.data!.data() == null) {
@@ -62,7 +63,7 @@ class _HomePageListViewState extends State<HomePageListView> {
                   leading: IconButton(
                       tooltip: 'Edit Setting',
                       onPressed: () {
-                        AlertDialogs.editValue(
+                        SettingsAlerts.editValue(
                             context,
                             widget.user!,
                             settings!.keys.elementAt(index),
@@ -89,28 +90,22 @@ class _HomePageListViewState extends State<HomePageListView> {
                           settings.values.elementAt(index),
                           style: Theme.of(context).textTheme.labelSmall,
                         ),
-                  trailing: IconButton(
-                      tooltip: 'Delete Setting',
-                      onPressed: () {
-                        if (settings != null &&
-                            settings.keys.elementAt(index) == 'Pressure') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Pressure is not deletable'),
-                            ),
-                          );
-                        } else {
-                          AlertDialogs.deleteCategory(
-                              context,
-                              widget.user!,
-                              settings!.keys.elementAt(index),
-                              widget.bikename,
-                              widget.category,
-                              widget.setup);
-                        }
-                      },
-                      icon: Icon(Icons.delete,
-                          color: Theme.of(context).iconTheme.color)),
+                  trailing: Visibility(
+                      visible: settings != null &&
+                          settings.keys.elementAt(index) != 'Pressure',
+                      child: IconButton(
+                          tooltip: 'Delete Setting',
+                          onPressed: () {
+                            SettingsAlerts.deleteCategory(
+                                context,
+                                widget.user!,
+                                settings!.keys.elementAt(index),
+                                widget.bikename,
+                                widget.category,
+                                widget.setup);
+                          },
+                          icon: Icon(Icons.delete,
+                              color: Theme.of(context).iconTheme.color))),
                 ),
               );
             },

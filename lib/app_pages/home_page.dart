@@ -1,5 +1,6 @@
+import 'package:bikesetupapp/alert_dialogs/settings_alert_dialogs.dart';
 import 'package:bikesetupapp/app_pages/nav_drawer.dart';
-import 'package:bikesetupapp/alert_dialogs/alert_dialogs.dart';
+import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
 import 'package:bikesetupapp/widgets/homepage_list_view.dart';
 import 'package:bikesetupapp/widgets/home_page_bubbles.dart';
 import 'package:bikesetupapp/bike_enums/biketype.dart';
@@ -64,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                   onPressed: () {
                     if (widget.user != null) {
-                      AlertDialogs.showSetupInformation(
+                      BikeAlerts.showSetupInformation(
                           context,
                           size,
                           widget.user!.uid,
@@ -73,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           widget.biketype);
                     }
                   },
-                  icon: const Icon(Icons.info_rounded)),
+                  icon: const Icon(Icons.info_outline_rounded)),
             ],
           )),
       body: Stack(
@@ -122,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 onValueChange: (value) {
                   chosenCategory = Category.reartire;
-                  AlertDialogs.editValue(
+                  SettingsAlerts.editValue(
                       context,
                       widget.user!,
                       'Pressure',
@@ -148,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 onValueChange: (value) {
                   chosenCategory = Category.fronttire;
-                  AlertDialogs.editValue(
+                  SettingsAlerts.editValue(
                       context,
                       widget.user!,
                       'Pressure',
@@ -174,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   onValueChange: (value) {
                     chosenCategory = Category.shock;
-                    AlertDialogs.editValue(
+                    SettingsAlerts.editValue(
                         context,
                         widget.user!,
                         'Pressure',
@@ -215,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   onValueChange: (value) {
                     chosenCategory = Category.fork;
-                    AlertDialogs.editValue(
+                    SettingsAlerts.editValue(
                         context,
                         widget.user!,
                         'Pressure',
@@ -231,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          AlertDialogs.newKey(context, widget.user!, widget.bikename,
+          SettingsAlerts.newKey(context, widget.user!, widget.bikename,
               chosenCategory.category, widget.chosensetup);
         },
         tooltip: 'Add Setting',

@@ -1,3 +1,4 @@
+import 'package:bikesetupapp/bike_enums/biketype.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bikesetupapp/bike_enums/category.dart';
 
@@ -15,12 +16,12 @@ class DatabaseService {
     if (isdefaultbike) {
       await setDefaultBike(bikename);
     }
+    await createTodoList(bikename);
     return await userbikesetup
         .doc(userID)
         .collection('UserData')
         .doc('BikeList')
-        .set({bikename: biketype},
-        SetOptions(merge: true));
+        .set({bikename: biketype}, SetOptions(merge: true));
   }
 
   Future createSetup(
@@ -98,6 +99,22 @@ class DatabaseService {
         .set({setupname: suspension}, SetOptions(merge: true));
   }
 
+  Future createTodoList(String bikename) async {
+    return await userbikesetup
+        .doc(userID)
+        .collection('ToDoList')
+        .doc(bikename)
+        .collection('MyList')
+        .doc()
+        .set({
+      'taskname': 'My First Task',
+      'taskdescription': 'This is my first task',
+      'Part': 'Breaks',
+      'done': false,
+      'created': DateTime.now()
+    }, SetOptions(merge: true));
+  }
+
   //set functions
   Future setDefaultBike(String bikename) async {
     return await userbikesetup
@@ -129,6 +146,93 @@ class DatabaseService {
         .update({key: value});
   }
 
+  Future setTodo(String bikename, String taskname, String taskdescription, String part) async {
+    return await userbikesetup
+        .doc(userID)
+        .collection('ToDoList')
+        .doc(bikename)
+        .collection('MyList')
+        .doc()
+        .set({
+      'taskname': taskname,
+      'taskdescription': taskdescription,
+      'Part': part,
+      'done': false,
+      'created': DateTime.now()
+    }, SetOptions(merge: true));
+  }
+
+  Future editTodo(String bikename, String docID, String taskname, String taskdescription, String part, bool isdone) async {
+    return await userbikesetup
+        .doc(userID)
+        .collection('ToDoList')
+        .doc(bikename)
+        .collection('MyList')
+        .doc(docID)
+        .set({
+      'taskname': taskname,
+      'taskdescription': taskdescription,
+      'Part': part,
+      'done': isdone,
+    }, SetOptions(merge: true));
+  }
+
+  Future deleteTodo(String bikename, String todoid) async {
+    return await userbikesetup
+        .doc(userID)
+        .collection('ToDoList')
+        .doc(bikename)
+        .collection('MyList')
+        .doc(todoid)
+        .delete();
+  }
+
+  /**
+   * This function is used to change the name of a bike.
+   * 
+   * @param bikeNameOld The old name of the bike.
+   * @param bikeNameNew The new name of the bike.
+   * @param biketype The type of the bike.
+   */ ///
+  Future setBikeName(
+      String bikeNameOld, String bikeNameNew, BikeType biketype) async {
+    await userbikesetup
+        .doc(userID)
+        .collection('Bikes')
+        .doc(bikeNameOld)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        userbikesetup
+            .doc(userID)
+            .collection('Bikes')
+            .doc(bikeNameNew)
+            .set(value.data()!);
+      }
+    });
+    await userbikesetup
+        .doc(userID)
+        .collection('UserData')
+        .doc('BikeList')
+        .update({bikeNameOld: FieldValue.delete()});
+    return await userbikesetup
+        .doc(userID)
+        .collection('UserData')
+        .doc('BikeList')
+        .set({bikeNameNew: biketype.biketype}, SetOptions(merge: true));
+  }
+
+  Future updateTodoList(
+      String bikename, String todolistid, bool isdone) async {
+    return await userbikesetup
+        .doc(userID)
+        .collection('ToDoList')
+        .doc(bikename)
+        .collection('MyList')
+        .doc(todolistid)
+        .update({'done': isdone});
+  }
+
   //Delete functions
   Future deleteBike(String bikename) async {
     await userbikesetup.doc(userID).collection('Bikes').doc(bikename).delete();
@@ -140,7 +244,12 @@ class DatabaseService {
   }
 
   Future deleteSetup(String bikename, String setup) async {
-    var setups = await userbikesetup.doc(userID).collection('Bikes').doc(bikename).collection(setup).get();
+    var setups = await userbikesetup
+        .doc(userID)
+        .collection('Bikes')
+        .doc(bikename)
+        .collection(setup)
+        .get();
 
     for (var doc in setups.docs) {
       await doc.reference.delete();
@@ -200,6 +309,15 @@ class DatabaseService {
         .doc(bikename)
         .collection(setup)
         .doc(category)
+        .snapshots();
+  }
+
+  Stream getTodoList(String bikename) {
+    return userbikesetup
+        .doc(userID)
+        .collection('ToDoList')
+        .doc(bikename)
+        .collection('MyList')
         .snapshots();
   }
 
@@ -281,7 +399,6 @@ class DatabaseService {
         return '""';
       }
       return '""';
-
     } catch (e) {
       return '""';
     }

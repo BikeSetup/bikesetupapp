@@ -1,6 +1,7 @@
-import 'package:bikesetupapp/alert_dialogs/alert_dialogs.dart';
+import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
 import 'package:bikesetupapp/app_pages/home_page.dart';
 import 'package:bikesetupapp/app_pages/new_bike_page.dart';
+import 'package:bikesetupapp/app_pages/todolist_page.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 import 'package:bikesetupapp/bike_enums/biketype.dart';
 import 'package:bikesetupapp/bike_enums/new_bike_mode.dart';
@@ -54,9 +55,18 @@ class _BikeListState extends State<BikeList> {
                           bikes.keys.elementAt(index) == widget.bikename,
                       onExpansionChanged: (value) {},
                       leading: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (widget.user != null) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => ToDoList(
+                                      user: widget.user!,
+                                      bikename: bikes.keys.elementAt(index))),
+                            );
+                          }
+                        },
                         icon: Icon(
-                          Icons.checklist,
+                          Icons.done_all,
                           color: Theme.of(context).iconTheme.color,
                         ),
                       ),
@@ -71,10 +81,10 @@ class _BikeListState extends State<BikeList> {
                       trailing: IconButton(
                         onPressed: () async {
                           if (bikes.length <= 1) {
-                            AlertDialogs.deleteBikeError(context, 'Bike');
+                            BikeAlerts.deleteBikeError(context, 'Bike');
                             return;
                           }
-                          AlertDialogs.deleteBike(context, widget.user!,
+                          BikeAlerts.deleteBike(context, widget.user!,
                               bikes.keys.elementAt(index));
                         },
                         icon: Icon(
@@ -133,7 +143,8 @@ class _BikeListState extends State<BikeList> {
                                                                       .editSetup,
                                                               isdefaultbike:
                                                                   false,
-                                                              bikename: bikename,
+                                                              bikename:
+                                                                  bikename,
                                                               setupname: setuplist
                                                                   .keys
                                                                   .elementAt(
@@ -175,12 +186,12 @@ class _BikeListState extends State<BikeList> {
                                               trailing: IconButton(
                                                 onPressed: () async {
                                                   if (setuplist.length <= 1) {
-                                                    AlertDialogs
+                                                    BikeAlerts
                                                         .deleteBikeError(
                                                             context, 'Setup');
                                                     return;
                                                   }
-                                                  AlertDialogs.deleteSetup(
+                                                  BikeAlerts.deleteSetup(
                                                       context,
                                                       widget.user!,
                                                       bikename,

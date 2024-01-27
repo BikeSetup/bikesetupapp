@@ -1,0 +1,206 @@
+import 'package:bikesetupapp/database_service/database.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+class TodoAlerts {
+  
+  static Future<void> newTodo(
+      BuildContext context, String bikename, User user) async {
+    String taskname = "";
+    String taskdescription = "";
+    String partsneeded = "";
+    return showDialog(
+        context: context,
+        builder: ((BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).cardTheme.color,
+            title: Text(
+              'New Task',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            content: IntrinsicHeight(
+              child: Column(
+                children: [
+                  TextFormField(
+                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
+                      hintText: 'Task Name',
+                    ),
+                    onChanged: (value) {
+                      taskname = value;
+                    },
+                  ),
+                  TextField(
+                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                    autofocus: true,
+                    minLines: 1,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
+                      hintText: 'Task Description',
+                    ),
+                    onChanged: (value) {
+                      taskdescription = value;
+                    },
+                  ),
+                  TextFormField(
+                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
+                      hintText: 'Parts Needed',
+                    ),
+                    onChanged: (value) {
+                      partsneeded = value;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actionsAlignment: MainAxisAlignment.spaceAround,
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  )),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                ),
+                child: Text(
+                  'Enter',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  DatabaseService(user.uid).setTodo(
+                      bikename, taskname, taskdescription, partsneeded);
+                },
+              ),
+            ],
+          );
+        }));
+  }
+
+  static Future<void> editTodo(
+      BuildContext context,
+      Size size,
+      String bikename,
+      String docId,
+      User user,
+      String taskname,
+      String taskdescription,
+      String partsneeded,
+      bool isdone) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).cardTheme.color,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Edit Task',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                IconButton(onPressed: () {
+                  Navigator.of(context).pop();
+                  DatabaseService(user.uid).deleteTodo(bikename, docId);
+                }, icon: const Icon(Icons.delete))
+              ],
+            ),
+            content: SizedBox(
+              width: size.width * 0.4,
+              child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  TextFormField(
+                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                    autofocus: false,
+                    initialValue: taskname,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
+                      hintText: 'Task Name',
+                    ),
+                    onChanged: (value) {
+                      taskname = value;
+                    },
+                  ),
+                  TextField(
+                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                    autofocus: false,
+                    controller: TextEditingController(text: taskdescription),
+                    minLines: 1,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
+                      hintText: 'Task Description',
+                    ),
+                    onChanged: (value) {
+                      taskdescription = value;
+                    },
+                  ),
+                  TextFormField(
+                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                    autofocus: false,
+                    initialValue: partsneeded,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
+                      hintText: 'Parts Needed',
+                    ),
+                    onChanged: (value) {
+                      partsneeded = value;
+                    },
+                  ),
+                ],
+              ),
+            ),),
+            actionsAlignment: MainAxisAlignment.spaceAround,
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel',
+                      style: Theme.of(context).textTheme.labelMedium)),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                ),
+                child: Text(
+                  'Edit',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  DatabaseService(user.uid).editTodo(bikename, docId, taskname,
+                      taskdescription, partsneeded, isdone);
+                },
+              ),
+            ],
+          );
+        });
+  }
+}

@@ -8,14 +8,12 @@ class SetupInformation extends StatelessWidget {
   final String bikename;
   final String setupname;
   final BikeType biketype;
-  final Size size;
   const SetupInformation(
       {super.key,
       required this.userID,
       required this.bikename,
       required this.setupname,
-      required this.biketype,
-      required this.size});
+      required this.biketype,});
 
   @override
   Widget build(BuildContext context) {

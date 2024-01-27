@@ -1,3 +1,4 @@
+import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
 import 'package:bikesetupapp/app_pages/google_sign_in.dart';
 import 'package:bikesetupapp/app_pages/home_page.dart';
 import 'package:bikesetupapp/app_services/app_state_notifier.dart';
@@ -12,7 +13,12 @@ class SettingsPage extends StatefulWidget {
   final String bikename;
   final BikeType biketype;
   final String chosensetup;
-  const SettingsPage({Key? key, required this.bikename, required this.biketype, required this.chosensetup}) : super(key: key);
+  const SettingsPage({
+    Key? key,
+    required this.bikename,
+    required this.biketype,
+    required this.chosensetup,
+  }) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -28,6 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -127,7 +134,25 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     ),
             ),
-          )
+          ),
+          Visibility(
+              visible: user != null,
+              child: Card(
+                  child: ListTile(
+                      title: Text(
+                        'Select default Bike',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          BikeAlerts.selectDefaultBike(context, user!, size);
+                        },
+                        icon: Icon(Icons.tune,
+                            color: Theme.of(context).textTheme.labelMedium !=
+                                    null
+                                ? Theme.of(context).textTheme.labelMedium!.color
+                                : Colors.white),
+                      ))))
         ],
       ),
     );
