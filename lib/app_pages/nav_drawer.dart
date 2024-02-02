@@ -29,14 +29,14 @@ class _NavDrawerState extends State<NavDrawer> {
     final Size size = MediaQuery.of(context).size;
 
     return SizedBox(
-        width: size.width * 0.85,
+        width: size.width,
         child: Drawer(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: Column(
             //padding: EdgeInsets.zero,
             children: [
               SizedBox(
-                  width: size.width * 0.85,
+                  width: size.width,
                   height: size.height * 0.20,
                   child: DrawerHeader(
                       decoration:
@@ -77,7 +77,10 @@ class _NavDrawerState extends State<NavDrawer> {
               Expanded(
                 child: SizedBox(
                     height: size.height * 0.73,
-                    child: BikeList(user: widget.user, bikename: widget.bikename,)),
+                    child: BikeList(
+                      user: widget.user,
+                      bikename: widget.bikename,
+                    )),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -86,42 +89,48 @@ class _NavDrawerState extends State<NavDrawer> {
                   Padding(
                     padding: const EdgeInsets.all(5),
                     child: ElevatedButton(
-                        onPressed: () {
-                          if (widget.user != null) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    BikeTypeSelector(
-                                      user: widget.user!,
-                                    )));
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('No User logged in'),
-                            ));
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context)
-                                .floatingActionButtonTheme
-                                .backgroundColor),
-                        child: Text(
-                          'New Bike',
-                          style: Theme.of(context).textTheme.labelLarge,
-                        )),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => SettingsPage(
+                                  bikename: widget.bikename,
+                                  biketype: widget.biketype,
+                                  chosensetup: widget.chosensetup,
+                                )));
+                      },
+                      style: IconButton.styleFrom(
+                          backgroundColor: Theme.of(context)
+                              .floatingActionButtonTheme
+                              .backgroundColor),
+                              child: Text('Settings',
+                              style: Theme.of(context).textTheme.titleLarge,),
+                              
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5),
-                    child: IconButton(
-                        onPressed: () {
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (widget.user != null) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => SettingsPage(
-                                    bikename: widget.bikename,
-                                    biketype: widget.biketype,
-                                    chosensetup: widget.chosensetup,
+                              builder: (BuildContext context) =>
+                                  BikeTypeSelector(
+                                    user: widget.user!,
                                   )));
-                        },
-                        icon: const Icon(Icons.settings)),
-                  )
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('No User logged in'),
+                          ));
+                        }
+                      },
+                      style: IconButton.styleFrom(
+                          backgroundColor: Theme.of(context)
+                              .floatingActionButtonTheme
+                              .backgroundColor),
+                              child: Text('New Bike',
+                              style: Theme.of(context).textTheme.titleLarge,),
+                    ),
+                  ),
                 ],
               ),
             ],

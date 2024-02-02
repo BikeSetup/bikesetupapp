@@ -16,8 +16,6 @@ class ToDoList extends StatefulWidget {
 class _ToDoListState extends State<ToDoList> {
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -60,7 +58,6 @@ class _ToDoListState extends State<ToDoList> {
                                   onTap: () {
                                     TodoAlerts.editTodo(
                                         context,
-                                        size,
                                         widget.bikename,
                                         data.id,
                                         widget.user,
@@ -120,7 +117,6 @@ class _ToDoListState extends State<ToDoList> {
                                 onTap: () {
                                   TodoAlerts.editTodo(
                                       context,
-                                      size,
                                       widget.bikename,
                                       data.id,
                                       widget.user,

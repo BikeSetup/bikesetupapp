@@ -91,18 +91,7 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                   onPressed: () {
                                     int currentPageIndex =
                                         pageController.page?.round() ?? 0;
-                                    BikeType biketype;
-                                    switch (currentPageIndex) {
-                                      case 0:
-                                        biketype = BikeType.fullsuspension;
-                                        break;
-                                      case 1:
-                                        biketype = BikeType.hardtail;
-                                        break;
-                                      default:
-                                        biketype = BikeType.road;
-                                        break;
-                                    }
+                                    BikeType biketype = BikeType.values[currentPageIndex + 1];
                                     Navigator.of(context).push(
                                       PageRouteBuilder(
                                         transitionDuration:

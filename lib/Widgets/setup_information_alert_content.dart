@@ -8,12 +8,13 @@ class SetupInformation extends StatelessWidget {
   final String bikename;
   final String setupname;
   final BikeType biketype;
-  const SetupInformation(
-      {super.key,
-      required this.userID,
-      required this.bikename,
-      required this.setupname,
-      required this.biketype,});
+  const SetupInformation({
+    super.key,
+    required this.userID,
+    required this.bikename,
+    required this.setupname,
+    required this.biketype,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +23,17 @@ class SetupInformation extends StatelessWidget {
             DatabaseService(userID).getSetupInformation(bikename, setupname),
         builder: ((context, snapshot) {
           if (ConnectionState.waiting == snapshot.connectionState) {
-            return Center(
-              child: CircularProgressIndicator.adaptive(
-                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context)
-                      .floatingActionButtonTheme
-                      .backgroundColor!)),
+            return const SizedBox(
+              height: 100.0,
+              width: 100.0,
             );
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error'));
           } else if (snapshot.data == null) {
-            return const Center(child: CircularProgressIndicator.adaptive());
+            return const SizedBox(
+              height: 100.0,
+              width: 100.0,
+            );
           } else {
             Map<String, dynamic> setupinformation =
                 snapshot.data as Map<String, dynamic>;
@@ -39,12 +41,30 @@ class SetupInformation extends StatelessWidget {
                 child: IntrinsicHeight(
                     child: Column(
               children: [
-                SetupInformationListElement(name: 'Fork Type', value: setupinformation['fork'], visible: biketype.hasFork),
-                SetupInformationListElement(name: 'Shock Type', value: setupinformation['shock'], visible: biketype.hasShock),
-                SetupInformationListElement(name: 'Front Travel', value: '${setupinformation['fronttravel']} mm', visible: biketype.hasFork),
-                SetupInformationListElement(name: 'Rear Travel', value: '${setupinformation['reartravel']} mm', visible: biketype.hasShock),
-                SetupInformationListElement(name: 'Front Wheel Size', value: '${setupinformation['frontwheelsize']}"', visible: true),
-                SetupInformationListElement(name: 'Rear Wheel Size', value: '${setupinformation['rearwheelsize']}"', visible: true),
+                SetupInformationListElement(
+                    name: 'Fork Type',
+                    value: setupinformation['fork'],
+                    visible: biketype.hasFork),
+                SetupInformationListElement(
+                    name: 'Shock Type',
+                    value: setupinformation['shock'],
+                    visible: biketype.hasShock),
+                SetupInformationListElement(
+                    name: 'Front Travel',
+                    value: '${setupinformation['fronttravel']} mm',
+                    visible: biketype.hasFork),
+                SetupInformationListElement(
+                    name: 'Rear Travel',
+                    value: '${setupinformation['reartravel']} mm',
+                    visible: biketype.hasShock),
+                SetupInformationListElement(
+                    name: 'Front Wheel Size',
+                    value: '${setupinformation['frontwheelsize']}"',
+                    visible: true),
+                SetupInformationListElement(
+                    name: 'Rear Wheel Size',
+                    value: '${setupinformation['rearwheelsize']}"',
+                    visible: true),
               ],
             )));
           }

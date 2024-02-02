@@ -146,7 +146,10 @@ class BikeAlerts {
                 stream: DatabaseService(user.uid).getBikes(),
                 builder: (((context, AsyncSnapshot snapshot) {
                   if (ConnectionState.waiting == snapshot.connectionState) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const SizedBox(
+                      height: 100,
+                      width: 100,
+                    );
                   } else if (snapshot.hasError) {
                     return const Center(child: Text('Error'));
                   } else {

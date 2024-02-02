@@ -169,26 +169,49 @@ class _BikeListState extends State<BikeList> {
                                               ),
                                               onTap: () {
                                                 Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        MyHomePage(
-                                                      bikename: bikename,
-                                                      user: widget.user,
-                                                      biketype: biketype,
-                                                      chosensetup: setuplist
-                                                          .keys
-                                                          .elementAt(index),
-                                                    ),
+                                                  PageRouteBuilder(
+                                                    transitionDuration:
+                                                        const Duration(
+                                                            milliseconds: 200),
+                                                    transitionsBuilder:
+                                                        (BuildContext context,
+                                                            Animation<double>
+                                                                animation,
+                                                            Animation<double>
+                                                                secondaryAnimation,
+                                                            Widget child) {
+                                                      return SlideTransition(
+                                                        position: Tween<Offset>(
+                                                          begin: const Offset(
+                                                              1.0, 0.0),
+                                                          end: Offset.zero,
+                                                        ).animate(animation),
+                                                        child: child,
+                                                      );
+                                                    },
+                                                    pageBuilder: (BuildContext
+                                                            context,
+                                                        Animation<double>
+                                                            animation,
+                                                        Animation<double>
+                                                            secondaryAnimation) {
+                                                      return MyHomePage(
+                                                        bikename: bikename,
+                                                        user: widget.user,
+                                                        biketype: biketype,
+                                                        chosensetup: setuplist
+                                                            .keys
+                                                            .elementAt(index),
+                                                      );
+                                                    },
                                                   ),
                                                 );
                                               },
                                               trailing: IconButton(
                                                 onPressed: () async {
                                                   if (setuplist.length <= 1) {
-                                                    BikeAlerts
-                                                        .deleteBikeError(
-                                                            context, 'Setup');
+                                                    BikeAlerts.deleteBikeError(
+                                                        context, 'Setup');
                                                     return;
                                                   }
                                                   BikeAlerts.deleteSetup(

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TodoAlerts {
-  
   static Future<void> newTodo(
       BuildContext context, String bikename, User user) async {
     String taskname = "";
@@ -19,44 +18,69 @@ class TodoAlerts {
               'New Task',
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            content: IntrinsicHeight(
+            content: SizedBox(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextFormField(
-                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      hintStyle: Theme.of(context).textTheme.labelSmall,
-                      hintText: 'Task Name',
+                  Card(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextFormField(
+                        cursorColor:
+                            Theme.of(context).textTheme.labelMedium!.color,
+                        autofocus: false,
+                        initialValue: taskname,
+                        decoration: InputDecoration.collapsed(
+                          hintStyle: Theme.of(context).textTheme.labelSmall,
+                          hintText: 'Task Name',
+                        ),
+                        onChanged: (value) {
+                          taskname = value;
+                        },
+                      ),
                     ),
-                    onChanged: (value) {
-                      taskname = value;
-                    },
                   ),
-                  TextField(
-                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
-                    autofocus: true,
-                    minLines: 1,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      hintStyle: Theme.of(context).textTheme.labelSmall,
-                      hintText: 'Task Description',
+                  Card(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        cursorColor:
+                            Theme.of(context).textTheme.labelMedium!.color,
+                        autofocus: false,
+                        controller:
+                            TextEditingController(text: taskdescription),
+                        minLines: 1,
+                        maxLines: 4,
+                        decoration: InputDecoration.collapsed(
+                          hintStyle: Theme.of(context).textTheme.labelSmall,
+                          hintText: 'Task Description',
+                        ),
+                        onChanged: (value) {
+                          taskdescription = value;
+                        },
+                      ),
                     ),
-                    onChanged: (value) {
-                      taskdescription = value;
-                    },
                   ),
-                  TextFormField(
-                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      hintStyle: Theme.of(context).textTheme.labelSmall,
-                      hintText: 'Parts Needed',
-                    ),
-                    onChanged: (value) {
-                      partsneeded = value;
-                    },
-                  ),
+                  Card(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: TextFormField(
+                          cursorColor:
+                              Theme.of(context).textTheme.labelMedium!.color,
+                          autofocus: false,
+                          initialValue: partsneeded,
+                          decoration: InputDecoration.collapsed(
+                            hintStyle: Theme.of(context).textTheme.labelSmall,
+                            hintText: 'Parts Needed',
+                          ),
+                          onChanged: (value) {
+                            partsneeded = value;
+                          },
+                        ),
+                      ))
                 ],
               ),
             ),
@@ -98,7 +122,6 @@ class TodoAlerts {
 
   static Future<void> editTodo(
       BuildContext context,
-      Size size,
       String bikename,
       String docId,
       User user,
@@ -118,58 +141,80 @@ class TodoAlerts {
                   'Edit Task',
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
-                IconButton(onPressed: () {
-                  Navigator.of(context).pop();
-                  DatabaseService(user.uid).deleteTodo(bikename, docId);
-                }, icon: const Icon(Icons.delete))
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      DatabaseService(user.uid).deleteTodo(bikename, docId);
+                    },
+                    icon: const Icon(Icons.delete))
               ],
             ),
             content: SizedBox(
-              width: size.width * 0.4,
-              child: IntrinsicHeight(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextFormField(
-                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
-                    autofocus: false,
-                    initialValue: taskname,
-                    decoration: InputDecoration(
-                      hintStyle: Theme.of(context).textTheme.labelSmall,
-                      hintText: 'Task Name',
+                  Card(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextFormField(
+                        cursorColor:
+                            Theme.of(context).textTheme.labelMedium!.color,
+                        autofocus: false,
+                        initialValue: taskname,
+                        decoration: InputDecoration.collapsed(
+                          hintStyle: Theme.of(context).textTheme.labelSmall,
+                          hintText: 'Task Name',
+                        ),
+                        onChanged: (value) {
+                          taskname = value;
+                        },
+                      ),
                     ),
-                    onChanged: (value) {
-                      taskname = value;
-                    },
                   ),
-                  TextField(
-                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
-                    autofocus: false,
-                    controller: TextEditingController(text: taskdescription),
-                    minLines: 1,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hintStyle: Theme.of(context).textTheme.labelSmall,
-                      hintText: 'Task Description',
+                  Card(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        cursorColor:
+                            Theme.of(context).textTheme.labelMedium!.color,
+                        autofocus: false,
+                        controller:
+                            TextEditingController(text: taskdescription),
+                        minLines: 1,
+                        maxLines: 4,
+                        decoration: InputDecoration.collapsed(
+                          hintStyle: Theme.of(context).textTheme.labelSmall,
+                          hintText: 'Task Description',
+                        ),
+                        onChanged: (value) {
+                          taskdescription = value;
+                        },
+                      ),
                     ),
-                    onChanged: (value) {
-                      taskdescription = value;
-                    },
                   ),
-                  TextFormField(
-                    cursorColor: Theme.of(context).textTheme.labelMedium!.color,
-                    autofocus: false,
-                    initialValue: partsneeded,
-                    decoration: InputDecoration(
-                      hintStyle: Theme.of(context).textTheme.labelSmall,
-                      hintText: 'Parts Needed',
-                    ),
-                    onChanged: (value) {
-                      partsneeded = value;
-                    },
-                  ),
+                  Card(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: TextFormField(
+                          cursorColor:
+                              Theme.of(context).textTheme.labelMedium!.color,
+                          autofocus: false,
+                          initialValue: partsneeded,
+                          decoration: InputDecoration.collapsed(
+                            hintStyle: Theme.of(context).textTheme.labelSmall,
+                            hintText: 'Parts Needed',
+                          ),
+                          onChanged: (value) {
+                            partsneeded = value;
+                          },
+                        ),
+                      ))
                 ],
               ),
-            ),),
+            ),
             actionsAlignment: MainAxisAlignment.spaceAround,
             actions: <Widget>[
               ElevatedButton(

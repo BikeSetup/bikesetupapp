@@ -39,7 +39,7 @@ class _NewBikeState extends State<NewBike> {
     'rearwheelsize': '',
   };
 
-  String userinput = '';
+  String userinputname = '';
   List<String> possiblesuspensiontype = ['Air', 'Coil'];
 
   Future<void> getData() async {
@@ -63,12 +63,9 @@ class _NewBikeState extends State<NewBike> {
   @override
   void initState() {
     super.initState();
-    if (widget.newbikemode == NewBikeMode.editBike) {
+    if (widget.newbikemode == NewBikeMode.editSetup) {
       initData = getData();
-      userinput = widget.bikename;
-    } else if (widget.newbikemode == NewBikeMode.editSetup) {
-      initData = getData();
-      userinput = widget.setupname;
+      userinputname = widget.setupname;
     } else {
       initData = Future.value();
     }
@@ -87,7 +84,7 @@ class _NewBikeState extends State<NewBike> {
             color: Theme.of(context).textTheme.titleLarge!.color,
           ));
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return const Text('Error');
         } else {
           return Scaffold(
               appBar: AppBar(
@@ -110,14 +107,10 @@ class _NewBikeState extends State<NewBike> {
                           child: Center(
                             child: TextFormField(
                               style: Theme.of(context).textTheme.labelLarge,
-                              readOnly: widget.newbikemode ==
-                                      NewBikeMode.editBike ||
-                                  widget.newbikemode == NewBikeMode.editSetup,
-                              initialValue: widget.newbikemode ==
-                                          NewBikeMode.newBike ||
-                                      widget.newbikemode == NewBikeMode.newSetup
+                              readOnly: widget.newbikemode.isEdit,
+                              initialValue: !widget.newbikemode.isEdit
                                   ? null
-                                  : userinput,
+                                  : userinputname,
                               decoration: InputDecoration(
                                   hintStyle:
                                       Theme.of(context).textTheme.titleLarge,
@@ -126,7 +119,7 @@ class _NewBikeState extends State<NewBike> {
                                   border: InputBorder.none),
                               onChanged: (value) {
                                 setState(() {
-                                  userinput = value;
+                                  userinputname = value;
                                 });
                               },
                             ),
@@ -160,7 +153,9 @@ class _NewBikeState extends State<NewBike> {
                                         Theme.of(context).textTheme.labelLarge,
                                     onChanged: (String? newValue) {
                                       setState(() {
-                                        setupinformation['fork'] = newValue!;
+                                        if (newValue != null) {
+                                          setupinformation['fork'] = newValue;
+                                        }
                                       });
                                     },
                                     items: possiblesuspensiontype
@@ -170,7 +165,7 @@ class _NewBikeState extends State<NewBike> {
                                         value: value,
                                         child: Text(
                                           value,
-                                          //style: Theme.of(context).textTheme.titleLarge,
+                                          style: Theme.of(context).textTheme.titleLarge,
                                         ),
                                       );
                                     }).toList(),
@@ -216,7 +211,7 @@ class _NewBikeState extends State<NewBike> {
                                           value: value,
                                           child: Text(
                                             value,
-                                            //style: Theme.of(context).textTheme.titleLarge,
+                                            style: Theme.of(context).textTheme.titleLarge,
                                           ),
                                         );
                                       }).toList(),
@@ -243,19 +238,18 @@ class _NewBikeState extends State<NewBike> {
                                       Expanded(
                                         flex: 3,
                                         child: TextFormField(
-                                          initialValue: (widget.newbikemode ==
-                                                      NewBikeMode.newBike) ||
-                                                  (widget.newbikemode ==
-                                                      NewBikeMode.newSetup)
+                                          cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                                          initialValue: (widget
+                                                  .newbikemode.isEdit)
                                               ? null
                                               : setupinformation['fronttravel'],
                                           keyboardType: TextInputType.number,
                                           textAlign: TextAlign.end,
                                           decoration: InputDecoration.collapsed(
-                                              hintText: widget.newbikemode ==
-                                                      NewBikeMode.newBike || widget.newbikemode == NewBikeMode.newSetup
-                                                  ? 'Front Travel'
-                                                  : null,
+                                              hintText:
+                                                  !widget.newbikemode.isEdit
+                                                      ? 'Front Travel'
+                                                      : null,
                                               hintStyle: Theme.of(context)
                                                   .textTheme
                                                   .bodyLarge),
@@ -283,8 +277,7 @@ class _NewBikeState extends State<NewBike> {
                               ),
                             ),
                             Visibility(
-                              visible:
-                                  widget.biketype.hasShock,
+                              visible: widget.biketype.hasShock,
                               child: ListTile(
                                 leading: Icon(
                                   Icons.straighten,
@@ -303,19 +296,18 @@ class _NewBikeState extends State<NewBike> {
                                       Expanded(
                                         flex: 3,
                                         child: TextFormField(
-                                          initialValue: (widget.newbikemode ==
-                                                      NewBikeMode.newBike) ||
-                                                  (widget.newbikemode ==
-                                                      NewBikeMode.newSetup)
+                                          cursorColor: Theme.of(context).textTheme.labelMedium!.color,
+                                          initialValue: widget
+                                                  .newbikemode.isEdit
                                               ? null
                                               : setupinformation['reartravel'],
                                           keyboardType: TextInputType.number,
                                           textAlign: TextAlign.end,
                                           decoration: InputDecoration.collapsed(
-                                              hintText: widget.newbikemode ==
-                                                      NewBikeMode.newBike || widget.newbikemode == NewBikeMode.newSetup
-                                                  ? 'Rear Travel'
-                                                  : null,
+                                              hintText:
+                                                  !widget.newbikemode.isEdit
+                                                      ? 'Rear Travel'
+                                                      : null,
                                               hintStyle: Theme.of(context)
                                                   .textTheme
                                                   .bodyLarge),
@@ -359,18 +351,15 @@ class _NewBikeState extends State<NewBike> {
                                     Expanded(
                                       flex: 3,
                                       child: TextFormField(
+                                        cursorColor: Theme.of(context).textTheme.labelMedium!.color,
                                         decoration: InputDecoration.collapsed(
                                             hintStyle: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,
-                                            hintText: widget.newbikemode ==
-                                                    NewBikeMode.newBike || widget.newbikemode == NewBikeMode.newSetup
+                                            hintText: !widget.newbikemode.isEdit
                                                 ? 'Size'
                                                 : null),
-                                        initialValue: (widget.newbikemode ==
-                                                    NewBikeMode.newBike) ||
-                                                (widget.newbikemode ==
-                                                    NewBikeMode.newSetup)
+                                        initialValue: widget.newbikemode.isEdit
                                             ? null
                                             : setupinformation['rearwheelsize'],
                                         keyboardType: TextInputType.number,
@@ -410,18 +399,15 @@ class _NewBikeState extends State<NewBike> {
                                     Expanded(
                                       flex: 3,
                                       child: TextFormField(
+                                        cursorColor: Theme.of(context).textTheme.labelMedium!.color,
                                         decoration: InputDecoration.collapsed(
                                             hintStyle: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge,
-                                            hintText: widget.newbikemode ==
-                                                    NewBikeMode.newBike || widget.newbikemode == NewBikeMode.newSetup
+                                            hintText: !widget.newbikemode.isEdit
                                                 ? 'Size'
                                                 : null),
-                                        initialValue: (widget.newbikemode ==
-                                                    NewBikeMode.newBike) ||
-                                                (widget.newbikemode ==
-                                                    NewBikeMode.newSetup)
+                                        initialValue: widget.newbikemode.isEdit
                                             ? null
                                             : setupinformation[
                                                 'frontwheelsize'],
@@ -482,7 +468,7 @@ class _NewBikeState extends State<NewBike> {
                                         backgroundColor:
                                             Theme.of(context).primaryColor),
                                     onPressed: () async {
-                                      if (userinput == '') {
+                                      if (userinputname == '') {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
@@ -496,7 +482,7 @@ class _NewBikeState extends State<NewBike> {
                                         String setupname;
                                         if (widget.newbikemode ==
                                             NewBikeMode.newBike) {
-                                          bikename = userinput;
+                                          bikename = userinputname;
                                           setupname = 'Default';
                                           DatabaseService(widget.user.uid)
                                               .createBike(
@@ -506,7 +492,7 @@ class _NewBikeState extends State<NewBike> {
                                                   widget.isdefaultbike);
                                         } else {
                                           bikename = widget.bikename;
-                                          setupname = userinput;
+                                          setupname = userinputname;
                                           DatabaseService(widget.user.uid)
                                               .createSetup(bikename, setupname,
                                                   setupinformation);
