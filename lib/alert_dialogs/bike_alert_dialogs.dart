@@ -1,5 +1,6 @@
 import 'package:bikesetupapp/bike_enums/biketype.dart';
 import 'package:bikesetupapp/database_service/database.dart';
+import 'package:bikesetupapp/widgets/default_bike_selector_widget.dart';
 import 'package:bikesetupapp/widgets/setup_information_alert_content.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -99,6 +100,58 @@ class BikeAlerts {
     );
   }
 
+  static Future<void> renameBike(BuildContext context, String bikeNameOld, String biketype) async {
+    TextEditingController _controller = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).cardTheme.color,
+          title: Text(
+            'Rename $bikeNameOld',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          content: TextField(
+            controller: _controller,
+            style: Theme.of(context).textTheme.titleMedium,
+            decoration: InputDecoration(
+              hintText: 'Enter new name',
+              hintStyle: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          actions: <Widget>[
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context)
+                      .floatingActionButtonTheme
+                      .backgroundColor,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel',
+                    style: Theme.of(context).textTheme.labelLarge)),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              ),
+              child:
+                  Text('Rename', style: Theme.of(context).textTheme.labelLarge),
+              onPressed: () {
+                Navigator.of(context).pop();
+                //DatabaseService(FirebaseAuth.instance.currentUser!.uid)
+                //    .renameBike(bikeNameOld, _controller.text, biketype);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Future<void> deleteBikeError(BuildContext context, String type) async {
     return showDialog<void>(
       context: context,
@@ -142,47 +195,10 @@ class BikeAlerts {
               'Select Default Bike',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            content: StreamBuilder(
-                stream: DatabaseService(user.uid).getBikes(),
-                builder: (((context, AsyncSnapshot snapshot) {
-                  if (ConnectionState.waiting == snapshot.connectionState) {
-                    return const SizedBox(
-                      height: 100,
-                      width: 100,
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Center(child: Text('Error'));
-                  } else {
-                    Map<String, dynamic>? bikes =
-                        snapshot.data!.data() as Map<String, dynamic>?;
-                    if (bikes == null) {
-                      return const Center(
-                        child: Text('No Bikes'),
-                      );
-                    } else {
-                      return SizedBox(
-                        height: size.height * 0.25,
-                        width: size.width * 0.8,
-                        child: ListView.builder(
-                          itemCount: bikes.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Card(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              child: ListTile(
-                              title: Text(bikes.keys.elementAt(index), style: Theme.of(context).textTheme.labelMedium,),
-                              onTap: () {
-                                DatabaseService(user.uid).setDefaultBike(
-                                    bikes.keys.elementAt(index));
-                                Navigator.of(context).pop();
-                              },
-                            ));
-                          },
-                        ),
-                      );
-                    }
-                  }
-                }))),
+            content: DefaultBikeSelector(
+              user: user,
+              size: size,
+            ),
             actionsAlignment: MainAxisAlignment.spaceAround,
             actions: [
               ElevatedButton(
