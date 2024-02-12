@@ -111,8 +111,16 @@ class TodoAlerts {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  DatabaseService(user.uid).setTodo(
+                  try {
+                    DatabaseService(user.uid).setTodo(
                       bikename, taskname, taskdescription, partsneeded);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Error creating todo',
+                                style:
+                                    Theme.of(context).textTheme.titleMedium!)));
+                  }
+                  
                 },
               ),
             ],
@@ -144,7 +152,14 @@ class TodoAlerts {
                 IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      DatabaseService(user.uid).deleteTodo(bikename, docId);
+                      try {
+                        DatabaseService(user.uid).deleteTodo(bikename, docId);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Error deleting todo',
+                                style:
+                                    Theme.of(context).textTheme.titleMedium!)));
+                      }
                     },
                     icon: const Icon(Icons.delete))
               ],
@@ -240,8 +255,14 @@ class TodoAlerts {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  DatabaseService(user.uid).editTodo(bikename, docId, taskname,
-                      taskdescription, partsneeded, isdone);
+                  try {
+                    DatabaseService(user.uid).editTodo(bikename, docId,
+                        taskname, taskdescription, partsneeded, isdone);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Error editing todo',
+                            style: Theme.of(context).textTheme.titleMedium!)));
+                  }
                 },
               ),
             ],

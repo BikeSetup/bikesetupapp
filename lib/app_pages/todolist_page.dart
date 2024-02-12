@@ -91,9 +91,20 @@ class _ToDoListState extends State<ToDoList> {
                                     value: data['done'],
                                     onChanged: (bool? value) {
                                       setState(() {
-                                        DatabaseService(widget.user.uid)
+                                        try {
+                                          DatabaseService(widget.user.uid)
                                             .updateTodoList(
                                                 widget.ubid, data.id, value!);
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'Error updating todo',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium!)));
+                                        }
+                                        
                                       });
                                     },
                                   ),
@@ -148,9 +159,19 @@ class _ToDoListState extends State<ToDoList> {
                                   value: data['done'],
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      DatabaseService(widget.user.uid)
-                                          .updateTodoList(
-                                              widget.ubid, data.id, value!);
+                                      try {
+                                        DatabaseService(widget.user.uid)
+                                            .updateTodoList(
+                                                widget.ubid, data.id, value!);
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'Error updating todo',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium!)));
+                                      }
                                     });
                                   },
                                 ),

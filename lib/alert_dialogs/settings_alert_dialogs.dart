@@ -132,8 +132,15 @@ class SettingsAlerts {
                   Text('Enter', style: Theme.of(context).textTheme.labelLarge),
               onPressed: () {
                 Navigator.of(context).pop();
-                DatabaseService(user.uid)
+                try {
+                  DatabaseService(user.uid)
                     .setSetting(key, value, bikename, category, setup);
+                } catch(e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Error creating setting',
+                          style: Theme.of(context).textTheme.titleMedium!)));
+                }
+                
               },
             ),
           ],
@@ -205,15 +212,23 @@ class SettingsAlerts {
                 if (key == "Pressure" &&
                     value.trim().replaceAll(',', '').length > 3) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Pressure must be 3 digits or less'),
+                    SnackBar(
+                      content: Text('Pressure must be 3 digits or less',
+                          style: Theme.of(context).textTheme.titleMedium!),
                     ),
                   );
                   return;
                 } else {
                   Navigator.of(context).pop();
-                  DatabaseService(user.uid).editSetting(
+                  try {
+                    DatabaseService(user.uid).editSetting(
                       key.trim(), value.trim(), bikename, category, setup);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Error creating setting',
+                          style: Theme.of(context).textTheme.titleMedium!)));
+                  }
+                  
                 }
               },
             ),
@@ -263,8 +278,18 @@ class SettingsAlerts {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                DatabaseService(user.uid)
+                try {
+                  DatabaseService(user.uid)
                     .deleteSetting(key, bikename, category, setup);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error deleting category',
+                      style: Theme.of(context).textTheme.titleMedium),
+                    ),
+                  );
+                }
+                
               },
             ),
           ],

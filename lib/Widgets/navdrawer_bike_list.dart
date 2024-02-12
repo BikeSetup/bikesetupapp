@@ -157,8 +157,6 @@ class _BikeListState extends State<BikeList> {
                                                               newbikemode:
                                                                   NewBikeMode
                                                                       .editSetup,
-                                                              isdefaultbike:
-                                                                  false,
                                                               bikename:
                                                                   bikename,
                                                               ubid: ubid,

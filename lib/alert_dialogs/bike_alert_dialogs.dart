@@ -47,7 +47,16 @@ class BikeAlerts {
                   Text('Delete', style: Theme.of(context).textTheme.labelLarge),
               onPressed: () {
                 Navigator.of(context).pop();
-                DatabaseService(user.uid).deleteBike(ubid);
+                try {
+                  DatabaseService(user.uid).deleteBike(ubid);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      'Error deleting bike',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ));
+                }
               },
             ),
           ],
@@ -94,7 +103,16 @@ class BikeAlerts {
                   Text('Delete', style: Theme.of(context).textTheme.labelLarge),
               onPressed: () {
                 Navigator.of(context).pop();
-                DatabaseService(user.uid).deleteSetup(ubid, usid);
+                try {
+                  DatabaseService(user.uid).deleteSetup(ubid, usid);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      'Error deleting setup',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ));
+                }
               },
             ),
           ],
@@ -148,8 +166,14 @@ class BikeAlerts {
                   Text('Edit', style: Theme.of(context).textTheme.labelLarge),
               onPressed: () {
                 Navigator.of(context).pop();
-                DatabaseService(FirebaseAuth.instance.currentUser!.uid)
-                    .renameBike(ubid, controller.text);
+                try {
+                  DatabaseService(FirebaseAuth.instance.currentUser!.uid)
+                      .renameBike(ubid, controller.text);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Error renaming bike',
+                          style: Theme.of(context).textTheme.titleMedium!)));
+                }
               },
             ),
           ],
@@ -305,7 +329,6 @@ class BikeAlerts {
                       builder: (context) => NewBike(
                           user: user,
                           newbikemode: NewBikeMode.newSetup,
-                          isdefaultbike: false,
                           bikename: bikename,
                           ubid: ubid,
                           setupname: "",

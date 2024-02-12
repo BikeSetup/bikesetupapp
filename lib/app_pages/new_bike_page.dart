@@ -10,7 +10,6 @@ import 'package:uuid/uuid.dart';
 class NewBike extends StatefulWidget {
   final User user;
   final NewBikeMode newbikemode;
-  final bool isdefaultbike;
   final String bikename;
   final String ubid;
   final String setupname;
@@ -20,7 +19,6 @@ class NewBike extends StatefulWidget {
       {Key? key,
       required this.user,
       required this.newbikemode,
-      required this.isdefaultbike,
       required this.bikename,
       required this.ubid,
       required this.setupname,
@@ -504,25 +502,30 @@ class _NewBikeState extends State<NewBike> {
                                         return;
                                       } else {
                                         isbuttonactive = false;
-                                        String bikename;
-                                        String setupname;
-                                        String ubid;
-                                        String usid;
+                                        final String bikename;
+                                        final String setupname;
+                                        final String ubid;
+                                        final String usid;
                                         if (widget.newbikemode ==
                                             NewBikeMode.newBike) {
                                           setupname = 'Default';
                                           bikename = userinputname;
-                                          ubid = await DatabaseService(
-                                                  widget.user.uid)
-                                              .createBike(
-                                                  bikename,
-                                                  setupinformation,
-                                                  widget.biketype.biketype,
-                                                  widget.isdefaultbike);
+                                          try {
+                                            ubid = await DatabaseService(
+                                                    widget.user.uid)
+                                                .createBike(
+                                                    bikename,
+                                                    setupinformation,
+                                                    widget.biketype.biketype);
+                                          } catch (e) {
+                                            return;
+                                          }
                                           usid = await DatabaseService(
                                                   widget.user.uid)
                                               .getDefaultSetup(ubid);
-                                          
+                                          if (usid == "") {
+                                            return;
+                                          }
                                         } else if (widget.newbikemode ==
                                             NewBikeMode.newSetup) {
                                           setupname = userinputname;
@@ -553,22 +556,28 @@ class _NewBikeState extends State<NewBike> {
                                                   builder: (context) =>
                                                       MyHomePage(
                                                           user: widget.user,
-                                                          biketype: widget.biketype,
+                                                          biketype:
+                                                              widget.biketype,
                                                           bikename: bikename,
                                                           ubid: ubid,
                                                           setupname: setupname,
                                                           usid: usid)));
-                                      }
                                         }
+                                      }
                                     },
-                                    child: isbuttonactive? Text(
-                                      'Save',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ): CircularProgressIndicator(
-                                      color: Theme.of(context).textTheme.labelMedium!.color,
-                                    ),
+                                    child: isbuttonactive
+                                        ? Text(
+                                            'Save',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge,
+                                          )
+                                        : CircularProgressIndicator(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium!
+                                                .color,
+                                          ),
                                   ),
                                 ))
                           ],
