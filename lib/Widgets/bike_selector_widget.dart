@@ -23,7 +23,7 @@ class BikeSelectorWidget extends StatelessWidget {
             ],
           ),
           child: Image.asset(
-            'assets/${bikeType.biketype}.png',
+            bikeType.path,
             fit: BoxFit.contain,
           )),
     );

@@ -29,7 +29,6 @@ void main() async {
   User? user = FirebaseAuth.instance.currentUser;
 
   if (user != null) {
-    isSignedIn = true;
     defaultBikebUbid = await DatabaseService(user.uid).getDefaultBike();
     defaultBikeName =
         await DatabaseService(user.uid).getBikeNameFromID(defaultBikebUbid);

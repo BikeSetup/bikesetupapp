@@ -52,8 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
     final double boxHeight = size.height / 3.5;
     const double offset = 40;
 
-    String bikeImage = 'assets/${widget.biketype.biketype}.png';
-
     return Scaffold(
       drawer: NavDrawer(
         user: widget.user,
@@ -114,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     bottomRight: Radius.circular(borderrad))),
             child: Stack(children: [
               Center(
-                child: Image.asset(bikeImage),
+                child: Image.asset(widget.biketype.path),
               ),
               Bubble(
                 user: widget.user!,
