@@ -54,11 +54,9 @@ class _HomePageListViewState extends State<HomePageListView> {
         }
         if (snapshot.data == null || snapshot.data!.data() == null) {
           return Center(
-              child: CircularProgressIndicator.adaptive(
-            valueColor: AlwaysStoppedAnimation<Color>(
-                Theme.of(context).floatingActionButtonTheme.backgroundColor!),
-          ));
-        }
+              child: Text('This bike does not exist', style: Theme.of(context)
+                  .textTheme
+                  .labelLarge));}
         Map<String, dynamic>? settings =
             snapshot.data!.data() as Map<String, dynamic>?;
         if (settings == null) {

@@ -40,10 +40,10 @@ void main() async {
     biketype = BikeType.fromString(
         await DatabaseService(user.uid).getBikeType(defaultBikebUbid));
 
-    if (defaultBikebUbid == "" ||
-        biketype == BikeType.error ||
-        defaultBikeName == "") {
-      isSignedIn = false;
+    if (defaultSetupUsid.isNotEmpty &&
+        defaultSetup.isNotEmpty &&
+        biketype != BikeType.error) {
+      isSignedIn = true;
     }
   }
 

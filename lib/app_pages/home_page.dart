@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.user == null || widget.ubid == "" || widget.usid == "") {
+    if (widget.user == null || widget.ubid.isEmpty || widget.usid.isEmpty) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const LoginPage()));
     }

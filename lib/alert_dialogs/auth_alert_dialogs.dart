@@ -34,8 +34,8 @@ class AuthAlerts {
         await DatabaseService(user.uid).getDefaultSetup(defaultBikeUbid);
     BikeType biketype = BikeType.fromString(
         await DatabaseService(user.uid).getBikeType(defaultBikeUbid));
-    if (defaultBikeUbid == "" ||
-        defaultSetupUsid == "" ||
+    if (defaultBikeUbid.isEmpty ||
+        defaultSetupUsid.isEmpty ||
         biketype == BikeType.error) {
       if (!context.mounted) return;
       Navigator.of(context).push(MaterialPageRoute(

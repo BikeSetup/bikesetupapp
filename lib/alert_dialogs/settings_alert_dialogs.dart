@@ -63,7 +63,7 @@ class SettingsAlerts {
                 style: Theme.of(context).textTheme.labelMedium,
               ),
               onPressed: () {
-                if (key == "") {
+                if (key.trim().isEmpty) {
                   generalError(context, 'Please enter a name!');
                   return;
                 } else {

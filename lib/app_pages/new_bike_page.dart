@@ -508,7 +508,7 @@ class _NewBikeState extends State<NewBike> {
                                       usid =
                                           await DatabaseService(widget.user.uid)
                                               .getDefaultSetup(ubid);
-                                      if (usid == "") {
+                                      if (usid.isEmpty) {
                                         return;
                                       }
                                     } else if (widget.newbikemode ==

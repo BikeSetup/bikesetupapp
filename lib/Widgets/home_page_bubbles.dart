@@ -78,7 +78,7 @@ class _BubbleState extends State<Bubble> {
                       if (snapshot.hasError ||
                           snapshot.data == null ||
                           !snapshot.hasData ||
-                          snapshot.data.toString() == "") {
+                          snapshot.data.toString().isEmpty) {
                         return const Icon(
                           Icons.error,
                           color: Colors.white,
@@ -107,7 +107,7 @@ class _BubbleState extends State<Bubble> {
                           size: 30,
                         );
                       }
-                      if (element == "") {
+                      if (element.isEmpty) {
                         return const Icon(
                           Icons.error,
                           color: Colors.white,
