@@ -5,10 +5,10 @@ class PulsatingCircle extends StatefulWidget {
   final Color color;
 
   const PulsatingCircle({
-    Key? key,
+    super.key,
     required this.size,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   State<PulsatingCircle> createState() => _PulsatingCircleState();

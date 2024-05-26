@@ -8,7 +8,7 @@ const String googleIcon = 'assets/google_icon.png';
 const String incognitoIcon = 'assets/incognito.png';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -51,8 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (!mounted) {
                         return;
                       }
-                      AuthAlerts.handleAuthentication(
-                          userCredential, context);
+                      AuthAlerts.handleAuthentication(userCredential, context);
                     }),
                     child: Padding(
                       padding: const EdgeInsets.all(0),
@@ -83,7 +82,8 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: (() async {
                       final UserCredential userCredential;
                       try {
-                        userCredential = await FirebaseAuth.instance.signInAnonymously();
+                        userCredential =
+                            await FirebaseAuth.instance.signInAnonymously();
                       } catch (e) {
                         if (!mounted) return;
                         AuthAlerts.generalError(context, 'Error: $e');
@@ -92,8 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (!mounted) {
                         return;
                       }
-                      AuthAlerts.handleAuthentication(
-                          userCredential, context);
+                      AuthAlerts.handleAuthentication(userCredential, context);
                     }),
                     child: Padding(
                       padding: const EdgeInsets.all(0),

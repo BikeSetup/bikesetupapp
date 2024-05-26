@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class BikeAlerts {
-
   static Future<void> deleteBike(
       BuildContext context, User user, String ubid) async {
     return showDialog<void>(

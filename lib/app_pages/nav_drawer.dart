@@ -12,12 +12,11 @@ class NavDrawer extends StatefulWidget {
   final String chosensetup;
   final User? user;
   const NavDrawer(
-      {Key? key,
+      {super.key,
       required this.bikename,
       required this.biketype,
       required this.chosensetup,
-      required this.user})
-      : super(key: key);
+      required this.user});
 
   @override
   State<NavDrawer> createState() => _NavDrawerState();
@@ -42,32 +41,34 @@ class _NavDrawerState extends State<NavDrawer> {
                           BoxDecoration(color: Theme.of(context).primaryColor),
                       child: Center(
                         child: ListTile(
-                          leading: widget.user != null && widget.user!.photoURL != null
-                              ? Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        '${widget.user?.photoURL}'),
+                            leading: widget.user != null &&
+                                    widget.user!.photoURL != null
+                                ? Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          '${widget.user?.photoURL}'),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      backgroundImage: const AssetImage(
+                                          'assets/incognito.png'),
+                                    ),
                                   ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: CircleAvatar(
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    backgroundImage: const AssetImage(
-                                        'assets/incognito.png'),
-                                  ),
-                                ),
-                          title: Text('Bike Setup',
-                              style: Theme.of(context).textTheme.titleLarge),
-                          subtitle: widget.user != null && widget.user!.email != null
-                              ? Text(
-                                  '${widget.user?.email}',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                )
-                              : null
-                        ),
+                            title: Text('Bike Setup',
+                                style: Theme.of(context).textTheme.titleLarge),
+                            subtitle: widget.user != null &&
+                                    widget.user!.email != null
+                                ? Text(
+                                    '${widget.user?.email}',
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                  )
+                                : null),
                       ))),
               Expanded(
                 child: SizedBox(

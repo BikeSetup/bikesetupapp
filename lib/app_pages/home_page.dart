@@ -20,14 +20,13 @@ class MyHomePage extends StatefulWidget {
   final String setupname;
   final String usid;
   const MyHomePage(
-      {Key? key,
+      {super.key,
       required this.user,
       required this.biketype,
       required this.bikename,
       required this.ubid,
       required this.setupname,
-      required this.usid})
-      : super(key: key);
+      required this.usid});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -41,11 +40,12 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     chosenCategory = Category.reartire;
   }
+
   @override
   Widget build(BuildContext context) {
     if (widget.user == null || widget.ubid.isEmpty || widget.usid.isEmpty) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const LoginPage()));
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const LoginPage()));
     }
 
     final Size size = MediaQuery.of(context).size;
@@ -71,13 +71,13 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                   onPressed: () {
                     BikeAlerts.showSetupInformation(
-                          context,
-                          size,
-                          widget.user!.uid,
-                          widget.ubid,
-                          widget.usid,
-                          widget.setupname,
-                          widget.biketype);
+                        context,
+                        size,
+                        widget.user!.uid,
+                        widget.ubid,
+                        widget.usid,
+                        widget.setupname,
+                        widget.biketype);
                   },
                   icon: const Icon(Icons.info_outline_rounded)),
             ],

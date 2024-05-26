@@ -16,15 +16,14 @@ class NewBike extends StatefulWidget {
   final String usid;
   final BikeType biketype;
   const NewBike(
-      {Key? key,
+      {super.key,
       required this.user,
       required this.newbikemode,
       required this.bikename,
       required this.ubid,
       required this.setupname,
       required this.usid,
-      required this.biketype})
-      : super(key: key);
+      required this.biketype});
 
   @override
   State<NewBike> createState() => _NewBikeState();

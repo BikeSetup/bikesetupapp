@@ -14,11 +14,11 @@ class SettingsPage extends StatefulWidget {
   final BikeType biketype;
   final String chosensetup;
   const SettingsPage({
-    Key? key,
+    super.key,
     required this.bikename,
     required this.biketype,
     required this.chosensetup,
-  }) : super(key: key);
+  });
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -110,16 +110,15 @@ class _SettingsPageState extends State<SettingsPage> {
                       onPressed: () async {
                         if (user != null && user!.isAnonymous) {
                           bool? wantsToSignOut =
-                              await AuthAlerts.signOutAnonymus(
-                                  context, user!);
+                              await AuthAlerts.signOutAnonymus(context, user!);
                           if (wantsToSignOut == null || !wantsToSignOut) {
                             return;
                           }
                         }
                         AuthService().signOut();
-                          setState(() {
-                            user = null;
-                          });
+                        setState(() {
+                          user = null;
+                        });
                       })
                   : IconButton(
                       icon: Icon(

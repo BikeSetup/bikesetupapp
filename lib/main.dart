@@ -72,15 +72,14 @@ class MyApp extends StatelessWidget {
   final String defaultSetup;
   final BikeType biketype;
   const MyApp(
-      {Key? key,
+      {super.key,
       required this.isSignedIn,
       required this.user,
       required this.defaultBikebuid,
       required this.defaultBike,
       required this.defaultSetupusid,
       required this.defaultSetup,
-      required this.biketype})
-      : super(key: key);
+      required this.biketype});
 
   @override
   Widget build(BuildContext context) {
