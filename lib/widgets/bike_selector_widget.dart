@@ -1,4 +1,4 @@
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:flutter/material.dart';
 
 class BikeSelectorWidget extends StatelessWidget {

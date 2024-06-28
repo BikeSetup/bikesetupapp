@@ -2,7 +2,7 @@ import 'package:bikesetupapp/alert_dialogs/auth_alert_dialogs.dart';
 import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
 import 'package:bikesetupapp/app_pages/google_sign_in.dart';
 import 'package:bikesetupapp/app_services/app_state_notifier.dart';
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,14 +10,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bikesetupapp/database_service/auth_service.dart';
 
 class SettingsPage extends StatefulWidget {
-  final String bikename;
-  final BikeType biketype;
-  final String chosensetup;
+  final String bikeName;
+  final BikeType bikeType;
+  final String chosenSetup;
   const SettingsPage({
     super.key,
-    required this.bikename,
-    required this.biketype,
-    required this.chosensetup,
+    required this.bikeName,
+    required this.bikeType,
+    required this.chosenSetup,
   });
 
   @override
@@ -92,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       style: Theme.of(context).textTheme.labelLarge,
                     )
                   : Text(
-                      user != null ? 'Anonymus' : 'No User',
+                      user != null ? 'Anonymous' : 'No User',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
               subtitle: user != null && user!.email != null
@@ -110,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       onPressed: () async {
                         if (user != null && user!.isAnonymous) {
                           bool? wantsToSignOut =
-                              await AuthAlerts.signOutAnonymus(context, user!);
+                              await AuthAlerts.signOutAnonymous(context, user!);
                           if (wantsToSignOut == null || !wantsToSignOut) {
                             return;
                           }

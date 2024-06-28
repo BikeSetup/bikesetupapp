@@ -1,6 +1,6 @@
 import 'package:bikesetupapp/app_pages/bike_selector_page.dart';
 import 'package:bikesetupapp/app_pages/home_page.dart';
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/database_service/auth_service.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,14 +29,14 @@ class AuthAlerts {
               style: Theme.of(context).textTheme.titleMedium)));
       return;
     }
-    String defaultBikeUbid = await DatabaseService(user.uid).getDefaultBike();
-    String defaultSetupUsid =
-        await DatabaseService(user.uid).getDefaultSetup(defaultBikeUbid);
-    BikeType biketype = BikeType.fromString(
-        await DatabaseService(user.uid).getBikeType(defaultBikeUbid));
-    if (defaultBikeUbid.isEmpty ||
-        defaultSetupUsid.isEmpty ||
-        biketype == BikeType.error) {
+    String defaultBikeID = await DatabaseService(user.uid).getDefaultBike();
+    String defaultSetupID =
+        await DatabaseService(user.uid).getDefaultSetup(defaultBikeID);
+    BikeType bikeType = BikeType.fromString(
+        await DatabaseService(user.uid).getBikeType(defaultBikeID));
+    if (defaultBikeID.isEmpty ||
+        defaultSetupID.isEmpty ||
+        bikeType == BikeType.error) {
       if (!context.mounted) return;
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => BikeTypeSelector(
@@ -45,22 +45,22 @@ class AuthAlerts {
       return;
     }
     String defaultBikeName =
-        await DatabaseService(user.uid).getBikeNameFromID(defaultBikeUbid);
+        await DatabaseService(user.uid).getBikeNameFromID(defaultBikeID);
     String defaultSetup = await DatabaseService(user.uid)
-        .getSetupNameFromID(defaultBikeUbid, defaultSetupUsid);
+        .getSetupNameFromID(defaultBikeID, defaultSetupID);
     if (!context.mounted) return;
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => MyHomePage(
               user: user,
-              bikename: defaultBikeName,
-              ubid: defaultBikeUbid,
-              biketype: biketype,
-              setupname: defaultSetup,
-              usid: defaultSetupUsid,
+              bikeName: defaultBikeName,
+              uBikeID: defaultBikeID,
+              bikeType: bikeType,
+              setupName: defaultSetup,
+              uSetupID: defaultSetupID,
             )));
   }
 
-  static Future<bool?> signOutAnonymus(BuildContext context, User user) async {
+  static Future<bool?> signOutAnonymous(BuildContext context, User user) async {
     bool? result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,

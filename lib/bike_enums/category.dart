@@ -1,8 +1,8 @@
 enum Category {
-  reartire(category: 'RearTire'),
-  fronttire(category: 'FrontTire'),
+  rearTire(category: 'RearTire'),
+  frontTire(category: 'FrontTire'),
   shock(category: 'Shock'),
-  generalsettings(category: 'GeneralSettings'),
+  generalSettings(category: 'GeneralSettings'),
   fork(category: 'Fork');
 
   final String category;

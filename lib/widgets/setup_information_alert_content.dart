@@ -1,25 +1,25 @@
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 import 'package:bikesetupapp/widgets/setup_information_list_element.dart';
 import 'package:flutter/material.dart';
 
 class SetupInformation extends StatelessWidget {
   final String userID;
-  final String ubid;
-  final String usid;
-  final BikeType biketype;
+  final String uBikeID;
+  final String uSetupID;
+  final BikeType bikeType;
   const SetupInformation({
     super.key,
     required this.userID,
-    required this.ubid,
-    required this.usid,
-    required this.biketype,
+    required this.uBikeID,
+    required this.uSetupID,
+    required this.bikeType,
   });
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: DatabaseService(userID).getSetupInformation(ubid, usid),
+        future: DatabaseService(userID).getSetupInformation(uBikeID, uSetupID),
         builder: ((context, snapshot) {
           if (ConnectionState.waiting == snapshot.connectionState) {
             return const SizedBox(
@@ -43,26 +43,26 @@ class SetupInformation extends StatelessWidget {
                 SetupInformationListElement(
                     name: 'Fork Type',
                     value: data['fork'] ?? '',
-                    visible: biketype.hasFork),
+                    visible: bikeType.hasFork),
                 SetupInformationListElement(
                     name: 'Shock Type',
                     value: data['shock'] ?? '',
-                    visible: biketype.hasShock),
+                    visible: bikeType.hasShock),
                 SetupInformationListElement(
                     name: 'Front Travel',
-                    value: '${data['fronttravel']} mm',
-                    visible: biketype.hasFork),
+                    value: '${data['front_travel']} mm',
+                    visible: bikeType.hasFork),
                 SetupInformationListElement(
                     name: 'Rear Travel',
-                    value: '${data['reartravel']} mm',
-                    visible: biketype.hasShock),
+                    value: '${data['rear_travel']} mm',
+                    visible: bikeType.hasShock),
                 SetupInformationListElement(
                     name: 'Front Wheel Size',
-                    value: '${data['frontwheelsize']}"',
+                    value: '${data['front_wheel_size']}"',
                     visible: true),
                 SetupInformationListElement(
                     name: 'Rear Wheel Size',
-                    value: '${data['rearwheelsize']}"',
+                    value: '${data['rear_wheel_size']}"',
                     visible: true),
               ],
             )));

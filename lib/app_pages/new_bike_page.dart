@@ -1,6 +1,6 @@
 import 'package:bikesetupapp/app_pages/home_page.dart';
 import 'package:bikesetupapp/database_service/database.dart';
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/bike_enums/new_bike_mode.dart';
 
 import 'package:flutter/material.dart';
@@ -9,21 +9,21 @@ import 'package:uuid/uuid.dart';
 
 class NewBike extends StatefulWidget {
   final User user;
-  final NewBikeMode newbikemode;
-  final String bikename;
-  final String ubid;
-  final String setupname;
-  final String usid;
-  final BikeType biketype;
+  final NewBikeMode newBikeMode;
+  final String bikeName;
+  final String uBikeID;
+  final String setupName;
+  final String uSetupID;
+  final BikeType bikeType;
   const NewBike(
       {super.key,
       required this.user,
-      required this.newbikemode,
-      required this.bikename,
-      required this.ubid,
-      required this.setupname,
-      required this.usid,
-      required this.biketype});
+      required this.newBikeMode,
+      required this.bikeName,
+      required this.uBikeID,
+      required this.setupName,
+      required this.uSetupID,
+      required this.bikeType});
 
   @override
   State<NewBike> createState() => _NewBikeState();
@@ -32,41 +32,41 @@ class NewBike extends StatefulWidget {
 class _NewBikeState extends State<NewBike> {
   late Future<void> initData;
 
-  String userinputname = '';
-  List<String> possiblesuspensiontype = ['Air', 'Coil'];
-  Map<String, String> setupinformation = {
+  String userInputFieldValue = '';
+  List<String> possibleSuspensionType = ['Air', 'Coil'];
+  Map<String, String> setupInformation = {
     'fork': 'Air',
     'shock': 'Air',
-    'fronttravel': '',
-    'reartravel': '',
-    'frontwheelsize': '',
-    'rearwheelsize': '',
+    'front_travel': '',
+    'rear_travel': '',
+    'front_wheel_size': '',
+    'rear_wheel_size': '',
   };
 
   Future<void> getData() async {
-    Map<String, dynamic> setupdata = await DatabaseService(widget.user.uid)
-        .getSetupInformationAsMap(widget.ubid, widget.usid);
+    Map<String, dynamic> setupData = await DatabaseService(widget.user.uid)
+        .getSetupInformationAsMap(widget.uBikeID, widget.uSetupID);
 
     setState(() {
-      setupinformation['fronttravel'] =
-          setupdata['fronttravel']!.toString().replaceAll('mm', "");
-      setupinformation['reartravel'] =
-          setupdata['reartravel']!.toString().replaceAll('mm', "");
-      setupinformation['frontwheelsize'] =
-          setupdata['frontwheelsize']!.toString().replaceAll('"', "");
-      setupinformation['rearwheelsize'] =
-          setupdata['rearwheelsize']!.toString().replaceAll('"', "");
-      setupinformation['fork'] = setupdata['fork']!.toString();
-      setupinformation['shock'] = setupdata['shock']!.toString();
+      setupInformation['front_travel'] =
+          setupData['front_travel']!.toString().replaceAll('mm', "");
+      setupInformation['rear_travel'] =
+          setupData['rear_travel']!.toString().replaceAll('mm', "");
+      setupInformation['front_wheel_size'] =
+          setupData['front_wheel_size']!.toString().replaceAll('"', "");
+      setupInformation['rear_wheel_size'] =
+          setupData['rear_wheel_size']!.toString().replaceAll('"', "");
+      setupInformation['fork'] = setupData['fork']!.toString();
+      setupInformation['shock'] = setupData['shock']!.toString();
     });
   }
 
   @override
   void initState() {
     super.initState();
-    if (widget.newbikemode == NewBikeMode.editSetup) {
+    if (widget.newBikeMode == NewBikeMode.editSetup) {
       initData = getData();
-      userinputname = widget.setupname;
+      userInputFieldValue = widget.setupName;
     } else {
       initData = Future.value();
     }
@@ -75,7 +75,7 @@ class _NewBikeState extends State<NewBike> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    bool isbuttonactive = true;
+    bool isButtonActive = true;
     return FutureBuilder<void>(
       future: initData,
       builder: (context, snapshot) {
@@ -90,7 +90,7 @@ class _NewBikeState extends State<NewBike> {
         return Scaffold(
             appBar: AppBar(
                 title: Text(
-              widget.newbikemode.appBarTitle,
+              widget.newBikeMode.appBarTitle,
               style: Theme.of(context).textTheme.titleLarge,
             )),
             body: ConstrainedBox(
@@ -108,17 +108,17 @@ class _NewBikeState extends State<NewBike> {
                         child: Center(
                           child: TextFormField(
                             style: Theme.of(context).textTheme.labelLarge,
-                            initialValue: !widget.newbikemode.isEdit
+                            initialValue: !widget.newBikeMode.isEdit
                                 ? null
-                                : userinputname,
+                                : userInputFieldValue,
                             decoration: InputDecoration(
                                 hintStyle:
                                     Theme.of(context).textTheme.titleLarge,
-                                hintText: widget.newbikemode.hintTextTextField,
+                                hintText: widget.newBikeMode.hintTextTextField,
                                 border: InputBorder.none),
                             onChanged: (value) {
                               setState(() {
-                                userinputname = value;
+                                userInputFieldValue = value;
                               });
                             },
                           ),
@@ -127,7 +127,7 @@ class _NewBikeState extends State<NewBike> {
                       Expanded(
                         child: ListView(children: [
                           Visibility(
-                            visible: widget.biketype.hasFork,
+                            visible: widget.bikeType.hasFork,
                             child: ListTile(
                               leading: Icon(
                                 Icons.compress_rounded,
@@ -141,7 +141,7 @@ class _NewBikeState extends State<NewBike> {
                                 child: DropdownButton<String>(
                                   dropdownColor:
                                       Theme.of(context).scaffoldBackgroundColor,
-                                  value: setupinformation['fork'],
+                                  value: setupInformation['fork'],
                                   icon: Icon(
                                     Icons.arrow_downward_rounded,
                                     color: Theme.of(context).iconTheme.color,
@@ -151,11 +151,11 @@ class _NewBikeState extends State<NewBike> {
                                   onChanged: (String? newValue) {
                                     setState(() {
                                       if (newValue != null) {
-                                        setupinformation['fork'] = newValue;
+                                        setupInformation['fork'] = newValue;
                                       }
                                     });
                                   },
-                                  items: possiblesuspensiontype
+                                  items: possibleSuspensionType
                                       .map<DropdownMenuItem<String>>(
                                           (String value) {
                                     return DropdownMenuItem<String>(
@@ -173,7 +173,7 @@ class _NewBikeState extends State<NewBike> {
                             ),
                           ),
                           Visibility(
-                              visible: widget.biketype.hasShock,
+                              visible: widget.bikeType.hasShock,
                               child: ListTile(
                                 leading: Icon(
                                   Icons.compress_rounded,
@@ -188,7 +188,7 @@ class _NewBikeState extends State<NewBike> {
                                   child: DropdownButton<String>(
                                     dropdownColor: Theme.of(context)
                                         .scaffoldBackgroundColor,
-                                    value: setupinformation['shock'],
+                                    value: setupInformation['shock'],
                                     icon: Icon(
                                       Icons.arrow_downward_rounded,
                                       color: Theme.of(context).iconTheme.color,
@@ -198,10 +198,10 @@ class _NewBikeState extends State<NewBike> {
                                         Theme.of(context).textTheme.labelLarge,
                                     onChanged: (String? newValue) {
                                       setState(() {
-                                        setupinformation['shock'] = newValue!;
+                                        setupInformation['shock'] = newValue!;
                                       });
                                     },
-                                    items: possiblesuspensiontype
+                                    items: possibleSuspensionType
                                         .map<DropdownMenuItem<String>>(
                                             (String value) {
                                       return DropdownMenuItem<String>(
@@ -218,7 +218,7 @@ class _NewBikeState extends State<NewBike> {
                                 ),
                               )),
                           Visibility(
-                            visible: widget.biketype.hasFork,
+                            visible: widget.bikeType.hasFork,
                             child: ListTile(
                               leading: Icon(
                                 Icons.straighten,
@@ -240,13 +240,13 @@ class _NewBikeState extends State<NewBike> {
                                             .textTheme
                                             .labelMedium!
                                             .color,
-                                        initialValue: !widget.newbikemode.isEdit
+                                        initialValue: !widget.newBikeMode.isEdit
                                             ? null
-                                            : setupinformation['fronttravel'],
+                                            : setupInformation['front_travel'],
                                         keyboardType: TextInputType.number,
                                         textAlign: TextAlign.end,
                                         decoration: InputDecoration.collapsed(
-                                            hintText: !widget.newbikemode.isEdit
+                                            hintText: !widget.newBikeMode.isEdit
                                                 ? 'Front Travel'
                                                 : null,
                                             hintStyle: Theme.of(context)
@@ -254,7 +254,7 @@ class _NewBikeState extends State<NewBike> {
                                                 .bodyLarge),
                                         onChanged: (value) {
                                           setState(() {
-                                            setupinformation['fronttravel'] =
+                                            setupInformation['front_travel'] =
                                                 value;
                                           });
                                         },
@@ -275,7 +275,7 @@ class _NewBikeState extends State<NewBike> {
                             ),
                           ),
                           Visibility(
-                            visible: widget.biketype.hasShock,
+                            visible: widget.bikeType.hasShock,
                             child: ListTile(
                               leading: Icon(
                                 Icons.straighten,
@@ -297,13 +297,13 @@ class _NewBikeState extends State<NewBike> {
                                             .textTheme
                                             .labelMedium!
                                             .color,
-                                        initialValue: !widget.newbikemode.isEdit
+                                        initialValue: !widget.newBikeMode.isEdit
                                             ? null
-                                            : setupinformation['reartravel'],
+                                            : setupInformation['rear_travel'],
                                         keyboardType: TextInputType.number,
                                         textAlign: TextAlign.end,
                                         decoration: InputDecoration.collapsed(
-                                            hintText: !widget.newbikemode.isEdit
+                                            hintText: !widget.newBikeMode.isEdit
                                                 ? 'Rear Travel'
                                                 : null,
                                             hintStyle: Theme.of(context)
@@ -311,7 +311,7 @@ class _NewBikeState extends State<NewBike> {
                                                 .bodyLarge),
                                         onChanged: (value) {
                                           setState(() {
-                                            setupinformation['reartravel'] =
+                                            setupInformation['rear_travel'] =
                                                 value;
                                           });
                                         },
@@ -356,17 +356,17 @@ class _NewBikeState extends State<NewBike> {
                                           hintStyle: Theme.of(context)
                                               .textTheme
                                               .bodyLarge,
-                                          hintText: !widget.newbikemode.isEdit
+                                          hintText: !widget.newBikeMode.isEdit
                                               ? 'Size'
                                               : null),
-                                      initialValue: !widget.newbikemode.isEdit
+                                      initialValue: !widget.newBikeMode.isEdit
                                           ? null
-                                          : setupinformation['rearwheelsize'],
+                                          : setupInformation['rear_wheel_size'],
                                       keyboardType: TextInputType.number,
                                       textAlign: TextAlign.end,
                                       onChanged: (value) {
                                         setState(() {
-                                          setupinformation['rearwheelsize'] =
+                                          setupInformation['rear_wheel_size'] =
                                               value;
                                         });
                                       },
@@ -407,17 +407,17 @@ class _NewBikeState extends State<NewBike> {
                                           hintStyle: Theme.of(context)
                                               .textTheme
                                               .bodyLarge,
-                                          hintText: !widget.newbikemode.isEdit
+                                          hintText: !widget.newBikeMode.isEdit
                                               ? 'Size'
                                               : null),
-                                      initialValue: !widget.newbikemode.isEdit
+                                      initialValue: !widget.newBikeMode.isEdit
                                           ? null
-                                          : setupinformation['frontwheelsize'],
+                                          : setupInformation['front_wheel_size'],
                                       keyboardType: TextInputType.number,
                                       textAlign: TextAlign.end,
                                       onChanged: (value) {
                                         setState(() {
-                                          setupinformation['frontwheelsize'] =
+                                          setupInformation['front_wheel_size'] =
                                               value;
                                         });
                                       },
@@ -451,7 +451,7 @@ class _NewBikeState extends State<NewBike> {
                                     Navigator.of(context).pop();
                                   },
                                   child: Text(
-                                    widget.newbikemode == NewBikeMode.newBike
+                                    widget.newBikeMode == NewBikeMode.newBike
                                         ? 'Back'
                                         : 'Cancel',
                                     style:
@@ -469,10 +469,10 @@ class _NewBikeState extends State<NewBike> {
                                       backgroundColor:
                                           Theme.of(context).primaryColor),
                                   onPressed: () async {
-                                    if (!isbuttonactive) {
+                                    if (!isButtonActive) {
                                       return;
                                     }
-                                    if (userinputname == '') {
+                                    if (userInputFieldValue == '') {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
@@ -481,66 +481,66 @@ class _NewBikeState extends State<NewBike> {
                                         ),
                                       );
                                       setState(() {
-                                        isbuttonactive = true;
+                                        isButtonActive = true;
                                       });
                                       return;
                                     }
-                                    isbuttonactive = false;
-                                    final String bikename;
-                                    final String setupname;
-                                    final String ubid;
-                                    final String usid;
-                                    if (widget.newbikemode ==
+                                    isButtonActive = false;
+                                    final String bikeName;
+                                    final String setupName;
+                                    final String uBikeID;
+                                    final String uSetupID;
+                                    if (widget.newBikeMode ==
                                         NewBikeMode.newBike) {
-                                      setupname = 'Default';
-                                      bikename = userinputname;
+                                      setupName = 'Default';
+                                      bikeName = userInputFieldValue;
                                       try {
-                                        ubid = await DatabaseService(
+                                        uBikeID = await DatabaseService(
                                                 widget.user.uid)
                                             .createBike(
-                                                bikename,
-                                                setupinformation,
-                                                widget.biketype.biketype);
+                                                bikeName,
+                                                setupInformation,
+                                                widget.bikeType.bikeType);
                                       } catch (e) {
                                         return;
                                       }
-                                      usid =
+                                      uSetupID =
                                           await DatabaseService(widget.user.uid)
-                                              .getDefaultSetup(ubid);
-                                      if (usid.isEmpty) {
+                                              .getDefaultSetup(uBikeID);
+                                      if (uSetupID.isEmpty) {
                                         return;
                                       }
-                                    } else if (widget.newbikemode ==
+                                    } else if (widget.newBikeMode ==
                                         NewBikeMode.newSetup) {
-                                      setupname = userinputname;
-                                      bikename = widget.bikename;
-                                      ubid = widget.ubid;
-                                      usid = const Uuid().v4();
+                                      setupName = userInputFieldValue;
+                                      bikeName = widget.bikeName;
+                                      uBikeID = widget.uBikeID;
+                                      uSetupID = const Uuid().v4();
                                       DatabaseService(widget.user.uid)
-                                          .createSetup(widget.ubid, usid,
-                                              userinputname, setupinformation);
+                                          .createSetup(widget.uBikeID, uSetupID,
+                                              userInputFieldValue, setupInformation);
                                     } else {
-                                      setupname = userinputname;
-                                      bikename = widget.bikename;
-                                      ubid = widget.ubid;
-                                      usid = widget.usid;
+                                      setupName = userInputFieldValue;
+                                      bikeName = widget.bikeName;
+                                      uBikeID = widget.uBikeID;
+                                      uSetupID = widget.uSetupID;
                                       DatabaseService(widget.user.uid)
-                                          .createSetup(widget.ubid, widget.usid,
-                                              userinputname, setupinformation);
+                                          .createSetup(widget.uBikeID, widget.uSetupID,
+                                              userInputFieldValue, setupInformation);
                                     }
                                     if (context.mounted) {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) => MyHomePage(
                                                   user: widget.user,
-                                                  biketype: widget.biketype,
-                                                  bikename: bikename,
-                                                  ubid: ubid,
-                                                  setupname: setupname,
-                                                  usid: usid)));
+                                                  bikeType: widget.bikeType,
+                                                  bikeName: bikeName,
+                                                  uBikeID: uBikeID,
+                                                  setupName: setupName,
+                                                  uSetupID: uSetupID)));
                                     }
                                   },
-                                  child: isbuttonactive
+                                  child: isButtonActive
                                       ? Text(
                                           'Save',
                                           style: Theme.of(context)

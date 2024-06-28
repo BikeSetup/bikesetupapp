@@ -1,4 +1,4 @@
-import 'package:bikesetupapp/widgets/progressindicator.dart';
+import 'package:bikesetupapp/widgets/progress_indicator.dart';
 import 'package:bikesetupapp/bike_enums/category.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 
@@ -10,9 +10,9 @@ class Bubble extends StatefulWidget {
   final User user;
   final double left;
   final double bottom;
-  final String bikename;
+  final String bikeName;
   final Category category;
-  final Category chosencategory;
+  final Category chosenCategory;
   final String setup;
   final VoidCallback? onPressed;
   final Function(String) onValueChange;
@@ -22,9 +22,9 @@ class Bubble extends StatefulWidget {
       required this.user,
       required this.left,
       required this.bottom,
-      required this.bikename,
+      required this.bikeName,
       required this.category,
-      required this.chosencategory,
+      required this.chosenCategory,
       required this.setup,
       required this.onPressed,
       required this.onValueChange,
@@ -59,7 +59,7 @@ class _BubbleState extends State<Bubble> {
                         offset: const Offset(0, 2))
                   ],
                   shape: BoxShape.circle,
-                  color: (widget.chosencategory == widget.category)
+                  color: (widget.chosenCategory == widget.category)
                       ? Theme.of(context).cardTheme.color
                       : Theme.of(context).cardColor),
               height: 50,
@@ -67,7 +67,7 @@ class _BubbleState extends State<Bubble> {
               child: Center(
                 child: StreamBuilder(
                     stream: DatabaseService(widget.user.uid).getDocumentElement(
-                        widget.bikename,
+                        widget.bikeName,
                         widget.category.category,
                         widget.setup),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -85,7 +85,7 @@ class _BubbleState extends State<Bubble> {
                           size: 30,
                         );
                       }
-                      if (widget.category == Category.generalsettings) {
+                      if (widget.category == Category.generalSettings) {
                         return GestureDetector(
                             onLongPress: () {
                               HapticFeedback.mediumImpact();

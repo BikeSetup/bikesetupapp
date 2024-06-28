@@ -1,4 +1,4 @@
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 import 'package:bikesetupapp/widgets/default_bike_selector_widget.dart';
 import 'package:bikesetupapp/widgets/setup_information_alert_content.dart';
@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class BikeAlerts {
   static Future<void> deleteBike(
-      BuildContext context, User user, String ubid) async {
+      BuildContext context, User user, String uBikeID) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -45,7 +45,7 @@ class BikeAlerts {
               onPressed: () {
                 Navigator.of(context).pop();
                 try {
-                  DatabaseService(user.uid).deleteBike(ubid);
+                  DatabaseService(user.uid).deleteBike(uBikeID);
                 } catch (e) {
                   generalError(context, 'Error deleting bike');
                 }
@@ -58,7 +58,7 @@ class BikeAlerts {
   }
 
   static Future<void> deleteSetup(
-      BuildContext context, User user, String ubid, String usid) async {
+      BuildContext context, User user, String uBikeID, String uSetupID) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -96,7 +96,7 @@ class BikeAlerts {
               onPressed: () {
                 Navigator.of(context).pop();
                 try {
-                  DatabaseService(user.uid).deleteSetup(ubid, usid);
+                  DatabaseService(user.uid).deleteSetup(uBikeID, uSetupID);
                 } catch (e) {
                   generalError(context, 'Error deleting setup');
                 }
@@ -109,7 +109,7 @@ class BikeAlerts {
   }
 
   static Future<void> renameBike(
-      BuildContext context, String ubid, String bikeNameOld) async {
+      BuildContext context, String uBikeID, String bikeNameOld) async {
     TextEditingController controller = TextEditingController(text: bikeNameOld);
     return showDialog<void>(
       context: context,
@@ -155,7 +155,7 @@ class BikeAlerts {
                 Navigator.of(context).pop();
                 try {
                   DatabaseService(FirebaseAuth.instance.currentUser!.uid)
-                      .renameBike(ubid, controller.text);
+                      .renameBike(uBikeID, controller.text);
                 } catch (e) {
                   generalError(context, 'Error renaming bike');
                 }
@@ -204,24 +204,24 @@ class BikeAlerts {
       BuildContext context,
       Size size,
       String userID,
-      String bikename,
-      String ubid,
-      String setupname,
-      BikeType biketype) async {
+      String bikeName,
+      String uBikeID,
+      String setupName,
+      BikeType bikeType) async {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             backgroundColor: Theme.of(context).cardTheme.color,
             title: Text(
-              setupname,
+              setupName,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             content: SetupInformation(
               userID: userID,
-              ubid: bikename,
-              usid: ubid,
-              biketype: biketype,
+              uBikeID: bikeName,
+              uSetupID: uBikeID,
+              bikeType: bikeType,
             ),
             actionsAlignment: MainAxisAlignment.spaceAround,
             actions: [

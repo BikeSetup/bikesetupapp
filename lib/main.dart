@@ -1,8 +1,8 @@
 import 'package:bikesetupapp/app_pages/home_page.dart';
 import 'package:bikesetupapp/app_pages/google_sign_in.dart';
-import 'package:bikesetupapp/app_services/themedata.dart';
+import 'package:bikesetupapp/app_services/theme_data.dart';
 import 'package:bikesetupapp/app_services/app_state_notifier.dart';
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 
 import 'package:flutter/material.dart';
@@ -20,28 +20,28 @@ void main() async {
   );
 
   bool isSignedIn = false;
-  String defaultBikebUbid = "";
+  String defaultBikeID = "";
   String defaultBikeName = "";
-  String defaultSetupUsid = "";
-  String defaultSetup = "";
-  BikeType biketype = BikeType.error;
+  String defaultSetupID = "";
+  String defaultSetupName = "";
+  BikeType bikeType = BikeType.error;
 
   User? user = FirebaseAuth.instance.currentUser;
 
   if (user != null) {
-    defaultBikebUbid = await DatabaseService(user.uid).getDefaultBike();
+    defaultBikeID = await DatabaseService(user.uid).getDefaultBike();
     defaultBikeName =
-        await DatabaseService(user.uid).getBikeNameFromID(defaultBikebUbid);
-    defaultSetupUsid =
-        await DatabaseService(user.uid).getDefaultSetup(defaultBikebUbid);
-    defaultSetup = await DatabaseService(user.uid)
-        .getSetupNameFromID(defaultBikebUbid, defaultSetupUsid);
-    biketype = BikeType.fromString(
-        await DatabaseService(user.uid).getBikeType(defaultBikebUbid));
+        await DatabaseService(user.uid).getBikeNameFromID(defaultBikeID);
+    defaultSetupID =
+        await DatabaseService(user.uid).getDefaultSetup(defaultBikeID);
+    defaultSetupName = await DatabaseService(user.uid)
+        .getSetupNameFromID(defaultBikeID, defaultSetupID);
+    bikeType = BikeType.fromString(
+        await DatabaseService(user.uid).getBikeType(defaultBikeID));
 
-    if (defaultSetupUsid.isNotEmpty &&
-        defaultSetup.isNotEmpty &&
-        biketype != BikeType.error) {
+    if (defaultSetupID.isNotEmpty &&
+        defaultSetupName.isNotEmpty &&
+        bikeType != BikeType.error) {
       isSignedIn = true;
     }
   }
@@ -55,31 +55,31 @@ void main() async {
       child: MyApp(
         isSignedIn: isSignedIn,
         user: FirebaseAuth.instance.currentUser,
-        defaultBikebuid: defaultBikebUbid,
+        defaultBikeID: defaultBikeID,
         defaultBike: defaultBikeName,
-        defaultSetupusid: defaultSetupUsid,
-        defaultSetup: defaultSetup,
-        biketype: biketype,
+        defaultSetupID: defaultSetupID,
+        defaultSetup: defaultSetupName,
+        bikeType: bikeType,
       )));
 }
 
 class MyApp extends StatelessWidget {
   final bool isSignedIn;
   final User? user;
-  final String defaultBikebuid;
+  final String defaultBikeID;
   final String defaultBike;
-  final String defaultSetupusid;
+  final String defaultSetupID;
   final String defaultSetup;
-  final BikeType biketype;
+  final BikeType bikeType;
   const MyApp(
       {super.key,
       required this.isSignedIn,
       required this.user,
-      required this.defaultBikebuid,
+      required this.defaultBikeID,
       required this.defaultBike,
-      required this.defaultSetupusid,
+      required this.defaultSetupID,
       required this.defaultSetup,
-      required this.biketype});
+      required this.bikeType});
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +98,11 @@ class MyApp extends StatelessWidget {
             home: isSignedIn
                 ? MyHomePage(
                     user: user,
-                    bikename: defaultBike,
-                    ubid: defaultBikebuid,
-                    biketype: biketype,
-                    setupname: defaultSetup,
-                    usid: defaultSetupusid,
+                    bikeName: defaultBike,
+                    uBikeID: defaultBikeID,
+                    bikeType: bikeType,
+                    setupName: defaultSetup,
+                    uSetupID: defaultSetupID,
                   )
                 : const LoginPage());
       },

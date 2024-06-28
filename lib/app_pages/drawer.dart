@@ -1,21 +1,21 @@
 import 'package:bikesetupapp/app_pages/bike_selector_page.dart';
 import 'package:bikesetupapp/app_pages/settings_page.dart';
-import 'package:bikesetupapp/widgets/navdrawer_bike_list.dart';
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/widgets/drawer_bike_list.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class NavDrawer extends StatefulWidget {
-  final String bikename;
-  final BikeType biketype;
-  final String chosensetup;
+  final String bikeName;
+  final BikeType bikeType;
+  final String chosenSetup;
   final User? user;
   const NavDrawer(
       {super.key,
-      required this.bikename,
-      required this.biketype,
-      required this.chosensetup,
+      required this.bikeName,
+      required this.bikeType,
+      required this.chosenSetup,
       required this.user});
 
   @override
@@ -75,7 +75,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     height: size.height * 0.73,
                     child: BikeList(
                       user: widget.user,
-                      bikename: widget.bikename,
+                      bikeName: widget.bikeName,
                     )),
               ),
               Row(
@@ -88,9 +88,9 @@ class _NavDrawerState extends State<NavDrawer> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) => SettingsPage(
-                                  bikename: widget.bikename,
-                                  biketype: widget.biketype,
-                                  chosensetup: widget.chosensetup,
+                                  bikeName: widget.bikeName,
+                                  bikeType: widget.bikeType,
+                                  chosenSetup: widget.chosenSetup,
                                 )));
                       },
                       style: IconButton.styleFrom(

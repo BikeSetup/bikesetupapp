@@ -1,32 +1,32 @@
 import 'package:bikesetupapp/alert_dialogs/settings_alert_dialogs.dart';
 import 'package:bikesetupapp/app_pages/google_sign_in.dart';
-import 'package:bikesetupapp/app_pages/nav_drawer.dart';
+import 'package:bikesetupapp/app_pages/drawer.dart';
 import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
 import 'package:bikesetupapp/widgets/homepage_list_view.dart';
 import 'package:bikesetupapp/widgets/home_page_bubbles.dart';
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/bike_enums/category.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-const double borderrad = 35;
+const double borderRadius = 35;
 
 class MyHomePage extends StatefulWidget {
   final User? user;
-  final String bikename;
-  final String ubid;
-  final BikeType biketype;
-  final String setupname;
-  final String usid;
+  final String bikeName;
+  final String uBikeID;
+  final BikeType bikeType;
+  final String setupName;
+  final String uSetupID;
   const MyHomePage(
       {super.key,
       required this.user,
-      required this.biketype,
-      required this.bikename,
-      required this.ubid,
-      required this.setupname,
-      required this.usid});
+      required this.bikeType,
+      required this.bikeName,
+      required this.uBikeID,
+      required this.setupName,
+      required this.uSetupID});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -38,12 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    chosenCategory = Category.reartire;
+    chosenCategory = Category.rearTire;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.user == null || widget.ubid.isEmpty || widget.usid.isEmpty) {
+    if (widget.user == null || widget.uBikeID.isEmpty || widget.uSetupID.isEmpty) {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => const LoginPage()));
     }
@@ -55,9 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawer: NavDrawer(
         user: widget.user,
-        bikename: widget.bikename,
-        biketype: widget.biketype,
-        chosensetup: widget.setupname,
+        bikeName: widget.bikeName,
+        bikeType: widget.bikeType,
+        chosenSetup: widget.setupName,
       ),
       appBar: AppBar(
           scrolledUnderElevation: 0,
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.bikename,
+                widget.bikeName,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               IconButton(
@@ -74,10 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         context,
                         size,
                         widget.user!.uid,
-                        widget.ubid,
-                        widget.usid,
-                        widget.setupname,
-                        widget.biketype);
+                        widget.uBikeID,
+                        widget.uSetupID,
+                        widget.setupName,
+                        widget.bikeType);
                   },
                   icon: const Icon(Icons.info_outline_rounded)),
             ],
@@ -89,11 +89,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
                 child: HomePageListView(
                     user: widget.user!,
-                    bikename: widget.bikename,
-                    ubid: widget.ubid,
+                    bikeName: widget.bikeName,
+                    uBikeID: widget.uBikeID,
                     category: chosenCategory.category,
-                    setup: widget.setupname,
-                    usid: widget.usid))
+                    setup: widget.setupName,
+                    uSetupID: widget.uSetupID))
           ]),
           Container(
             width: size.width,
@@ -108,29 +108,29 @@ class _MyHomePageState extends State<MyHomePage> {
                       offset: const Offset(0, 3))
                 ],
                 borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(borderrad),
-                    bottomRight: Radius.circular(borderrad))),
+                    bottomLeft: Radius.circular(borderRadius),
+                    bottomRight: Radius.circular(borderRadius))),
             child: Stack(children: [
               Center(
-                child: Image.asset(widget.biketype.path),
+                child: Image.asset(widget.bikeType.path),
               ),
               Bubble(
                 user: widget.user!,
                 left: size.width / 40,
                 bottom: size.height / 6.66,
-                bikename: widget.ubid,
-                category: Category.reartire,
-                chosencategory: chosenCategory,
-                setup: widget.usid,
+                bikeName: widget.uBikeID,
+                category: Category.rearTire,
+                chosenCategory: chosenCategory,
+                setup: widget.uSetupID,
                 onPressed: () {
                   setState(() {
-                    chosenCategory = Category.reartire;
+                    chosenCategory = Category.rearTire;
                   });
                 },
                 onValueChange: (value) {
-                  chosenCategory = Category.reartire;
+                  chosenCategory = Category.rearTire;
                   SettingsAlerts.editValue(context, widget.user!, 'Pressure',
-                      value, widget.ubid, chosenCategory.category, widget.usid);
+                      value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
                 },
                 show: true,
               ),
@@ -138,19 +138,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 user: widget.user!,
                 left: size.width / 1.20,
                 bottom: size.height / 6.66,
-                bikename: widget.ubid,
-                category: Category.fronttire,
-                chosencategory: chosenCategory,
-                setup: widget.usid,
+                bikeName: widget.uBikeID,
+                category: Category.frontTire,
+                chosenCategory: chosenCategory,
+                setup: widget.uSetupID,
                 onPressed: () {
                   setState(() {
-                    chosenCategory = Category.fronttire;
+                    chosenCategory = Category.frontTire;
                   });
                 },
                 onValueChange: (value) {
-                  chosenCategory = Category.fronttire;
+                  chosenCategory = Category.frontTire;
                   SettingsAlerts.editValue(context, widget.user!, 'Pressure',
-                      value, widget.ubid, chosenCategory.category, widget.usid);
+                      value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
                 },
                 show: true,
               ),
@@ -158,10 +158,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   user: widget.user!,
                   left: size.width / 2.2,
                   bottom: size.height / 8,
-                  bikename: widget.ubid,
+                  bikeName: widget.uBikeID,
                   category: Category.shock,
-                  chosencategory: chosenCategory,
-                  setup: widget.usid,
+                  chosenCategory: chosenCategory,
+                  setup: widget.uSetupID,
                   onPressed: () {
                     setState(() {
                       chosenCategory = Category.shock;
@@ -174,22 +174,22 @@ class _MyHomePageState extends State<MyHomePage> {
                         widget.user!,
                         'Pressure',
                         value,
-                        widget.ubid,
+                        widget.uBikeID,
                         chosenCategory.category,
-                        widget.usid);
+                        widget.uSetupID);
                   },
-                  show: widget.biketype.hasShock),
+                  show: widget.bikeType.hasShock),
               Bubble(
                 user: widget.user!,
                 left: size.width / 2.65,
                 bottom: size.height / 5.33,
-                bikename: widget.ubid,
-                category: Category.generalsettings,
-                chosencategory: chosenCategory,
-                setup: widget.usid,
+                bikeName: widget.uBikeID,
+                category: Category.generalSettings,
+                chosenCategory: chosenCategory,
+                setup: widget.uSetupID,
                 onPressed: () {
                   setState(() {
-                    chosenCategory = Category.generalsettings;
+                    chosenCategory = Category.generalSettings;
                   });
                 },
                 onValueChange: (value) {},
@@ -199,10 +199,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   user: widget.user!,
                   left: size.width / 1.5,
                   bottom: size.height / 5.33,
-                  bikename: widget.ubid,
+                  bikeName: widget.uBikeID,
                   category: Category.fork,
-                  chosencategory: chosenCategory,
-                  setup: widget.usid,
+                  chosenCategory: chosenCategory,
+                  setup: widget.uSetupID,
                   onPressed: () {
                     setState(() {
                       chosenCategory = Category.fork;
@@ -215,19 +215,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         widget.user!,
                         'Pressure',
                         value,
-                        widget.ubid,
+                        widget.uBikeID,
                         chosenCategory.category,
-                        widget.usid);
+                        widget.uSetupID);
                   },
-                  show: widget.biketype.hasFork),
+                  show: widget.bikeType.hasFork),
             ]),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          SettingsAlerts.newKey(context, widget.user!, widget.ubid,
-              chosenCategory.category, widget.usid);
+          SettingsAlerts.newKey(context, widget.user!, widget.uBikeID,
+              chosenCategory.category, widget.uSetupID);
         },
         tooltip: 'Add Setting',
         child: const Icon(Icons.add),

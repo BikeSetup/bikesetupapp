@@ -42,7 +42,7 @@ class DefaultBikeSelector extends StatelessWidget {
                             color: Theme.of(context).scaffoldBackgroundColor,
                             child: ListTile(
                                 title: Text(
-                                  bike['bikename'],
+                                  bike['bike_name'],
                                   style:
                                       Theme.of(context).textTheme.labelMedium,
                                 ),
@@ -54,7 +54,7 @@ class DefaultBikeSelector extends StatelessWidget {
                                 trailing: IconButton(
                                   onPressed: () {
                                     BikeAlerts.renameBike(
-                                        context, bike.id, bike['bikename']);
+                                        context, bike.id, bike['bike_name']);
                                   },
                                   icon: Icon(Icons.edit,
                                       color: Theme.of(context)

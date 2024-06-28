@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class SettingsAlerts {
 
-  static Future<void> newKey(BuildContext context, User user, String bikename,
+  static Future<void> newKey(BuildContext context, User user, String bikeName,
       String category, String setup) async {
     String key = "";
     return showDialog<void>(
@@ -68,7 +68,7 @@ class SettingsAlerts {
                   return;
                 } else {
                   Navigator.of(context).pop();
-                  newValue(context, key, user, bikename, category, setup);
+                  newValue(context, key, user, bikeName, category, setup);
                 }
               },
             ),
@@ -79,7 +79,7 @@ class SettingsAlerts {
   }
 
   static Future<void> newValue(BuildContext context, String key, User user,
-      String bikename, String category, String setup) async {
+      String bikeName, String category, String setup) async {
     String value = "";
     return showDialog<void>(
       context: context,
@@ -136,7 +136,7 @@ class SettingsAlerts {
                 Navigator.of(context).pop();
                 try {
                   DatabaseService(user.uid)
-                    .setSetting(key, value, bikename, category, setup);
+                    .setSetting(key, value, bikeName, category, setup);
                 } catch(e) {
                   generalError(context, 'Error creating setting');
                 }
@@ -150,7 +150,7 @@ class SettingsAlerts {
   }
 
   static Future<void> editValue(BuildContext context, User user, String key,
-      String value, String bikename, String category, String setup) async {
+      String value, String bikeName, String category, String setup) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -217,7 +217,7 @@ class SettingsAlerts {
                   Navigator.of(context).pop();
                   try {
                     DatabaseService(user.uid).editSetting(
-                      key.trim(), value.trim(), bikename, category, setup);
+                      key.trim(), value.trim(), bikeName, category, setup);
                   } catch (e) {
                     generalError(context, 'Error creating setting');
                   }
@@ -231,7 +231,7 @@ class SettingsAlerts {
   }
 
   static Future<void> deleteCategory(BuildContext context, User user,
-      String key, String bikename, String category, String setup) async {
+      String key, String bikeName, String category, String setup) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -272,7 +272,7 @@ class SettingsAlerts {
                 Navigator.of(context).pop();
                 try {
                   DatabaseService(user.uid)
-                    .deleteSetting(key, bikename, category, setup);
+                    .deleteSetting(key, bikeName, category, setup);
                 } catch (e) {
                   generalError(context, 'Error deleting category');
                 }

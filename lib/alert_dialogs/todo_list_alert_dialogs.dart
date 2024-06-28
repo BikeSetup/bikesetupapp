@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class TodoAlerts {
   static Future<void> newTodo(
-      BuildContext context, String bikename, User user) async {
-    String taskname = "";
-    String taskdescription = "";
-    String partsneeded = "";
+      BuildContext context, String bikeName, User user) async {
+    String taskName = "";
+    String taskDescription = "";
+    String partsNeeded = "";
     return showDialog(
         context: context,
         builder: ((BuildContext context) {
@@ -30,13 +30,13 @@ class TodoAlerts {
                         cursorColor:
                             Theme.of(context).textTheme.labelMedium!.color,
                         autofocus: false,
-                        initialValue: taskname,
+                        initialValue: taskName,
                         decoration: InputDecoration.collapsed(
                           hintStyle: Theme.of(context).textTheme.labelSmall,
                           hintText: 'Task Name',
                         ),
                         onChanged: (value) {
-                          taskname = value;
+                          taskName = value;
                         },
                       ),
                     ),
@@ -50,7 +50,7 @@ class TodoAlerts {
                             Theme.of(context).textTheme.labelMedium!.color,
                         autofocus: false,
                         controller:
-                            TextEditingController(text: taskdescription),
+                            TextEditingController(text: taskDescription),
                         minLines: 1,
                         maxLines: 4,
                         decoration: InputDecoration.collapsed(
@@ -58,7 +58,7 @@ class TodoAlerts {
                           hintText: 'Task Description',
                         ),
                         onChanged: (value) {
-                          taskdescription = value;
+                          taskDescription = value;
                         },
                       ),
                     ),
@@ -71,13 +71,13 @@ class TodoAlerts {
                           cursorColor:
                               Theme.of(context).textTheme.labelMedium!.color,
                           autofocus: false,
-                          initialValue: partsneeded,
+                          initialValue: partsNeeded,
                           decoration: InputDecoration.collapsed(
                             hintStyle: Theme.of(context).textTheme.labelSmall,
                             hintText: 'Parts Needed',
                           ),
                           onChanged: (value) {
-                            partsneeded = value;
+                            partsNeeded = value;
                           },
                         ),
                       ))
@@ -113,7 +113,7 @@ class TodoAlerts {
                   Navigator.of(context).pop();
                   try {
                     DatabaseService(user.uid).setTodo(
-                      bikename, taskname, taskdescription, partsneeded);
+                      bikeName, taskName, taskDescription, partsNeeded);
                   } catch (e) {
                     generalError(context, 'Error creating todo');
                   }
@@ -127,13 +127,13 @@ class TodoAlerts {
 
   static Future<void> editTodo(
       BuildContext context,
-      String bikename,
+      String bikeName,
       String docId,
       User user,
-      String taskname,
-      String taskdescription,
-      String partsneeded,
-      bool isdone) async {
+      String taskName,
+      String taskDescription,
+      String partsNeeded,
+      bool isDone) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -150,7 +150,7 @@ class TodoAlerts {
                     onPressed: () {
                       Navigator.of(context).pop();
                       try {
-                        DatabaseService(user.uid).deleteTodo(bikename, docId);
+                        DatabaseService(user.uid).deleteTodo(bikeName, docId);
                       } catch (e) {
                         generalError(context, 'Error deleting todo');
                       }
@@ -170,13 +170,13 @@ class TodoAlerts {
                         cursorColor:
                             Theme.of(context).textTheme.labelMedium!.color,
                         autofocus: false,
-                        initialValue: taskname,
+                        initialValue: taskName,
                         decoration: InputDecoration.collapsed(
                           hintStyle: Theme.of(context).textTheme.labelSmall,
                           hintText: 'Task Name',
                         ),
                         onChanged: (value) {
-                          taskname = value;
+                          taskName = value;
                         },
                       ),
                     ),
@@ -190,7 +190,7 @@ class TodoAlerts {
                             Theme.of(context).textTheme.labelMedium!.color,
                         autofocus: false,
                         controller:
-                            TextEditingController(text: taskdescription),
+                            TextEditingController(text: taskDescription),
                         minLines: 1,
                         maxLines: 4,
                         decoration: InputDecoration.collapsed(
@@ -198,7 +198,7 @@ class TodoAlerts {
                           hintText: 'Task Description',
                         ),
                         onChanged: (value) {
-                          taskdescription = value;
+                          taskDescription = value;
                         },
                       ),
                     ),
@@ -211,13 +211,13 @@ class TodoAlerts {
                           cursorColor:
                               Theme.of(context).textTheme.labelMedium!.color,
                           autofocus: false,
-                          initialValue: partsneeded,
+                          initialValue: partsNeeded,
                           decoration: InputDecoration.collapsed(
                             hintStyle: Theme.of(context).textTheme.labelSmall,
                             hintText: 'Parts Needed',
                           ),
                           onChanged: (value) {
-                            partsneeded = value;
+                            partsNeeded = value;
                           },
                         ),
                       ))
@@ -250,8 +250,8 @@ class TodoAlerts {
                 onPressed: () {
                   Navigator.of(context).pop();
                   try {
-                    DatabaseService(user.uid).editTodo(bikename, docId,
-                        taskname, taskdescription, partsneeded, isdone);
+                    DatabaseService(user.uid).editTodo(bikeName, docId,
+                        taskName, taskDescription, partsNeeded, isDone);
                   } catch (e) {
                     generalError(context, 'Error editing todo');
                   }

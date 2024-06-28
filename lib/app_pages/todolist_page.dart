@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 
 class ToDoList extends StatefulWidget {
   final User user;
-  final String ubid;
-  final String bikename;
+  final String uBikeID;
+  final String bikeName;
   const ToDoList(
       {super.key,
       required this.user,
-      required this.ubid,
-      required this.bikename});
+      required this.uBikeID,
+      required this.bikeName});
 
   @override
   State<ToDoList> createState() => _ToDoListState();
@@ -24,11 +24,11 @@ class _ToDoListState extends State<ToDoList> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        widget.bikename,
+        widget.bikeName,
         style: Theme.of(context).textTheme.titleLarge,
       )),
       body: StreamBuilder(
-        stream: DatabaseService(widget.user.uid).getTodoList(widget.ubid),
+        stream: DatabaseService(widget.user.uid).getTodoList(widget.uBikeID),
         builder: ((context, AsyncSnapshot snapshot) {
           if (ConnectionState.waiting == snapshot.connectionState) {
             return const Center(child: CircularProgressIndicator());
@@ -63,21 +63,21 @@ class _ToDoListState extends State<ToDoList> {
                                   onTap: () {
                                     TodoAlerts.editTodo(
                                         context,
-                                        widget.ubid,
+                                        widget.uBikeID,
                                         data.id,
                                         widget.user,
-                                        data['taskname'],
-                                        data['taskdescription'],
+                                        data['task_name'],
+                                        data['task_description'],
                                         data['Part'],
                                         data['done']);
                                   },
                                   title: Text(
-                                    data['taskname'],
+                                    data['task_name'],
                                     style:
                                         Theme.of(context).textTheme.labelSmall,
                                   ),
                                   subtitle: Text(
-                                    data['taskdescription'],
+                                    data['task_description'],
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
                                   ),
@@ -94,7 +94,7 @@ class _ToDoListState extends State<ToDoList> {
                                         try {
                                           DatabaseService(widget.user.uid)
                                             .updateTodoList(
-                                                widget.ubid, data.id, value!);
+                                                widget.uBikeID, data.id, value!);
                                         } catch (e) {
                                           TodoAlerts.generalError(context, 'Error updating todo');
                                         }
@@ -127,20 +127,20 @@ class _ToDoListState extends State<ToDoList> {
                                 onTap: () {
                                   TodoAlerts.editTodo(
                                       context,
-                                      widget.ubid,
+                                      widget.uBikeID,
                                       data.id,
                                       widget.user,
-                                      data['taskname'],
-                                      data['taskdescription'],
+                                      data['task_name'],
+                                      data['task_description'],
                                       data['Part'],
                                       data['done']);
                                 },
                                 title: Text(
-                                  data['taskname'],
+                                  data['task_name'],
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),
                                 subtitle: Text(
-                                  data['taskdescription'],
+                                  data['task_description'],
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 trailing: Checkbox(
@@ -156,7 +156,7 @@ class _ToDoListState extends State<ToDoList> {
                                       try {
                                         DatabaseService(widget.user.uid)
                                             .updateTodoList(
-                                                widget.ubid, data.id, value!);
+                                                widget.uBikeID, data.id, value!);
                                       } catch (e) {
                                         TodoAlerts.generalError(context, 'Error updating todo');
                                       }
@@ -176,7 +176,7 @@ class _ToDoListState extends State<ToDoList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          TodoAlerts.newTodo(context, widget.ubid, widget.user);
+          TodoAlerts.newTodo(context, widget.uBikeID, widget.user);
         },
         tooltip: 'Add Todo',
         child: const Icon(Icons.add),

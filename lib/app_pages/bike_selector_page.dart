@@ -1,6 +1,6 @@
 import 'package:bikesetupapp/app_pages/new_bike_page.dart';
 import 'package:bikesetupapp/widgets/bike_selector_widget.dart';
-import 'package:bikesetupapp/bike_enums/biketype.dart';
+import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/bike_enums/new_bike_mode.dart';
 
 import 'package:flutter/material.dart';
@@ -92,7 +92,7 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                       backgroundColor:
                                           Theme.of(context).primaryColor),
                                   onPressed: () {
-                                    BikeType biketype =
+                                    BikeType bikeType =
                                         BikeType.values[pageController.page?.round() ?? 0];
                                     Navigator.of(context).push(
                                       PageRouteBuilder(
@@ -118,12 +118,12 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                                 secondaryAnimation) {
                                           return NewBike(
                                             user: widget.user,
-                                            newbikemode: NewBikeMode.newBike,
-                                            bikename: "",
-                                            ubid: "",
-                                            setupname: 'Default',
-                                            usid: "",
-                                            biketype: biketype,
+                                            newBikeMode: NewBikeMode.newBike,
+                                            bikeName: "",
+                                            uBikeID: "",
+                                            setupName: 'Default',
+                                            uSetupID: "",
+                                            bikeType: bikeType,
                                           );
                                         },
                                       ),
