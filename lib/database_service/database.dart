@@ -144,7 +144,7 @@ class DatabaseService {
   Future setDefaultBike(String uBikeID) {
     return userBikeSetup
         .doc(userID)
-        .set({'default-bike': uBikeID}, SetOptions(merge: true));
+        .set({'default_bike': uBikeID}, SetOptions(merge: true));
   }
 
   /// Sets the default setup for a bike in the database.
