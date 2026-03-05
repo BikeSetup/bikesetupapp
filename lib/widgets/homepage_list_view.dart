@@ -1,5 +1,6 @@
 import 'package:bikesetupapp/alert_dialogs/settings_alert_dialogs.dart';
 import 'package:bikesetupapp/database_service/database.dart';
+import 'package:bikesetupapp/widgets/field_meta.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -112,21 +113,22 @@ class _HomePageListViewState extends State<HomePageListView>
                   ),
                   elevation: 5,
                   child: ListTile(
-                    leading: IconButton(
-                        onPressed: () {
-                          SettingsAlerts.editValue(
-                              context,
-                              widget.user,
-                              settings.keys.elementAt(index),
-                              settings.values.elementAt(index),
-                              widget.uBikeID,
-                              widget.category,
-                              widget.uSetupID);
-                        },
-                        icon: Icon(
-                          Icons.edit,
-                          color: Theme.of(context).iconTheme.color,
-                        )),
+                    onTap: () {
+                      SettingsAlerts.editValue(
+                          context,
+                          widget.user,
+                          settings.keys.elementAt(index),
+                          settings.values.elementAt(index),
+                          widget.uBikeID,
+                          widget.category,
+                          widget.uSetupID);
+                    },
+                    leading: Icon(
+                      kFieldMeta[settings.keys.elementAt(index)]?.icon ??
+                          kDefaultFieldMeta.icon,
+                      size: 20,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
                     title: Text(
                       settings.keys.elementAt(index),
                       style: Theme.of(context).textTheme.labelMedium,
@@ -135,9 +137,30 @@ class _HomePageListViewState extends State<HomePageListView>
                       settings.values.elementAt(index),
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
-                    trailing: Visibility(
-                        visible: settings.keys.elementAt(index) != 'Pressure',
-                        child: IconButton(
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            SettingsAlerts.editValue(
+                                context,
+                                widget.user,
+                                settings.keys.elementAt(index),
+                                settings.values.elementAt(index),
+                                widget.uBikeID,
+                                widget.category,
+                                widget.uSetupID);
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                        ),
+                        Visibility(
+                          visible: !isDefaultField(
+                              widget.category,
+                              settings.keys.elementAt(index)),
+                          child: IconButton(
                             tooltip: 'Delete Setting',
                             onPressed: () {
                               SettingsAlerts.deleteCategory(
@@ -149,7 +172,11 @@ class _HomePageListViewState extends State<HomePageListView>
                                   widget.uSetupID);
                             },
                             icon: Icon(Icons.delete,
-                                color: Theme.of(context).iconTheme.color))),
+                                color: Theme.of(context).iconTheme.color),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -68,7 +68,10 @@ class DatabaseService {
   /// The [uBikeID] parameter represents the user's unique identifier.
   /// The [uSetupID] parameter represents the user's session identifier.
   Future createFork(String uBikeID, String uSetupID) async {
-    await setSetting('Pressure', '90', uBikeID, Category.fork.category, uSetupID);
+    await setSetting('Pressure',    '90', uBikeID, Category.fork.category, uSetupID);
+    await setSetting('Rebound',     '5',  uBikeID, Category.fork.category, uSetupID);
+    await setSetting('Compression', '8',  uBikeID, Category.fork.category, uSetupID);
+    await setSetting('Tokens',      '2',  uBikeID, Category.fork.category, uSetupID);
   }
 
   /// Creates shock category with default values for the specified [uBikeID] and [uSetupID] in the database.
@@ -76,7 +79,10 @@ class DatabaseService {
   /// The [uBikeID] parameter represents the user's unique identifier.
   /// The [uSetupID] parameter represents the user's session identifier.
   Future createShock(String uBikeID, String uSetupID) async {
-    await setSetting('Pressure', '180', uBikeID, Category.shock.category, uSetupID);
+    await setSetting('Pressure',    '180', uBikeID, Category.shock.category, uSetupID);
+    await setSetting('Rebound',     '5',   uBikeID, Category.shock.category, uSetupID);
+    await setSetting('Compression', '8',   uBikeID, Category.shock.category, uSetupID);
+    await setSetting('Tokens',      '0',   uBikeID, Category.shock.category, uSetupID);
   }
 
   /// Creates front tire category with default values for the specified [uBikeID] and [uSetupID] in the database.
