@@ -62,6 +62,31 @@ class _MyHomePageState extends State<MyHomePage> {
     final double imgRenderW = imgNativeW * scale;
     final double imgLeft = (contentWidth - imgRenderW) / 2;
 
+    // Anchor positions — on the bike parts.
+    final double rtAnchorL = imgLeft + imgRenderW / 40;
+    final double rtAnchorB = boxHeight * 0.525;
+    final double ftAnchorL = imgLeft + imgRenderW / 1.20;
+    final double ftAnchorB = boxHeight * 0.525;
+    final double shAnchorL = imgLeft + imgRenderW / 2.2;
+    final double shAnchorB = boxHeight * 0.437;
+    final double gsAnchorL = imgLeft + imgRenderW / 2.65;
+    final double gsAnchorB = boxHeight * 0.657;
+    final double fkAnchorL = imgLeft + imgRenderW / 1.5;
+    final double fkAnchorB = boxHeight * 0.657;
+
+    // Bubble card positions — floated into clear space near each part.
+    // Cards are bubbleCardW × bubbleCardH (76 × 44 px).
+    final double rtBubbleL = rtAnchorL - 8;
+    final double rtBubbleB = rtAnchorB - 68;
+    final double ftBubbleL = ftAnchorL - bubbleCardW + 8;
+    final double ftBubbleB = ftAnchorB - 68;
+    final double shBubbleL = shAnchorL - bubbleCardW / 2;
+    final double shBubbleB = shAnchorB - 70;
+    final double gsBubbleL = gsAnchorL - bubbleCardW - 10;
+    final double gsBubbleB = gsAnchorB - 6;
+    final double fkBubbleL = fkAnchorL + 14;
+    final double fkBubbleB = fkAnchorB - 6;
+
     return Stack(
       children: [
         Column(children: [
@@ -92,25 +117,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   bottomLeft: Radius.circular(borderRadius),
                   bottomRight: Radius.circular(borderRadius))),
           child: Stack(children: [
+            // Bike silhouette — dimmed to act as a background reference.
             Center(
-              child: Hero(
-                tag: 'bike-image-${widget.bikeType.path}',
-                child: Image.asset(widget.bikeType.path),
+              child: Opacity(
+                opacity: 0.22,
+                child: Hero(
+                  tag: 'bike-image-${widget.bikeType.path}',
+                  child: Image.asset(widget.bikeType.path),
+                ),
               ),
             ),
-            Bubble(
+            SchematicBubble(
               user: widget.user!,
-              left: imgLeft + imgRenderW / 40,
-              bottom: boxHeight * 0.525,
+              anchorLeft: rtAnchorL,
+              anchorBottom: rtAnchorB,
+              bubbleLeft: rtBubbleL,
+              bubbleBottom: rtBubbleB,
+              containerHeight: boxHeight,
               bikeName: widget.uBikeID,
               category: Category.rearTire,
               chosenCategory: chosenCategory,
               setup: widget.uSetupID,
-              onPressed: () {
-                setState(() {
-                  chosenCategory = Category.rearTire;
-                });
-              },
+              onPressed: () => setState(() => chosenCategory = Category.rearTire),
               onValueChange: (value) {
                 chosenCategory = Category.rearTire;
                 SettingsAlerts.editValue(context, widget.user!, 'Pressure',
@@ -118,19 +146,18 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               show: true,
             ),
-            Bubble(
+            SchematicBubble(
               user: widget.user!,
-              left: imgLeft + imgRenderW / 1.20,
-              bottom: boxHeight * 0.525,
+              anchorLeft: ftAnchorL,
+              anchorBottom: ftAnchorB,
+              bubbleLeft: ftBubbleL,
+              bubbleBottom: ftBubbleB,
+              containerHeight: boxHeight,
               bikeName: widget.uBikeID,
               category: Category.frontTire,
               chosenCategory: chosenCategory,
               setup: widget.uSetupID,
-              onPressed: () {
-                setState(() {
-                  chosenCategory = Category.frontTire;
-                });
-              },
+              onPressed: () => setState(() => chosenCategory = Category.frontTire),
               onValueChange: (value) {
                 chosenCategory = Category.frontTire;
                 SettingsAlerts.editValue(context, widget.user!, 'Pressure',
@@ -138,72 +165,59 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               show: true,
             ),
-            Bubble(
-                user: widget.user!,
-                left: imgLeft + imgRenderW / 2.2,
-                bottom: boxHeight * 0.437,
-                bikeName: widget.uBikeID,
-                category: Category.shock,
-                chosenCategory: chosenCategory,
-                setup: widget.uSetupID,
-                onPressed: () {
-                  setState(() {
-                    chosenCategory = Category.shock;
-                  });
-                },
-                onValueChange: (value) {
-                  chosenCategory = Category.shock;
-                  SettingsAlerts.editValue(
-                      context,
-                      widget.user!,
-                      'Pressure',
-                      value,
-                      widget.uBikeID,
-                      chosenCategory.category,
-                      widget.uSetupID);
-                },
-                show: widget.bikeType.hasShock),
-            Bubble(
+            SchematicBubble(
               user: widget.user!,
-              left: imgLeft + imgRenderW / 2.65,
-              bottom: boxHeight * 0.657,
+              anchorLeft: shAnchorL,
+              anchorBottom: shAnchorB,
+              bubbleLeft: shBubbleL,
+              bubbleBottom: shBubbleB,
+              containerHeight: boxHeight,
+              bikeName: widget.uBikeID,
+              category: Category.shock,
+              chosenCategory: chosenCategory,
+              setup: widget.uSetupID,
+              onPressed: () => setState(() => chosenCategory = Category.shock),
+              onValueChange: (value) {
+                chosenCategory = Category.shock;
+                SettingsAlerts.editValue(context, widget.user!, 'Pressure',
+                    value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
+              },
+              show: widget.bikeType.hasShock,
+            ),
+            SchematicBubble(
+              user: widget.user!,
+              anchorLeft: gsAnchorL,
+              anchorBottom: gsAnchorB,
+              bubbleLeft: gsBubbleL,
+              bubbleBottom: gsBubbleB,
+              containerHeight: boxHeight,
               bikeName: widget.uBikeID,
               category: Category.generalSettings,
               chosenCategory: chosenCategory,
               setup: widget.uSetupID,
-              onPressed: () {
-                setState(() {
-                  chosenCategory = Category.generalSettings;
-                });
-              },
+              onPressed: () => setState(() => chosenCategory = Category.generalSettings),
               onValueChange: (value) {},
               show: true,
             ),
-            Bubble(
-                user: widget.user!,
-                left: imgLeft + imgRenderW / 1.5,
-                bottom: boxHeight * 0.657,
-                bikeName: widget.uBikeID,
-                category: Category.fork,
-                chosenCategory: chosenCategory,
-                setup: widget.uSetupID,
-                onPressed: () {
-                  setState(() {
-                    chosenCategory = Category.fork;
-                  });
-                },
-                onValueChange: (value) {
-                  chosenCategory = Category.fork;
-                  SettingsAlerts.editValue(
-                      context,
-                      widget.user!,
-                      'Pressure',
-                      value,
-                      widget.uBikeID,
-                      chosenCategory.category,
-                      widget.uSetupID);
-                },
-                show: widget.bikeType.hasFork),
+            SchematicBubble(
+              user: widget.user!,
+              anchorLeft: fkAnchorL,
+              anchorBottom: fkAnchorB,
+              bubbleLeft: fkBubbleL,
+              bubbleBottom: fkBubbleB,
+              containerHeight: boxHeight,
+              bikeName: widget.uBikeID,
+              category: Category.fork,
+              chosenCategory: chosenCategory,
+              setup: widget.uSetupID,
+              onPressed: () => setState(() => chosenCategory = Category.fork),
+              onValueChange: (value) {
+                chosenCategory = Category.fork;
+                SettingsAlerts.editValue(context, widget.user!, 'Pressure',
+                    value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
+              },
+              show: widget.bikeType.hasFork,
+            ),
           ]),
         ),
       ],
