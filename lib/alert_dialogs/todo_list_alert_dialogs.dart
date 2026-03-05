@@ -16,7 +16,7 @@ class TodoAlerts {
             backgroundColor: Theme.of(context).cardTheme.color,
             title: Text(
               'New Task',
-              style: Theme.of(context).textTheme.labelLarge,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             content: SizedBox(
               child: Column(
@@ -144,7 +144,7 @@ class TodoAlerts {
               children: [
                 Text(
                   'Edit Task',
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(
                     onPressed: () {
@@ -236,7 +236,7 @@ class TodoAlerts {
                     Navigator.of(context).pop();
                   },
                   child: Text('Cancel',
-                      style: Theme.of(context).textTheme.labelMedium)),
+                      style: Theme.of(context).textTheme.labelLarge)),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context)
@@ -245,7 +245,7 @@ class TodoAlerts {
                 ),
                 child: Text(
                   'Edit',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();

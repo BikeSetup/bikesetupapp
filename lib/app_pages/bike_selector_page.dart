@@ -72,8 +72,9 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                     const EdgeInsets.only(left: 30, right: 30),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor),
+                                      backgroundColor: Theme.of(context)
+                                          .floatingActionButtonTheme
+                                          .backgroundColor),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
@@ -91,8 +92,9 @@ class _BikeTypeSelectorState extends State<BikeTypeSelector> {
                                     const EdgeInsets.only(left: 30, right: 30),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor),
+                                      backgroundColor: Theme.of(context)
+                                          .floatingActionButtonTheme
+                                          .backgroundColor),
                                   onPressed: () {
                                     BikeType bikeType =
                                         BikeType.values[pageController.page?.round() ?? 0];

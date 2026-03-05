@@ -131,7 +131,7 @@ class _ControlPanelGridState extends State<ControlPanelGrid> {
                             .backgroundColor,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       onPressed: () {
@@ -302,7 +302,7 @@ class _ControlCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(12),
         ),
         elevation: 4,
         child: Padding(
@@ -376,7 +376,7 @@ class _StepButton extends StatelessWidget {
               .floatingActionButtonTheme
               .backgroundColor
               ?.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon, size: 30),
       ),

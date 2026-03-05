@@ -109,7 +109,7 @@ class _HomePageListViewState extends State<HomePageListView>
                 ).animate(anim),
                 child: Card(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                   elevation: 5,
                   child: ListTile(

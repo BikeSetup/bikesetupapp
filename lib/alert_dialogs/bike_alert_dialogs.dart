@@ -236,7 +236,7 @@ class BikeAlerts {
                   },
                   child: Text(
                     'Ok',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ))
             ],
           );

@@ -14,13 +14,13 @@ class SettingsAlerts {
         return AlertDialog(
           backgroundColor: Theme.of(context).cardTheme.color,
           title: Text('New Category',
-              style: Theme.of(context).textTheme.labelLarge),
+              style: Theme.of(context).textTheme.titleLarge),
           content: TextFormField(
             cursorColor: Theme.of(context).textTheme.labelMedium!.color,
             autofocus: true,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
                     width: 2,
                     color: Theme.of(context).textTheme.labelMedium!.color!),
@@ -29,7 +29,7 @@ class SettingsAlerts {
                 borderSide: BorderSide(
                     width: 2,
                     color: Theme.of(context).textTheme.labelMedium!.color!),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
               ),
               hintStyle: Theme.of(context).textTheme.labelSmall,
               hintText: 'Category Name',
@@ -51,7 +51,7 @@ class SettingsAlerts {
                 },
                 child: Text(
                   'Cancel',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.labelLarge,
                 )),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -60,7 +60,7 @@ class SettingsAlerts {
               ),
               child: Text(
                 'Enter',
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
               onPressed: () {
                 if (key.trim().isEmpty) {
@@ -88,13 +88,13 @@ class SettingsAlerts {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).cardTheme.color,
-          title: Text(key, style: Theme.of(context).textTheme.labelLarge),
+          title: Text(key, style: Theme.of(context).textTheme.titleLarge),
           content: TextFormField(
             cursorColor: Theme.of(context).textTheme.labelMedium!.color,
             autofocus: true,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
                     width: 2,
                     color: Theme.of(context).textTheme.labelMedium!.color!),
@@ -103,7 +103,7 @@ class SettingsAlerts {
                 borderSide: BorderSide(
                     width: 2,
                     color: Theme.of(context).textTheme.labelMedium!.color!),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
               ),
               hintStyle: Theme.of(context).textTheme.labelSmall,
               hintText: 'Value',
@@ -159,7 +159,7 @@ class SettingsAlerts {
           backgroundColor: Theme.of(context).cardTheme.color,
           title: Text(
             key,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           content: TextFormField(
             cursorColor: Theme.of(context).textTheme.labelMedium!.color,
@@ -168,7 +168,7 @@ class SettingsAlerts {
             initialValue: value,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(
                     width: 2,
                     color: Theme.of(context).textTheme.labelMedium!.color!),
@@ -177,7 +177,7 @@ class SettingsAlerts {
                 borderSide: BorderSide(
                     width: 2,
                     color: Theme.of(context).textTheme.labelMedium!.color!),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
             onChanged: (val) {
@@ -240,11 +240,11 @@ class SettingsAlerts {
           backgroundColor: Theme.of(context).cardTheme.color,
           title: Text(
             'Delete Category',
-            style: Theme.of(context).textTheme.labelLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           content: Text(
             'Are you sure you want to delete this category?',
-            style: Theme.of(context).textTheme.labelMedium,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           actionsAlignment: MainAxisAlignment.spaceAround,
           actions: <Widget>[
@@ -258,7 +258,7 @@ class SettingsAlerts {
                   Navigator.of(context).pop();
                 },
                 child: Text('Cancel',
-                    style: Theme.of(context).textTheme.labelMedium)),
+                    style: Theme.of(context).textTheme.labelLarge)),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:
@@ -266,7 +266,7 @@ class SettingsAlerts {
               ),
               child: Text(
                 'Delete',
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
               onPressed: () {
                 Navigator.of(context).pop();

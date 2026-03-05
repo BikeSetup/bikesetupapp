@@ -450,8 +450,9 @@ class _NewBikeState extends State<NewBike> {
                                     const EdgeInsets.only(left: 30, right: 30),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor),
+                                      backgroundColor: Theme.of(context)
+                                          .floatingActionButtonTheme
+                                          .backgroundColor),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
@@ -471,8 +472,9 @@ class _NewBikeState extends State<NewBike> {
                                     const EdgeInsets.only(left: 30, right: 30),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor),
+                                      backgroundColor: Theme.of(context)
+                                          .floatingActionButtonTheme
+                                          .backgroundColor),
                                   onPressed: () async {
                                     if (!isButtonActive) {
                                       return;

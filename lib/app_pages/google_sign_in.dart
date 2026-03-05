@@ -62,11 +62,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             title: Text(
                               'Sign in with Google',
-                              //style: Theme.of(context).textTheme.titleMedium,
-                              style: TextStyle(
-                                  color: Colors.grey[800],
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Color(0xFF424242),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
                             ),
                           )),
                     )),
@@ -99,12 +98,12 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.all(10),
                                 child: Image.asset(incognitoIcon),
                               ),
-                              title: Text(
+                              title: const Text(
                                 'Sign in anonymously',
                                 style: TextStyle(
-                                    color: Colors.grey[800],
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                                    color: Color(0xFF424242),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600),
                               ))),
                     )),
               ),
