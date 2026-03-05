@@ -62,11 +62,44 @@ UserBikeSetup/{userID}
 | `lib/app_pages/` | Full-screen pages: `home_page`, `google_sign_in`, `drawer`, `settings_page`, `bike_selector_page`, `new_bike_page`, `todolist_page` |
 | `lib/alert_dialogs/` | All `showDialog` calls grouped by domain: auth, bike, settings, todo |
 | `lib/widgets/` | Reusable widgets used within pages and dialogs |
-| `lib/app_services/` | `AppStateNotifier` (theme) and `AppTheme` (light/dark `ThemeData`) |
+| `lib/app_services/` | `AppStateNotifier` (theme), `AppTheme` (light/dark `ThemeData`), `ResponsiveLayout`, `AppRoutes` |
 | `lib/bike_enums/` | `BikeType` (DH, Enduro, Dirt, XC, Singlespeed, Road), `Category` (RearTire, FrontTire, Shock, Fork, GeneralSettings), `NewBikeMode` |
 
 ### Enums as Configuration
-`BikeType` carries `hasShock` and `hasFork` booleans that control which `Bubble` widgets are shown on the home page. `Category.category` returns the exact Firestore document name used as the settings category.
+`BikeType` carries `hasShock` and `hasFork` booleans that control which `SchematicBubble` widgets are shown on the home page. `Category.category` returns the exact Firestore document name used as the settings category.
 
 ### Home Page Layout
-`MyHomePage` uses a `Stack` with a colored header panel containing bike image and interactive `Bubble` widgets (one per category). Below the header, a `HomePageListView` shows the currently selected category's settings as a stream from Firestore.
+`MyHomePage` uses a `Stack` with a colored header panel containing the bike image and interactive `SchematicBubble` widgets (one per category). Below the header, a `ControlPanelGrid` shows the currently selected category's settings as tappable cards streamed from Firestore.
+
+### Responsive Layout
+- `lib/app_services/responsive_layout.dart` — `kWideBreakpoint = 768px`, `sidebarWidth = 300`
+- Wide (>= 768px): `Row(SidebarContent 300px + VerticalDivider + Expanded content)`
+- Narrow (< 768px): standard `Scaffold` with `drawer: NavDrawer(...)`
+- `lib/widgets/sidebar_content.dart` — shared drawer/sidebar body (`isInDrawer` flag controls pop-on-navigate behavior)
+
+### Page Transitions
+- `lib/app_services/app_routes.dart` — `AppRoutes.fadeSlide()` replaces `MaterialPageRoute` everywhere
+- 280ms fade + 6% vertical slide in, 200ms out
+
+### Animations
+- **Bubbles** (`lib/widgets/home_page_bubbles.dart`): tap shrink 120ms (scale 1.0→0.88), select pop 180ms (scale 1.0→1.12), `AnimatedContainer` color/border 250ms; leader line drawn with `CustomPainter`
+- **ControlPanelGrid cards** (`lib/widgets/control_panel_grid.dart`): staggered fade+scale-in on load (300ms, 60ms per-card offset)
+- **Hero**: bike image tagged `'bike-image-${bikeType.path}'` — `home_page.dart` ↔ `bike_selector_widget.dart`
+
+### Field Metadata (`lib/widgets/field_meta.dart`)
+`kFieldMeta` maps setting keys (e.g. `'Pressure'`, `'Rebound'`) to `FieldMeta(icon, unit)`. `kDefaultFieldKeys` maps each category to its default field list. `ControlPanelGrid` uses these to render cards with the correct icon and unit without any per-field conditionals.
+
+### Key Widget Files
+
+| File | Purpose |
+|---|---|
+| `lib/widgets/control_panel_grid.dart` | Grid of setting cards with stepper bottom sheet for editing |
+| `lib/widgets/home_page_bubbles.dart` | `SchematicBubble` — anchor dot + leader line + floating card |
+| `lib/widgets/homepage_list_view.dart` | List view of settings (`topPadding`: 0 wide, 45 narrow) |
+| `lib/widgets/sidebar_content.dart` | Shared sidebar/drawer body |
+| `lib/widgets/bike_selector_widget.dart` | Bike selection widget with Hero image |
+| `lib/widgets/drawer_bike_list.dart` | Scrollable bike list inside sidebar |
+| `lib/widgets/field_meta.dart` | Icon/unit metadata and default field keys per category |
+| `lib/widgets/default_bike_selector_widget.dart` | Widget for choosing default bike in settings |
+| `lib/widgets/setup_information_alert_content.dart` | Content for setup info dialog |
+| `lib/widgets/setup_information_list_element.dart` | Single row in setup info list |
