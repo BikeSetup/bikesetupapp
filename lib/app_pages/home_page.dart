@@ -10,6 +10,8 @@ import 'package:bikesetupapp/widgets/sidebar_content.dart';
 import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/bike_enums/category.dart';
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -46,10 +48,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildMainContent(BuildContext context, double contentWidth) {
     final Size size = MediaQuery.of(context).size;
-    final double boxHeight = size.height / 3.5;
     final bool wide = ResponsiveLayout.isWide(context);
+    final double boxHeight = wide
+        ? (size.height * 0.48).clamp(180.0, 340.0)
+        : size.height / 3.5;
     final double offset = wide ? 0 : 40;
     final double topPadding = wide ? 0 : 45;
+
+    // Compute the bike image's actual rendered size (BoxFit.contain of 1080×664).
+    // Bubbles are positioned relative to the image, not the full container width.
+    const double imgNativeW = 1080.0, imgNativeH = 664.0;
+    final double scale = math.min(contentWidth / imgNativeW, boxHeight / imgNativeH);
+    final double imgRenderW = imgNativeW * scale;
+    final double imgLeft = (contentWidth - imgRenderW) / 2;
 
     return Stack(
       children: [
@@ -89,8 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Bubble(
               user: widget.user!,
-              left: contentWidth / 40,
-              bottom: size.height / 6.66,
+              left: imgLeft + imgRenderW / 40,
+              bottom: boxHeight * 0.525,
               bikeName: widget.uBikeID,
               category: Category.rearTire,
               chosenCategory: chosenCategory,
@@ -109,8 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Bubble(
               user: widget.user!,
-              left: contentWidth / 1.20,
-              bottom: size.height / 6.66,
+              left: imgLeft + imgRenderW / 1.20,
+              bottom: boxHeight * 0.525,
               bikeName: widget.uBikeID,
               category: Category.frontTire,
               chosenCategory: chosenCategory,
@@ -129,8 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Bubble(
                 user: widget.user!,
-                left: contentWidth / 2.2,
-                bottom: size.height / 8,
+                left: imgLeft + imgRenderW / 2.2,
+                bottom: boxHeight * 0.437,
                 bikeName: widget.uBikeID,
                 category: Category.shock,
                 chosenCategory: chosenCategory,
@@ -154,8 +165,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 show: widget.bikeType.hasShock),
             Bubble(
               user: widget.user!,
-              left: contentWidth / 2.65,
-              bottom: size.height / 5.33,
+              left: imgLeft + imgRenderW / 2.65,
+              bottom: boxHeight * 0.657,
               bikeName: widget.uBikeID,
               category: Category.generalSettings,
               chosenCategory: chosenCategory,
@@ -170,8 +181,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Bubble(
                 user: widget.user!,
-                left: contentWidth / 1.5,
-                bottom: size.height / 5.33,
+                left: imgLeft + imgRenderW / 1.5,
+                bottom: boxHeight * 0.657,
                 bikeName: widget.uBikeID,
                 category: Category.fork,
                 chosenCategory: chosenCategory,

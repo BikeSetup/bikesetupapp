@@ -71,7 +71,11 @@ class _BikeListState extends State<BikeList> {
               child: ExpansionTile(
                 initiallyExpanded: currentBikeName == widget.bikeName,
                 onExpansionChanged: (value) {},
+                tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+                minTileHeight: 48,
                 leading: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                   onPressed: () {
                     Navigator.of(context).push(
                       AppRoutes.fadeSlide(ToDoList(
@@ -84,17 +88,24 @@ class _BikeListState extends State<BikeList> {
                   icon: Icon(
                     Icons.edit_calendar_outlined,
                     color: Theme.of(context).iconTheme.color,
+                    size: 20,
                   ),
                 ),
                 title: Text(
                   currentBikeName,
                   style: Theme.of(context).textTheme.labelLarge,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
                 subtitle: Text(
                   currentBikeType,
                   style: Theme.of(context).textTheme.bodySmall,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
                 trailing: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                   onPressed: () async {
                     if (snapshot.data!.docs.length <= 1) {
                       BikeAlerts.deleteError(context, 'Bike');
@@ -113,6 +124,7 @@ class _BikeListState extends State<BikeList> {
                   icon: Icon(
                     Icons.delete,
                     color: Theme.of(context).iconTheme.color,
+                    size: 20,
                   ),
                 ),
                 children: <Widget>[
@@ -178,6 +190,8 @@ class _BikeListState extends State<BikeList> {
                                     setup['setup_name'],
                                     style:
                                         Theme.of(context).textTheme.labelMedium,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                   ),
                                   onTap: () {
                                     Navigator.of(context).push(
