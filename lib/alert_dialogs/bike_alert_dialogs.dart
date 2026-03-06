@@ -204,8 +204,8 @@ class BikeAlerts {
       BuildContext context,
       Size size,
       String userID,
-      String bikeName,
       String uBikeID,
+      String uSetupID,
       String setupName,
       BikeType bikeType) async {
     return showDialog(
@@ -219,8 +219,8 @@ class BikeAlerts {
             ),
             content: SetupInformation(
               userID: userID,
-              uBikeID: bikeName,
-              uSetupID: uBikeID,
+              uBikeID: uBikeID,
+              uSetupID: uSetupID,
               bikeType: bikeType,
             ),
             actionsAlignment: MainAxisAlignment.spaceAround,

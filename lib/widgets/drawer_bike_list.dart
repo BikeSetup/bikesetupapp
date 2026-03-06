@@ -5,9 +5,9 @@ import 'package:bikesetupapp/app_services/app_routes.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/bike_enums/new_bike_mode.dart';
+import 'package:bikesetupapp/models/bike.dart';
+import 'package:bikesetupapp/models/bike_setup.dart';
 import 'package:bikesetupapp/widgets/new_bike_bottom_sheet.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -56,16 +56,9 @@ class _BikeListState extends State<BikeList> {
           padding: const EdgeInsets.only(top: 0),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot bike = snapshot.data.docs[index];
-            String currentBikeName;
-            String currentBikeType;
-            try {
-              currentBikeName = bike['bike_name'];
-              currentBikeType = bike['bike_type'];
-            } catch (e) {
-              currentBikeName = "";
-              currentBikeType = "Error";
-            }
+            final bike = Bike.fromSnapshot(snapshot.data.docs[index]);
+            final String currentBikeName = bike.name;
+            final String currentBikeType = bike.bikeType;
             return Dismissible(
               key: Key(bike.id),
               direction: DismissDirection.endToStart,
@@ -206,8 +199,8 @@ class _BikeListState extends State<BikeList> {
                                   padding: EdgeInsets.zero,
                                   itemCount: setupSnapshot.data.docs.length,
                                   itemBuilder: (context, index) {
-                                    DocumentSnapshot setup =
-                                        setupSnapshot.data.docs[index];
+                                    final setup = BikeSetup.fromSnapshot(
+                                        setupSnapshot.data.docs[index]);
                                     return Dismissible(
                                       key: Key(setup.id),
                                       direction: DismissDirection.endToStart,
@@ -319,7 +312,7 @@ class _BikeListState extends State<BikeList> {
                                               uBikeID: uBikeID,
                                               bikeName: bikeName,
                                               uSetupID: setup.id,
-                                              setupName: setup['setup_name'],
+                                              setupName: setup.name,
                                             );
                                           },
                                           icon: Icon(
@@ -331,7 +324,7 @@ class _BikeListState extends State<BikeList> {
                                           ),
                                         ),
                                         title: Text(
-                                          setup['setup_name'],
+                                          setup.name,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall,
@@ -345,7 +338,7 @@ class _BikeListState extends State<BikeList> {
                                               uBikeID: uBikeID,
                                               user: widget.user,
                                               bikeType: bikeType,
-                                              setupName: setup['setup_name'],
+                                              setupName: setup.name,
                                               uSetupID: setup.id,
                                             )),
                                           );

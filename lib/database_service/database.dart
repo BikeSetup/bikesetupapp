@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bikesetupapp/bike_enums/category.dart';
+import 'package:bikesetupapp/database_service/firestore_keys.dart';
 import 'package:uuid/uuid.dart';
 
 class DatabaseService {
@@ -8,7 +9,7 @@ class DatabaseService {
 
   /// Collection reference for the 'UserBikeSetup' collection in the Firestore database.
   final CollectionReference userBikeSetup =
-      FirebaseFirestore.instance.collection('UserBikeSetup');
+      FirebaseFirestore.instance.collection(FirestoreKeys.userBikeSetup);
 
   /// Creates a new bike in the database.
   ///
@@ -32,9 +33,9 @@ class DatabaseService {
 
     await setTodo(uBikeID, 'MyFirstTask', 'This is my first task', 'Breaks');
 
-    await userBikeSetup.doc(userID).collection('Bikes').doc(uBikeID).set({
-      'bike_name': bikeName,
-      'bike_type': bikeType,
+    await userBikeSetup.doc(userID).collection(FirestoreKeys.bikes).doc(uBikeID).set({
+      FirestoreKeys.bikeName: bikeName,
+      FirestoreKeys.bikeType: bikeType,
     }, SetOptions(merge: true));
 
     return uBikeID;
@@ -133,13 +134,13 @@ class DatabaseService {
       Map<String, dynamic> setupInformation) {
     final Map<String, dynamic> setupListDocument = <String, dynamic>{};
     setupListDocument.addAll(setupInformation);
-    setupListDocument['setup_name'] = setupName;
+    setupListDocument[FirestoreKeys.setupName] = setupName;
 
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
-        .collection('SetupList')
+        .collection(FirestoreKeys.setupList)
         .doc(uSetupID)
         .set(setupListDocument, SetOptions(merge: true));
   }
@@ -155,7 +156,7 @@ class DatabaseService {
   Future setDefaultBike(String uBikeID) {
     return userBikeSetup
         .doc(userID)
-        .set({'default_bike': uBikeID}, SetOptions(merge: true));
+        .set({FirestoreKeys.defaultBike: uBikeID}, SetOptions(merge: true));
   }
 
   /// Sets the default setup for a bike in the database.
@@ -171,9 +172,9 @@ class DatabaseService {
   Future setDefaultSetup(String uBikeID, String uSetupID) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
-        .set({'defaultSetup': uSetupID}, SetOptions(merge: true));
+        .set({FirestoreKeys.defaultSetup: uSetupID}, SetOptions(merge: true));
   }
 
   /// Sets a setting in the database for specific bike and setup.
@@ -192,7 +193,7 @@ class DatabaseService {
       String key, String value, String uBikeID, String category, String uSetupID) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
         .collection(uSetupID)
         .doc(category)
@@ -212,7 +213,7 @@ class DatabaseService {
       String key, String value, String uBikeID, String category, String uSetupID) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
         .collection(uSetupID)
         .doc(category)
@@ -232,16 +233,16 @@ class DatabaseService {
       String uBikeID, String taskName, String taskDescription, String part) {
     return userBikeSetup
         .doc(userID)
-        .collection('ToDoList')
+        .collection(FirestoreKeys.todoList)
         .doc(uBikeID)
-        .collection('MyList')
+        .collection(FirestoreKeys.myList)
         .doc()
         .set({
-      'task_name': taskName,
-      'task_description': taskDescription,
-      'Part': part,
-      'done': false,
-      'created': DateTime.now()
+      FirestoreKeys.taskName: taskName,
+      FirestoreKeys.taskDescription: taskDescription,
+      FirestoreKeys.part: part,
+      FirestoreKeys.done: false,
+      FirestoreKeys.created: DateTime.now().toUtc(),
     }, SetOptions(merge: true));
   }
 
@@ -258,9 +259,9 @@ class DatabaseService {
   Future renameBike(String uBikeID, String bikeName) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
-        .update({'bike_name': bikeName});
+        .update({FirestoreKeys.bikeName: bikeName});
   }
 
   /// Edits a To-Do item in the database.
@@ -281,15 +282,15 @@ class DatabaseService {
       String taskDescription, String part, bool isDone) {
     return userBikeSetup
         .doc(userID)
-        .collection('ToDoList')
+        .collection(FirestoreKeys.todoList)
         .doc(uBikeID)
-        .collection('MyList')
+        .collection(FirestoreKeys.myList)
         .doc(docID)
         .set({
-      'task_name': taskName,
-      'task_description': taskDescription,
-      'Part': part,
-      'done': isDone,
+      FirestoreKeys.taskName: taskName,
+      FirestoreKeys.taskDescription: taskDescription,
+      FirestoreKeys.part: part,
+      FirestoreKeys.done: isDone,
     }, SetOptions(merge: true));
   }
 
@@ -306,9 +307,9 @@ class DatabaseService {
   Future deleteTodo(String uBikeID, String toDoID) async {
     await userBikeSetup
         .doc(userID)
-        .collection('ToDoList')
+        .collection(FirestoreKeys.todoList)
         .doc(uBikeID)
-        .collection('MyList')
+        .collection(FirestoreKeys.myList)
         .doc(toDoID)
         .delete();
   }
@@ -327,11 +328,11 @@ class DatabaseService {
   Future updateTodoList(String uBikeID, String toDoListID, bool isDone) async {
     await userBikeSetup
         .doc(userID)
-        .collection('ToDoList')
+        .collection(FirestoreKeys.todoList)
         .doc(uBikeID)
-        .collection('MyList')
+        .collection(FirestoreKeys.myList)
         .doc(toDoListID)
-        .update({'done': isDone});
+        .update({FirestoreKeys.done: isDone});
   }
 
   //Delete functions
@@ -348,15 +349,15 @@ class DatabaseService {
   Future deleteBike(String uBikeID) async {
     var setups = await userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
-        .collection('SetupList')
+        .collection(FirestoreKeys.setupList)
         .get();
     for (var doc in setups.docs) {
       await deleteSetup(uBikeID, doc.id);
     }
 
-    await userBikeSetup.doc(userID).collection('Bikes').doc(uBikeID).delete();
+    await userBikeSetup.doc(userID).collection(FirestoreKeys.bikes).doc(uBikeID).delete();
   }
 
   /// Deletes a bike setup from the database.
@@ -372,7 +373,7 @@ class DatabaseService {
   Future deleteSetup(String uBikeID, String uSetupID) async {
     var setups = await userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
         .collection(uSetupID)
         .get();
@@ -383,9 +384,9 @@ class DatabaseService {
 
     await userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
-        .collection('SetupList')
+        .collection(FirestoreKeys.setupList)
         .doc(uSetupID)
         .delete();
   }
@@ -406,7 +407,7 @@ class DatabaseService {
       String key, String uBikeID, String category, String uSetupID) async {
     await userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
         .collection(uSetupID)
         .doc(category)
@@ -427,7 +428,7 @@ class DatabaseService {
   Stream getSettings(String uBikeID, String category, String uSetupID) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
         .collection(uSetupID)
         .doc(category)
@@ -436,7 +437,7 @@ class DatabaseService {
 
   /// Returns a [stream] of bikes from the database.
   Stream getBikes() {
-    return userBikeSetup.doc(userID).collection('Bikes').snapshots();
+    return userBikeSetup.doc(userID).collection(FirestoreKeys.bikes).snapshots();
   }
 
   /// Retrieves a stream of setups for a given user bike ID.
@@ -446,9 +447,9 @@ class DatabaseService {
   Stream getSetups(String uBikeID) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
-        .collection('SetupList')
+        .collection(FirestoreKeys.setupList)
         .snapshots();
   }
 
@@ -462,7 +463,7 @@ class DatabaseService {
   Stream getDocumentElement(String uBikeID, String category, String uSetupID) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
         .collection(uSetupID)
         .doc(category)
@@ -476,9 +477,9 @@ class DatabaseService {
   Stream getTodoList(String uBikeID) {
     return userBikeSetup
         .doc(userID)
-        .collection('ToDoList')
+        .collection(FirestoreKeys.todoList)
         .doc(uBikeID)
-        .collection('MyList')
+        .collection(FirestoreKeys.myList)
         .snapshots();
   }
 
@@ -495,7 +496,7 @@ class DatabaseService {
       if (!snapshot.exists) {
         return "";
       }
-      value = snapshot['default_bike'];
+      value = snapshot[FirestoreKeys.defaultBike];
     } catch (e) {
       return "";
     }
@@ -516,11 +517,11 @@ class DatabaseService {
     dynamic value;
     try {
       snapshot =
-          await userBikeSetup.doc(userID).collection('Bikes').doc(uBikeID).get();
+          await userBikeSetup.doc(userID).collection(FirestoreKeys.bikes).doc(uBikeID).get();
       if (!snapshot.exists) {
         return "";
       }
-      value = snapshot['defaultSetup'];
+      value = snapshot[FirestoreKeys.defaultSetup];
     } catch (e) {
       return "";
     }
@@ -539,11 +540,11 @@ class DatabaseService {
     dynamic value;
     try {
       snapshot =
-          await userBikeSetup.doc(userID).collection('Bikes').doc(uBikeID).get();
+          await userBikeSetup.doc(userID).collection(FirestoreKeys.bikes).doc(uBikeID).get();
       if (!snapshot.exists) {
         return "";
       }
-      value = snapshot['bike_name'];
+      value = snapshot[FirestoreKeys.bikeName];
     } catch (e) {
       return "";
     }
@@ -568,15 +569,15 @@ class DatabaseService {
     try {
       snapshot = await userBikeSetup
           .doc(userID)
-          .collection('Bikes')
+          .collection(FirestoreKeys.bikes)
           .doc(uBikeID)
-          .collection('SetupList')
+          .collection(FirestoreKeys.setupList)
           .doc(uSetupID)
           .get();
       if (!snapshot.exists) {
         return "";
       }
-      value = snapshot['setup_name'];
+      value = snapshot[FirestoreKeys.setupName];
     } catch (e) {
       return "";
     }
@@ -598,11 +599,11 @@ class DatabaseService {
     dynamic value;
     try {
       snapshot =
-          await userBikeSetup.doc(userID).collection('Bikes').doc(uBikeID).get();
+          await userBikeSetup.doc(userID).collection(FirestoreKeys.bikes).doc(uBikeID).get();
       if (!snapshot.exists) {
         return "";
       }
-      value = snapshot['bike_type'];
+      value = snapshot[FirestoreKeys.bikeType];
     } catch (e) {
       return "";
     }
@@ -621,9 +622,9 @@ class DatabaseService {
   Future getSetupInformation(String uBikeID, String uSetupID) {
     return userBikeSetup
         .doc(userID)
-        .collection('Bikes')
+        .collection(FirestoreKeys.bikes)
         .doc(uBikeID)
-        .collection('SetupList')
+        .collection(FirestoreKeys.setupList)
         .doc(uSetupID)
         .get();
   }

@@ -1,6 +1,6 @@
 import 'package:bikesetupapp/alert_dialogs/todo_list_alert_dialogs.dart';
 import 'package:bikesetupapp/database_service/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bikesetupapp/models/todo_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -55,29 +55,30 @@ class _ToDoListState extends State<ToDoList> {
                           shrinkWrap: true,
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot data = snapshot.data.docs[index];
+                            final todo = TodoItem.fromSnapshot(
+                                snapshot.data.docs[index]);
                             return Visibility(
-                                visible: !data['done'],
+                                visible: !todo.isDone,
                                 child: Card(
                                     child: ListTile(
                                   onTap: () {
                                     TodoAlerts.editTodo(
                                         context,
                                         widget.uBikeID,
-                                        data.id,
+                                        todo.id,
                                         widget.user,
-                                        data['task_name'],
-                                        data['task_description'],
-                                        data['Part'],
-                                        data['done']);
+                                        todo.taskName,
+                                        todo.taskDescription,
+                                        todo.part,
+                                        todo.isDone);
                                   },
                                   title: Text(
-                                    data['task_name'],
+                                    todo.taskName,
                                     style:
                                         Theme.of(context).textTheme.labelSmall,
                                   ),
                                   subtitle: Text(
-                                    data['task_description'],
+                                    todo.taskDescription,
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
                                   ),
@@ -88,17 +89,16 @@ class _ToDoListState extends State<ToDoList> {
                                             .textTheme
                                             .bodySmall!
                                             .color!),
-                                    value: data['done'],
+                                    value: todo.isDone,
                                     onChanged: (bool? value) {
                                       setState(() {
                                         try {
                                           DatabaseService(widget.user.uid)
                                             .updateTodoList(
-                                                widget.uBikeID, data.id, value!);
+                                                widget.uBikeID, todo.id, value!);
                                         } catch (e) {
                                           TodoAlerts.generalError(context, 'Error updating todo');
                                         }
-                                        
                                       });
                                     },
                                   ),
@@ -119,28 +119,29 @@ class _ToDoListState extends State<ToDoList> {
                         shrinkWrap: true,
                         itemCount: snapshot.data.docs.length,
                         itemBuilder: (context, index) {
-                          DocumentSnapshot data = snapshot.data.docs[index];
+                          final todo = TodoItem.fromSnapshot(
+                              snapshot.data.docs[index]);
                           return Visibility(
-                              visible: data['done'],
+                              visible: todo.isDone,
                               child: Card(
                                   child: ListTile(
                                 onTap: () {
                                   TodoAlerts.editTodo(
                                       context,
                                       widget.uBikeID,
-                                      data.id,
+                                      todo.id,
                                       widget.user,
-                                      data['task_name'],
-                                      data['task_description'],
-                                      data['Part'],
-                                      data['done']);
+                                      todo.taskName,
+                                      todo.taskDescription,
+                                      todo.part,
+                                      todo.isDone);
                                 },
                                 title: Text(
-                                  data['task_name'],
+                                  todo.taskName,
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),
                                 subtitle: Text(
-                                  data['task_description'],
+                                  todo.taskDescription,
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 trailing: Checkbox(
@@ -150,13 +151,13 @@ class _ToDoListState extends State<ToDoList> {
                                           .textTheme
                                           .bodySmall!
                                           .color!),
-                                  value: data['done'],
+                                  value: todo.isDone,
                                   onChanged: (bool? value) {
                                     setState(() {
                                       try {
                                         DatabaseService(widget.user.uid)
                                             .updateTodoList(
-                                                widget.uBikeID, data.id, value!);
+                                                widget.uBikeID, todo.id, value!);
                                       } catch (e) {
                                         TodoAlerts.generalError(context, 'Error updating todo');
                                       }

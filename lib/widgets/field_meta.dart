@@ -24,32 +24,39 @@ const Map<String, FieldMeta> kFieldMeta = {
   'Seat Height':           FieldMeta(Icons.airline_seat_recline_normal,      'mm'),
 };
 
-const Map<String, List<String>> kDefaultFieldKeys = {
-  'Fork':            ['Pressure', 'Rebound', 'Compression', 'Tokens'],
-  'Shock':           ['Pressure', 'Preload', 'Spring Rate', 'Rebound', 'Compression', 'Tokens'],
-  'FrontTire':       ['Pressure'],
-  'RearTire':        ['Pressure'],
-  'GeneralSettings': ['Reach', 'Stack Height', 'Seat Height'],
+// Single source of truth for per-category field configuration.
+// defaultKeys doubles as requiredKeys — required fields cannot be deleted.
+class _CategoryConfig {
+  final List<String> defaultKeys;
+  final List<String> suggestedKeys;
+  const _CategoryConfig({required this.defaultKeys, this.suggestedKeys = const []});
+}
+
+const Map<String, _CategoryConfig> _kCategoryConfigs = {
+  'Fork': _CategoryConfig(
+    defaultKeys:   ['Pressure', 'Rebound', 'Compression', 'Tokens'],
+    suggestedKeys: ['High Speed Rebound', 'Low Speed Rebound', 'High Speed Compression', 'Low Speed Compression', 'Spring Rate'],
+  ),
+  'Shock': _CategoryConfig(
+    defaultKeys:   ['Pressure', 'Preload', 'Spring Rate', 'Rebound', 'Compression', 'Tokens'],
+    suggestedKeys: ['High Speed Rebound', 'Low Speed Rebound', 'High Speed Compression', 'Low Speed Compression'],
+  ),
+  'FrontTire':       _CategoryConfig(defaultKeys: ['Pressure']),
+  'RearTire':        _CategoryConfig(defaultKeys: ['Pressure']),
+  'GeneralSettings': _CategoryConfig(defaultKeys: ['Reach', 'Stack Height', 'Seat Height']),
 };
 
-const Map<String, List<String>> kSuggestedFieldKeys = {
-  'Fork':            ['High Speed Rebound', 'Low Speed Rebound', 'High Speed Compression', 'Low Speed Compression', 'Spring Rate'],
-  'Shock':           ['High Speed Rebound', 'Low Speed Rebound', 'High Speed Compression', 'Low Speed Compression'],
-  'FrontTire':       [],
-  'RearTire':        [],
-  'GeneralSettings': [],
+// Public derived views — callers use these unchanged.
+final Map<String, List<String>> kDefaultFieldKeys = {
+  for (final e in _kCategoryConfigs.entries) e.key: e.value.defaultKeys,
+};
+
+final Map<String, List<String>> kSuggestedFieldKeys = {
+  for (final e in _kCategoryConfigs.entries) e.key: e.value.suggestedKeys,
 };
 
 bool isDefaultField(String category, String key) =>
-    kDefaultFieldKeys[category]?.contains(key) ?? false;
+    _kCategoryConfigs[category]?.defaultKeys.contains(key) ?? false;
 
-const Map<String, List<String>> kRequiredFieldKeys = {
-  'Fork':            ['Pressure', 'Rebound', 'Compression', 'Tokens'],
-  'Shock':           ['Pressure', 'Preload', 'Spring Rate', 'Rebound', 'Compression', 'Tokens'],
-  'FrontTire':       ['Pressure'],
-  'RearTire':        ['Pressure'],
-  'GeneralSettings': ['Reach', 'Stack Height', 'Seat Height'],
-};
-
-bool isRequiredField(String category, String key) =>
-    kRequiredFieldKeys[category]?.contains(key) ?? false;
+/// A required field cannot be deleted. Currently identical to [isDefaultField].
+bool isRequiredField(String category, String key) => isDefaultField(category, key);
