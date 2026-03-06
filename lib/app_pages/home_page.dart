@@ -1,4 +1,5 @@
 import 'package:bikesetupapp/alert_dialogs/settings_alert_dialogs.dart';
+import 'package:bikesetupapp/widgets/add_field_bottom_sheet.dart';
 import 'package:bikesetupapp/app_pages/google_sign_in.dart';
 import 'package:bikesetupapp/app_pages/drawer.dart';
 import 'package:bikesetupapp/app_services/app_routes.dart';
@@ -274,8 +275,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final fab = FloatingActionButton(
       onPressed: () {
-        SettingsAlerts.newKey(context, widget.user!, widget.uBikeID,
-            chosenCategory.category, widget.uSetupID);
+        showAddFieldSheet(context,
+            user: widget.user!,
+            uBikeID: widget.uBikeID,
+            category: chosenCategory.category,
+            uSetupID: widget.uSetupID);
       },
       tooltip: 'Add Setting',
       child: const Icon(Icons.add),

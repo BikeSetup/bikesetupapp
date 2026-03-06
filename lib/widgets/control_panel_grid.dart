@@ -193,7 +193,10 @@ class _ControlPanelGridState extends State<ControlPanelGrid> {
         final defaults = kDefaultFieldKeys[widget.category] ?? [];
         final extras =
             settings.keys.where((k) => !defaults.contains(k)).toList();
-        final allKeys = [...defaults, ...extras];
+        final allKeys = [
+          ...defaults.where((k) => settings.containsKey(k)),
+          ...extras,
+        ];
 
         return GridView.builder(
           padding:
@@ -209,78 +212,16 @@ class _ControlPanelGridState extends State<ControlPanelGrid> {
             final key = allKeys[index];
             final card = _CardDef.fromKey(key);
             final value = settings[key]?.toString() ?? '--';
-            final isDefault = defaults.contains(key);
-            return _AnimatedControlCard(
-              key: ValueKey(key),
+            final isDefault = key == 'Pressure';
+            return _ControlCard(
               config: card,
               value: value,
-              delay: Duration(milliseconds: index * 60),
               onTap: () =>
                   _showStepperSheet(context, card, value, isDefault),
             );
           },
         );
       },
-    );
-  }
-}
-
-class _AnimatedControlCard extends StatefulWidget {
-  final _CardDef config;
-  final String value;
-  final Duration delay;
-  final VoidCallback onTap;
-
-  const _AnimatedControlCard({
-    super.key,
-    required this.config,
-    required this.value,
-    required this.delay,
-    required this.onTap,
-  });
-
-  @override
-  State<_AnimatedControlCard> createState() => _AnimatedControlCardState();
-}
-
-class _AnimatedControlCardState extends State<_AnimatedControlCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  late Animation<double> _fade;
-  late Animation<double> _scale;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
-    _scale = Tween<double>(begin: 0.85, end: 1.0).animate(_fade);
-    Future.delayed(widget.delay, () {
-      if (mounted) _ctrl.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fade,
-      child: ScaleTransition(
-        scale: _scale,
-        child: _ControlCard(
-          config: widget.config,
-          value: widget.value,
-          onTap: widget.onTap,
-        ),
-      ),
     );
   }
 }

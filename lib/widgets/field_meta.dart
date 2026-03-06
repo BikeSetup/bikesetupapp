@@ -9,14 +9,18 @@ class FieldMeta {
 const FieldMeta kDefaultFieldMeta = FieldMeta(Icons.tune_rounded, '');
 
 const Map<String, FieldMeta> kFieldMeta = {
-  'Pressure':    FieldMeta(Icons.speed_rounded,                    'psi'),
-  'Rebound':     FieldMeta(Icons.unfold_more_rounded,              'clicks'),
-  'Compression': FieldMeta(Icons.unfold_less_rounded,              'clicks'),
-  'Tokens':      FieldMeta(Icons.radio_button_unchecked_rounded,   'count'),
-  'Spring Rate': FieldMeta(Icons.compress_rounded,                 'N/mm'),
-  'Reach':       FieldMeta(Icons.straighten_rounded,               'mm'),
-  'Stack Height':FieldMeta(Icons.height_rounded,                   'mm'),
-  'Seat Height': FieldMeta(Icons.airline_seat_recline_normal,      'mm'),
+  'Pressure':              FieldMeta(Icons.speed_rounded,                    'psi'),
+  'Rebound':               FieldMeta(Icons.unfold_more_rounded,              'clicks'),
+  'High Speed Rebound':    FieldMeta(Icons.unfold_more_rounded,              'clicks'),
+  'Low Speed Rebound':     FieldMeta(Icons.unfold_more_rounded,              'clicks'),
+  'Compression':           FieldMeta(Icons.unfold_less_rounded,              'clicks'),
+  'High Speed Compression':FieldMeta(Icons.unfold_less_rounded,              'clicks'),
+  'Low Speed Compression': FieldMeta(Icons.unfold_less_rounded,              'clicks'),
+  'Tokens':                FieldMeta(Icons.radio_button_unchecked_rounded,   'count'),
+  'Spring Rate':           FieldMeta(Icons.compress_rounded,                 'N/mm'),
+  'Reach':                 FieldMeta(Icons.straighten_rounded,               'mm'),
+  'Stack Height':          FieldMeta(Icons.height_rounded,                   'mm'),
+  'Seat Height':           FieldMeta(Icons.airline_seat_recline_normal,      'mm'),
 };
 
 const Map<String, List<String>> kDefaultFieldKeys = {
@@ -25,6 +29,14 @@ const Map<String, List<String>> kDefaultFieldKeys = {
   'FrontTire':       ['Pressure'],
   'RearTire':        ['Pressure'],
   'GeneralSettings': ['Reach', 'Stack Height', 'Seat Height'],
+};
+
+const Map<String, List<String>> kSuggestedFieldKeys = {
+  'Fork':            ['High Speed Rebound', 'Low Speed Rebound', 'High Speed Compression', 'Low Speed Compression', 'Spring Rate'],
+  'Shock':           ['High Speed Rebound', 'Low Speed Rebound', 'High Speed Compression', 'Low Speed Compression', 'Spring Rate'],
+  'FrontTire':       [],
+  'RearTire':        [],
+  'GeneralSettings': [],
 };
 
 bool isDefaultField(String category, String key) =>
