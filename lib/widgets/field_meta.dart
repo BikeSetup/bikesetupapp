@@ -45,7 +45,7 @@ bool isDefaultField(String category, String key) =>
 
 const Map<String, List<String>> kRequiredFieldKeys = {
   'Fork':            ['Pressure', 'Rebound', 'Compression', 'Tokens'],
-  'Shock':           ['Preload', 'Spring Rate', 'Rebound', 'Compression', 'Tokens'],
+  'Shock':           ['Pressure', 'Preload', 'Spring Rate', 'Rebound', 'Compression', 'Tokens'],
   'FrontTire':       ['Pressure'],
   'RearTire':        ['Pressure'],
   'GeneralSettings': ['Reach', 'Stack Height', 'Seat Height'],
