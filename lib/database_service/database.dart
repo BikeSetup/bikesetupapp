@@ -634,7 +634,7 @@ class DatabaseService {
   /// - The [uBikeID] specifies the unique bike identifier
   /// - The [uSetupID] specifies the unique setup identifier
   ///
-  /// Returns a [Future] that resolves to a Map<String, dynamic> containing the setup information.
+  /// Returns a [Future] that resolves to a Map\<String, dynamic\> containing the setup information.
   /// If the setup information does not exist, an empty map is returned.
   Future<Map<String, dynamic>> getSetupInformationAsMap(
       String uBikeID, String uSetupID) async {

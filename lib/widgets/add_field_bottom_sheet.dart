@@ -149,7 +149,7 @@ class _AddFieldSheetState extends State<_AddFieldSheet> {
           else ...[
             if (suggestions.isNotEmpty) ...[
               DropdownButtonFormField<String>(
-                value: _nameController.text.isEmpty ? _selectedChip : null,
+                initialValue: _nameController.text.isEmpty ? _selectedChip : null,
                 hint: Text(
                   'Suggested fields',
                   style: Theme.of(context).textTheme.labelSmall,
