@@ -54,18 +54,42 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: [
           Card(
-            child: ListTile(
-              title: Text(
-                'Theme',
-                style: Theme.of(context).textTheme.labelLarge,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Theme',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  SegmentedButton<ThemeMode>(
+                    segments: const [
+                      ButtonSegment(
+                        value: ThemeMode.light,
+                        icon: Icon(Icons.light_mode),
+                        label: Text('Light'),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.system,
+                        icon: Icon(Icons.brightness_auto),
+                        label: Text('System'),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.dark,
+                        icon: Icon(Icons.dark_mode),
+                        label: Text('Dark'),
+                      ),
+                    ],
+                    selected: {Provider.of<AppStateNotifier>(context).themeMode},
+                    onSelectionChanged: (selection) {
+                      Provider.of<AppStateNotifier>(context, listen: false)
+                          .updateTheme(selection.first);
+                    },
+                  ),
+                ],
               ),
-              trailing: Switch(
-                  activeThumbColor: Colors.grey,
-                  value: Provider.of<AppStateNotifier>(context).isDarkModeOn,
-                  onChanged: (boolVal) {
-                    Provider.of<AppStateNotifier>(context, listen: false)
-                        .updateTheme(boolVal);
-                  }),
             ),
           ),
           Card(

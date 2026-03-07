@@ -50,7 +50,7 @@ void main() async {
 
   runApp(ChangeNotifierProvider<AppStateNotifier>(
       create: (context) =>
-          AppStateNotifier(prefs.getBool('isDarkModeOn') ?? false),
+          AppStateNotifier(AppStateNotifier.fromPrefs(prefs)),
       child: MyApp(
         isSignedIn: isSignedIn,
         user: FirebaseAuth.instance.currentUser,
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
             title: "Bike Setup",
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: appState.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
+            themeMode: appState.themeMode,
             home: isSignedIn
                 ? MyHomePage(
                     user: user,

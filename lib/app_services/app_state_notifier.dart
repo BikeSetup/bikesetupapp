@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppStateNotifier extends ChangeNotifier {
-  late bool isDarkModeOn;
+  late ThemeMode themeMode;
 
-  AppStateNotifier(this.isDarkModeOn);
+  AppStateNotifier(this.themeMode);
 
-  Future<void> updateTheme(bool isDarkModeOn) async {
+  Future<void> updateTheme(ThemeMode mode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isDarkModeOn', isDarkModeOn);
-    this.isDarkModeOn = isDarkModeOn;
+    prefs.setString('themeMode', mode.name);
+    themeMode = mode;
     notifyListeners();
+  }
+
+  static ThemeMode fromPrefs(SharedPreferences prefs) {
+    final saved = prefs.getString('themeMode');
+    if (saved == null) return ThemeMode.dark;
+    return ThemeMode.values.firstWhere(
+      (m) => m.name == saved,
+      orElse: () => ThemeMode.dark,
+    );
   }
 }
