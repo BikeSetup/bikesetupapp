@@ -1,7 +1,5 @@
-import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/database_service/database.dart';
 import 'package:bikesetupapp/widgets/default_bike_selector_widget.dart';
-import 'package:bikesetupapp/widgets/setup_information_alert_content.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -195,49 +193,6 @@ class BikeAlerts {
                   },
                   child: Text('Cancel',
                       style: Theme.of(context).textTheme.labelLarge)),
-            ],
-          );
-        });
-  }
-
-  static Future<void> showSetupInformation(
-      BuildContext context,
-      Size size,
-      String userID,
-      String uBikeID,
-      String uSetupID,
-      String setupName,
-      BikeType bikeType) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).cardTheme.color,
-            title: Text(
-              setupName,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            content: SetupInformation(
-              userID: userID,
-              uBikeID: uBikeID,
-              uSetupID: uSetupID,
-              bikeType: bikeType,
-            ),
-            actionsAlignment: MainAxisAlignment.spaceAround,
-            actions: [
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context)
-                        .floatingActionButtonTheme
-                        .backgroundColor,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'Ok',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ))
             ],
           );
         });

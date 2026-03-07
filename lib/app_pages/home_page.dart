@@ -4,7 +4,7 @@ import 'package:bikesetupapp/app_pages/google_sign_in.dart';
 import 'package:bikesetupapp/app_pages/drawer.dart';
 import 'package:bikesetupapp/app_services/app_routes.dart';
 import 'package:bikesetupapp/app_services/responsive_layout.dart';
-import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
+import 'package:bikesetupapp/widgets/bike_info_bottom_sheet.dart';
 import 'package:bikesetupapp/widgets/control_panel_grid.dart';
 import 'package:bikesetupapp/widgets/home_page_bubbles.dart';
 import 'package:bikesetupapp/widgets/sidebar_content.dart';
@@ -228,7 +228,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   AppBar _buildAppBar(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return AppBar(
         scrolledUnderElevation: 0,
         title: Row(
@@ -240,14 +239,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             IconButton(
                 onPressed: () {
-                  BikeAlerts.showSetupInformation(
-                      context,
-                      size,
-                      widget.user!.uid,
-                      widget.uBikeID,
-                      widget.uSetupID,
-                      widget.setupName,
-                      widget.bikeType);
+                  showBikeInfoSheet(
+                    context,
+                    widget.user!,
+                    widget.uBikeID,
+                    widget.uSetupID,
+                    widget.setupName,
+                    widget.bikeName,
+                    widget.bikeType,
+                  );
                 },
                 icon: const Icon(Icons.info_outline_rounded)),
           ],
