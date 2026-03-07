@@ -21,6 +21,22 @@ class BikeList extends StatefulWidget {
 }
 
 class _BikeListState extends State<BikeList> {
+  late Stream _bikesStream;
+  final Map<String, Stream> _setupStreams = {};
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.user != null) {
+      _bikesStream = DatabaseService(widget.user!.uid).getBikes();
+    }
+  }
+
+  Stream _setupStreamFor(String bikeId) {
+    return _setupStreams.putIfAbsent(
+        bikeId, () => DatabaseService(widget.user!.uid).getSetups(bikeId));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.user == null) {
@@ -29,7 +45,7 @@ class _BikeListState extends State<BikeList> {
       );
     }
     return StreamBuilder(
-      stream: DatabaseService(widget.user!.uid).getBikes(),
+      stream: _bikesStream,
       builder: ((context, AsyncSnapshot snapshot) {
         if (ConnectionState.waiting == snapshot.connectionState) {
           return Center(
@@ -164,8 +180,7 @@ class _BikeListState extends State<BikeList> {
                   ),
                   children: <Widget>[
                     StreamBuilder(
-                        stream: DatabaseService(widget.user!.uid)
-                            .getSetups(bike.id),
+                        stream: _setupStreamFor(bike.id),
                         builder: ((context, AsyncSnapshot setupSnapshot) {
                           String bikeName = currentBikeName;
                           String uBikeID = bike.id;
