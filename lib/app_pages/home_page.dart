@@ -6,7 +6,6 @@ import 'package:bikesetupapp/app_services/app_routes.dart';
 import 'package:bikesetupapp/app_services/responsive_layout.dart';
 import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
 import 'package:bikesetupapp/widgets/control_panel_grid.dart';
-import 'package:bikesetupapp/widgets/homepage_list_view.dart';
 import 'package:bikesetupapp/widgets/home_page_bubbles.dart';
 import 'package:bikesetupapp/widgets/sidebar_content.dart';
 import 'package:bikesetupapp/bike_enums/bike_type.dart';
@@ -55,9 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  bool _isGridCategory(Category category) =>
-      category != Category.generalSettings;
-
   Widget _buildMainContent(BuildContext context, double contentWidth) {
     final Size size = MediaQuery.of(context).size;
     final bool wide = ResponsiveLayout.isWide(context);
@@ -104,21 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
         Column(children: [
           SizedBox(height: boxHeight - offset),
           Expanded(
-              child: _isGridCategory(chosenCategory)
-                  ? ControlPanelGrid(
-                      user: widget.user!,
-                      uBikeID: widget.uBikeID,
-                      category: chosenCategory.category,
-                      uSetupID: widget.uSetupID,
-                      topPadding: topPadding)
-                  : HomePageListView(
-                      user: widget.user!,
-                      bikeName: widget.bikeName,
-                      uBikeID: widget.uBikeID,
-                      category: chosenCategory.category,
-                      setup: widget.setupName,
-                      uSetupID: widget.uSetupID,
-                      topPadding: topPadding))
+              child: ControlPanelGrid(
+                  user: widget.user!,
+                  uBikeID: widget.uBikeID,
+                  category: chosenCategory.category,
+                  uSetupID: widget.uSetupID,
+                  topPadding: topPadding))
         ]),
         Container(
           width: contentWidth,
