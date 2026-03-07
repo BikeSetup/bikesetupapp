@@ -1,5 +1,4 @@
 import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
-import 'package:bikesetupapp/app_pages/home_page.dart';
 import 'package:bikesetupapp/app_pages/todolist_page.dart';
 import 'package:bikesetupapp/app_services/app_routes.dart';
 import 'package:bikesetupapp/database_service/database.dart';
@@ -14,7 +13,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 class BikeList extends StatefulWidget {
   final User? user;
   final String bikeName;
-  const BikeList({super.key, required this.user, required this.bikeName});
+  final void Function(String, String, BikeType, String, String) onBikeSelected;
+  const BikeList(
+      {super.key,
+      required this.user,
+      required this.bikeName,
+      required this.onBikeSelected});
 
   @override
   State<BikeList> createState() => _BikeListState();
@@ -329,6 +333,8 @@ class _BikeListState extends State<BikeList> {
                                               bikeName: bikeName,
                                               uSetupID: setup.id,
                                               setupName: setup.name,
+                                              onBikeSelected:
+                                                  widget.onBikeSelected,
                                             );
                                           },
                                           icon: Icon(
@@ -353,16 +359,13 @@ class _BikeListState extends State<BikeList> {
                                           DatabaseService(widget.user!.uid)
                                               .setDefaultSetup(
                                                   uBikeID, setup.id);
-                                          Navigator.of(context).push(
-                                            AppRoutes.fadeSlide(MyHomePage(
-                                              bikeName: bikeName,
-                                              uBikeID: uBikeID,
-                                              user: widget.user,
-                                              bikeType: bikeType,
-                                              setupName: setup.name,
-                                              uSetupID: setup.id,
-                                            )),
-                                          );
+                                          final scaffold =
+                                              Scaffold.maybeOf(context);
+                                          if (scaffold?.isDrawerOpen == true) {
+                                            scaffold!.closeDrawer();
+                                          }
+                                          widget.onBikeSelected(bikeName,
+                                              uBikeID, bikeType, setup.name, setup.id);
                                         },
                                       ),
                                     );
@@ -385,6 +388,7 @@ class _BikeListState extends State<BikeList> {
                                       bikeType: bt,
                                       uBikeID: bike.id,
                                       bikeName: currentBikeName,
+                                      onBikeSelected: widget.onBikeSelected,
                                     );
                                   },
                                   child: Padding(

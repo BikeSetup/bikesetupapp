@@ -12,8 +12,10 @@ Future<void> showBikeInfoSheet(
   String uSetupID,
   String setupName,
   String bikeName,
-  BikeType bikeType,
-) {
+  BikeType bikeType, {
+  required void Function(String, String, BikeType, String, String)
+      onBikeSelected,
+}) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -25,6 +27,7 @@ Future<void> showBikeInfoSheet(
       setupName: setupName,
       bikeName: bikeName,
       bikeType: bikeType,
+      onBikeSelected: onBikeSelected,
     ),
   );
 }
@@ -36,6 +39,7 @@ class _BikeInfoSheetContent extends StatelessWidget {
   final String setupName;
   final String bikeName;
   final BikeType bikeType;
+  final void Function(String, String, BikeType, String, String) onBikeSelected;
 
   const _BikeInfoSheetContent({
     required this.user,
@@ -44,6 +48,7 @@ class _BikeInfoSheetContent extends StatelessWidget {
     required this.setupName,
     required this.bikeName,
     required this.bikeType,
+    required this.onBikeSelected,
   });
 
   List<(String, String)> _buildRows(Map<String, dynamic> data) {
@@ -100,6 +105,7 @@ class _BikeInfoSheetContent extends StatelessWidget {
                     bikeName: bikeName,
                     uSetupID: uSetupID,
                     setupName: setupName,
+                    onBikeSelected: onBikeSelected,
                   );
                 },
               ),

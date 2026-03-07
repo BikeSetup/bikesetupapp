@@ -1,5 +1,3 @@
-import 'package:bikesetupapp/app_pages/home_page.dart';
-import 'package:bikesetupapp/app_services/app_routes.dart';
 import 'package:bikesetupapp/bike_enums/bike_type.dart';
 import 'package:bikesetupapp/bike_enums/new_bike_mode.dart';
 import 'package:bikesetupapp/database_service/database.dart';
@@ -17,6 +15,8 @@ Future<void> showNewBikeSheet(
   String bikeName = '',
   String uSetupID = '',
   String setupName = '',
+  required void Function(String, String, BikeType, String, String)
+      onBikeSelected,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -33,6 +33,7 @@ Future<void> showNewBikeSheet(
       bikeName: bikeName,
       uSetupID: uSetupID,
       setupName: setupName,
+      onBikeSelected: onBikeSelected,
     ),
   );
 }
@@ -45,6 +46,7 @@ class _NewBikeSheetContent extends StatefulWidget {
   final String bikeName;
   final String uSetupID;
   final String setupName;
+  final void Function(String, String, BikeType, String, String) onBikeSelected;
 
   const _NewBikeSheetContent({
     required this.user,
@@ -54,6 +56,7 @@ class _NewBikeSheetContent extends StatefulWidget {
     required this.bikeName,
     required this.uSetupID,
     required this.setupName,
+    required this.onBikeSelected,
   });
 
   @override
@@ -207,16 +210,9 @@ class _NewBikeSheetContentState extends State<_NewBikeSheetContent>
     }
 
     if (mounted) {
-      Navigator.of(context).push(
-        AppRoutes.fadeSlide(MyHomePage(
-          user: widget.user,
-          bikeType: bikeType,
-          bikeName: bikeName,
-          uBikeID: uBikeID,
-          setupName: setupName,
-          uSetupID: uSetupID,
-        )),
-      );
+      final cb = widget.onBikeSelected;
+      Navigator.of(context).pop();
+      cb(bikeName, uBikeID, bikeType, setupName, uSetupID);
     }
   }
 

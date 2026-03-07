@@ -9,12 +9,14 @@ class NavDrawer extends StatelessWidget {
   final BikeType bikeType;
   final String chosenSetup;
   final User? user;
+  final void Function(String, String, BikeType, String, String) onBikeSelected;
   const NavDrawer(
       {super.key,
       required this.bikeName,
       required this.bikeType,
       required this.chosenSetup,
-      required this.user});
+      required this.user,
+      required this.onBikeSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class NavDrawer extends StatelessWidget {
         chosenSetup: chosenSetup,
         user: user,
         isInDrawer: true,
+        onBikeSelected: onBikeSelected,
       ),
     );
   }

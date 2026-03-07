@@ -40,18 +40,40 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Category chosenCategory;
+  late String _bikeName;
+  late String _uBikeID;
+  late BikeType _bikeType;
+  late String _setupName;
+  late String _uSetupID;
 
   @override
   void initState() {
     super.initState();
+    _bikeName = widget.bikeName;
+    _uBikeID = widget.uBikeID;
+    _bikeType = widget.bikeType;
+    _setupName = widget.setupName;
+    _uSetupID = widget.uSetupID;
     chosenCategory = Category.rearTire;
     if (widget.user == null ||
-        widget.uBikeID.isEmpty ||
-        widget.uSetupID.isEmpty) {
+        _uBikeID.isEmpty ||
+        _uSetupID.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).push(AppRoutes.fadeSlide(const LoginPage()));
       });
     }
+  }
+
+  void _onBikeSelected(String bikeName, String uBikeID, BikeType bikeType,
+      String setupName, String uSetupID) {
+    setState(() {
+      _bikeName = bikeName;
+      _uBikeID = uBikeID;
+      _bikeType = bikeType;
+      _setupName = setupName;
+      _uSetupID = uSetupID;
+      chosenCategory = Category.rearTire;
+    });
   }
 
   Widget _buildMainContent(BuildContext context, double contentWidth) {
@@ -102,9 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
               child: ControlPanelGrid(
                   user: widget.user!,
-                  uBikeID: widget.uBikeID,
+                  uBikeID: _uBikeID,
                   category: chosenCategory.category,
-                  uSetupID: widget.uSetupID,
+                  uSetupID: _uSetupID,
                   topPadding: topPadding))
         ]),
         Container(
@@ -127,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Center(
               child: Opacity(
                 opacity: 0.22,
-                child: Image.asset(widget.bikeType.path),
+                child: Image.asset(_bikeType.path),
               ),
             ),
             SchematicBubble(
@@ -137,15 +159,15 @@ class _MyHomePageState extends State<MyHomePage> {
               bubbleLeft: rtBubbleL,
               bubbleBottom: rtBubbleB,
               containerHeight: boxHeight,
-              bikeName: widget.uBikeID,
+              bikeName: _uBikeID,
               category: Category.rearTire,
               chosenCategory: chosenCategory,
-              setup: widget.uSetupID,
+              setup: _uSetupID,
               onPressed: () => setState(() => chosenCategory = Category.rearTire),
               onValueChange: (value) {
                 chosenCategory = Category.rearTire;
                 SettingsAlerts.editValue(context, widget.user!, 'Pressure',
-                    value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
+                    value, _uBikeID, chosenCategory.category, _uSetupID);
               },
               show: true,
             ),
@@ -156,15 +178,15 @@ class _MyHomePageState extends State<MyHomePage> {
               bubbleLeft: ftBubbleL,
               bubbleBottom: ftBubbleB,
               containerHeight: boxHeight,
-              bikeName: widget.uBikeID,
+              bikeName: _uBikeID,
               category: Category.frontTire,
               chosenCategory: chosenCategory,
-              setup: widget.uSetupID,
+              setup: _uSetupID,
               onPressed: () => setState(() => chosenCategory = Category.frontTire),
               onValueChange: (value) {
                 chosenCategory = Category.frontTire;
                 SettingsAlerts.editValue(context, widget.user!, 'Pressure',
-                    value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
+                    value, _uBikeID, chosenCategory.category, _uSetupID);
               },
               show: true,
             ),
@@ -175,17 +197,17 @@ class _MyHomePageState extends State<MyHomePage> {
               bubbleLeft: shBubbleL,
               bubbleBottom: shBubbleB,
               containerHeight: boxHeight,
-              bikeName: widget.uBikeID,
+              bikeName: _uBikeID,
               category: Category.shock,
               chosenCategory: chosenCategory,
-              setup: widget.uSetupID,
+              setup: _uSetupID,
               onPressed: () => setState(() => chosenCategory = Category.shock),
               onValueChange: (value) {
                 chosenCategory = Category.shock;
                 SettingsAlerts.editValue(context, widget.user!, 'Pressure',
-                    value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
+                    value, _uBikeID, chosenCategory.category, _uSetupID);
               },
-              show: widget.bikeType.hasShock,
+              show: _bikeType.hasShock,
             ),
             SchematicBubble(
               user: widget.user!,
@@ -194,10 +216,10 @@ class _MyHomePageState extends State<MyHomePage> {
               bubbleLeft: gsBubbleL,
               bubbleBottom: gsBubbleB,
               containerHeight: boxHeight,
-              bikeName: widget.uBikeID,
+              bikeName: _uBikeID,
               category: Category.generalSettings,
               chosenCategory: chosenCategory,
-              setup: widget.uSetupID,
+              setup: _uSetupID,
               onPressed: () => setState(() => chosenCategory = Category.generalSettings),
               onValueChange: (value) {},
               show: true,
@@ -209,17 +231,17 @@ class _MyHomePageState extends State<MyHomePage> {
               bubbleLeft: fkBubbleL,
               bubbleBottom: fkBubbleB,
               containerHeight: boxHeight,
-              bikeName: widget.uBikeID,
+              bikeName: _uBikeID,
               category: Category.fork,
               chosenCategory: chosenCategory,
-              setup: widget.uSetupID,
+              setup: _uSetupID,
               onPressed: () => setState(() => chosenCategory = Category.fork),
               onValueChange: (value) {
                 chosenCategory = Category.fork;
                 SettingsAlerts.editValue(context, widget.user!, 'Pressure',
-                    value, widget.uBikeID, chosenCategory.category, widget.uSetupID);
+                    value, _uBikeID, chosenCategory.category, _uSetupID);
               },
-              show: widget.bikeType.hasFork,
+              show: _bikeType.hasFork,
             ),
           ]),
         ),
@@ -234,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.bikeName,
+              _bikeName,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             IconButton(
@@ -242,11 +264,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   showBikeInfoSheet(
                     context,
                     widget.user!,
-                    widget.uBikeID,
-                    widget.uSetupID,
-                    widget.setupName,
-                    widget.bikeName,
-                    widget.bikeType,
+                    _uBikeID,
+                    _uSetupID,
+                    _setupName,
+                    _bikeName,
+                    _bikeType,
+                    onBikeSelected: _onBikeSelected,
                   );
                 },
                 icon: const Icon(Icons.info_outline_rounded)),
@@ -264,9 +287,9 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed: () {
         showAddFieldSheet(context,
             user: widget.user!,
-            uBikeID: widget.uBikeID,
+            uBikeID: _uBikeID,
             category: chosenCategory.category,
-            uSetupID: widget.uSetupID);
+            uSetupID: _uSetupID);
       },
       tooltip: 'Add Setting',
       child: const Icon(Icons.add),
@@ -281,9 +304,10 @@ class _MyHomePageState extends State<MyHomePage> {
               width: ResponsiveLayout.sidebarWidth,
               child: SidebarContent(
                 user: widget.user,
-                bikeName: widget.bikeName,
-                bikeType: widget.bikeType,
-                chosenSetup: widget.setupName,
+                bikeName: _bikeName,
+                bikeType: _bikeType,
+                chosenSetup: _setupName,
+                onBikeSelected: _onBikeSelected,
               ),
             ),
 Expanded(child: _buildMainContent(context, cWidth)),
@@ -296,9 +320,10 @@ Expanded(child: _buildMainContent(context, cWidth)),
     return Scaffold(
       drawer: NavDrawer(
         user: widget.user,
-        bikeName: widget.bikeName,
-        bikeType: widget.bikeType,
-        chosenSetup: widget.setupName,
+        bikeName: _bikeName,
+        bikeType: _bikeType,
+        chosenSetup: _setupName,
+        onBikeSelected: _onBikeSelected,
       ),
       appBar: _buildAppBar(context),
       body: _buildMainContent(context, size.width),

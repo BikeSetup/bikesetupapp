@@ -14,6 +14,7 @@ class SidebarContent extends StatelessWidget {
   final String chosenSetup;
   final User? user;
   final bool isInDrawer;
+  final void Function(String, String, BikeType, String, String) onBikeSelected;
 
   const SidebarContent({
     super.key,
@@ -21,6 +22,7 @@ class SidebarContent extends StatelessWidget {
     required this.bikeType,
     required this.chosenSetup,
     required this.user,
+    required this.onBikeSelected,
     this.isInDrawer = false,
   });
 
@@ -112,6 +114,7 @@ class SidebarContent extends StatelessWidget {
           child: BikeList(
             user: user,
             bikeName: bikeName,
+            onBikeSelected: onBikeSelected,
           ),
         ),
         // Fixed footer
@@ -161,7 +164,8 @@ class SidebarContent extends StatelessWidget {
                     if (user != null) {
                       if (isInDrawer) Navigator.of(context).pop();
                       showNewBikeSheet(
-                          context, user!, NewBikeMode.newBike);
+                          context, user!, NewBikeMode.newBike,
+                          onBikeSelected: onBikeSelected);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('No User logged in')));

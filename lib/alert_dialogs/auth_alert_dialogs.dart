@@ -18,7 +18,17 @@ class AuthAlerts {
         userCredential.additionalUserInfo != null &&
         userCredential.additionalUserInfo!.isNewUser) {
       if (!context.mounted) return;
-      showNewBikeSheet(context, user, NewBikeMode.newBike);
+      showNewBikeSheet(context, user, NewBikeMode.newBike,
+          onBikeSelected: (bikeName, uBikeID, bikeType, setupName, uSetupID) {
+        Navigator.of(context).push(AppRoutes.fadeSlide(MyHomePage(
+          user: user,
+          bikeName: bikeName,
+          uBikeID: uBikeID,
+          bikeType: bikeType,
+          setupName: setupName,
+          uSetupID: uSetupID,
+        )));
+      });
       return;
     }
     if (user == null) {
@@ -35,7 +45,17 @@ class AuthAlerts {
         defaultSetupID.isEmpty ||
         bikeType == BikeType.error) {
       if (!context.mounted) return;
-      showNewBikeSheet(context, user, NewBikeMode.newBike);
+      showNewBikeSheet(context, user, NewBikeMode.newBike,
+          onBikeSelected: (bikeName, uBikeID, bikeType, setupName, uSetupID) {
+        Navigator.of(context).push(AppRoutes.fadeSlide(MyHomePage(
+          user: user,
+          bikeName: bikeName,
+          uBikeID: uBikeID,
+          bikeType: bikeType,
+          setupName: setupName,
+          uSetupID: uSetupID,
+        )));
+      });
       return;
     }
     String defaultBikeName =
