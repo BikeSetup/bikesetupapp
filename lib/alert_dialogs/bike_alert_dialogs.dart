@@ -1,5 +1,4 @@
 import 'package:bikesetupapp/database_service/database.dart';
-import 'package:bikesetupapp/widgets/default_bike_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -163,39 +162,6 @@ class BikeAlerts {
         );
       },
     );
-  }
-
-  static Future<void> selectDefaultBike(
-      BuildContext context, User user, Size size) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).cardTheme.color,
-            title: Text(
-              'Select Default Bike',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            content: DefaultBikeSelector(
-              user: user,
-              size: size,
-            ),
-            actionsAlignment: MainAxisAlignment.spaceAround,
-            actions: [
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context)
-                        .floatingActionButtonTheme
-                        .backgroundColor,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Cancel',
-                      style: Theme.of(context).textTheme.labelLarge)),
-            ],
-          );
-        });
   }
 
   static Future<void> deleteError(BuildContext context, String type) async {

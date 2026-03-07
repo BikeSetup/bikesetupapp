@@ -333,6 +333,11 @@ class _BikeListState extends State<BikeList> {
                                           maxLines: 1,
                                         ),
                                         onTap: () {
+                                          DatabaseService(widget.user!.uid)
+                                              .setDefaultBike(uBikeID);
+                                          DatabaseService(widget.user!.uid)
+                                              .setDefaultSetup(
+                                                  uBikeID, setup.id);
                                           Navigator.of(context).push(
                                             AppRoutes.fadeSlide(MyHomePage(
                                               bikeName: bikeName,

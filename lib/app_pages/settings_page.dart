@@ -1,5 +1,4 @@
 import 'package:bikesetupapp/alert_dialogs/auth_alert_dialogs.dart';
-import 'package:bikesetupapp/alert_dialogs/bike_alert_dialogs.dart';
 import 'package:bikesetupapp/app_pages/google_sign_in.dart';
 import 'package:bikesetupapp/app_services/app_routes.dart';
 import 'package:bikesetupapp/app_services/app_state_notifier.dart';
@@ -35,7 +34,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -133,24 +131,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
             ),
           ),
-          Visibility(
-              visible: user != null,
-              child: Card(
-                  child: ListTile(
-                      title: Text(
-                        'Select default Bike',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      trailing: IconButton(
-                        onPressed: () {
-                          BikeAlerts.selectDefaultBike(context, user!, size);
-                        },
-                        icon: Icon(Icons.tune,
-                            color: Theme.of(context).textTheme.labelMedium !=
-                                    null
-                                ? Theme.of(context).textTheme.labelMedium!.color
-                                : Colors.white),
-                      ))))
         ],
       ),
     );
